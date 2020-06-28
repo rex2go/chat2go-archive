@@ -1,0 +1,8 @@
+name: chat2go
+version: 1.0.0
+author: rex2go
+softdepend:
+  - Vault
+loadbefore:
+  - Vault
+main: eu.rex2go.chat2go.Chat2Go
