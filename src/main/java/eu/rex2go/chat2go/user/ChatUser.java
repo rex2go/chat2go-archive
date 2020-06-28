@@ -29,6 +29,9 @@ public class ChatUser {
     @Getter @Setter
     private ChatUser lastChatter;
 
+    @Getter @Setter
+    private boolean badWordNotificationEnabled = true;
+
     public ChatUser(Player player, String name) {
         this.player = player;
         this.name = name;

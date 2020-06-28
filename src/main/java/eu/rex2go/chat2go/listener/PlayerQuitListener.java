@@ -19,7 +19,7 @@ public class PlayerQuitListener extends AbstractListener {
         ChatUser user = plugin.getUserManager().getUser(player);
 
         // TODO test
-        plugin.getUserManager().getChatUsers().remove(user);
+        if(user != null) plugin.getUserManager().getChatUsers().remove(user);
 
         if (configManager.isCustomLeaveMessageEnabled()) {
             try {

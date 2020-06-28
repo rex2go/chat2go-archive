@@ -1,6 +1,7 @@
 package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.FilterMode;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
@@ -18,8 +19,8 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String... args) throws CommandNoPermissionException,
             CommandPlayerNotOnlineException {
-        if (!sender.hasPermission("chat2go.command")) {
-            throw new CommandNoPermissionException("chat2go.command");
+        if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND)) {
+            throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND);
         }
 
         if (args.length < 1) {
@@ -30,7 +31,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         String subCommand = args[0];
 
         if (subCommand.equalsIgnoreCase("filter")) {
-            if (!sender.hasPermission("chat2go.command.filter")) {
+            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_FILTER)) {
                 sender.sendMessage(pluginCommand.getPermissionMessage());
                 return true;
             }
@@ -38,7 +39,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             handleFilter(sender, user, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("badword")) {
-            if (!sender.hasPermission("chat2go.command.badword")) {
+            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_BADWORD)) {
                 sender.sendMessage(pluginCommand.getPermissionMessage());
                 return true;
             }
@@ -109,8 +110,30 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 sender.sendMessage(Chat2Go.PREFIX + " - " + ChatColor.WHITE + badWord);
             }
             return;
+        } else if(subCommand.equalsIgnoreCase("add")) {
+            if (args.length == 2) {
+                sender.sendMessage(ChatColor.RED + "Usage: /chat badword add <word>");
+                return;
+            }
+
+            // TODO check if already in list
+            plugin.getChatManager().getBadWords().add(args[2]);
+            // TODO save & message
+            return;
+        } else if(subCommand.equalsIgnoreCase("remove")) {
+            if (args.length == 2) {
+                sender.sendMessage(ChatColor.RED + "Usage: /chat badword add <word>");
+                return;
+            }
+
+            if(plugin.getChatManager().getBadWords().remove(args[2])) {
+                // TODO save & message
+            } else {
+                // TODO message
+            }
+            return;
         }
 
-        // TODO add & remove
+        sender.sendMessage(ChatColor.RED + "Usage: /chat badword <list|add|remove>");
     }
 }

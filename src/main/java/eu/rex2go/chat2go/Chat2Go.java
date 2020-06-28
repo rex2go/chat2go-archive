@@ -22,6 +22,9 @@ public class Chat2Go extends JavaPlugin {
     public static final String PREFIX =
             ChatColor.WHITE + "[" + ChatColor.AQUA + "chat2go" + ChatColor.WHITE + "]" + ChatColor.GRAY;
 
+    public static final String WARNING_PREFIX =
+            ChatColor.RED + "[" + ChatColor.DARK_RED + "!" + ChatColor.RED + "]" + ChatColor.GRAY;
+
     @Getter
     private static Chat chat;
 
