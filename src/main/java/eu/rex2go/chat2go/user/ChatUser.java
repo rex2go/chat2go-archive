@@ -3,6 +3,7 @@ package eu.rex2go.chat2go.user;
 import eu.rex2go.chat2go.Chat2Go;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class ChatUser {
@@ -11,7 +12,7 @@ public class ChatUser {
     private Player player;
 
     @Getter @Setter
-    private String displayName;
+    private String name;
 
     @Getter @Setter
     private String lastMessage = null;
@@ -25,9 +26,12 @@ public class ChatUser {
     @Getter @Setter
     private long mutedTime = 0;
 
-    public ChatUser(Player player, String displayName) {
+    @Getter @Setter
+    private ChatUser lastChatter;
+
+    public ChatUser(Player player, String name) {
         this.player = player;
-        this.displayName = displayName;
+        this.name = name;
     }
 
     public ChatUser(Player player) {
@@ -36,8 +40,7 @@ public class ChatUser {
 
     public String getPrefix() {
         if(Chat2Go.isVaultInstalled()) {
-            // TODO Groups
-            return Chat2Go.getChat().getPlayerPrefix(player);
+            return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerPrefix(player));
         }
 
         return "";
@@ -45,8 +48,7 @@ public class ChatUser {
 
     public String getSuffix() {
         if(Chat2Go.isVaultInstalled()) {
-            // TODO Groups
-            return Chat2Go.getChat().getPlayerSuffix(player);
+            return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerSuffix(player));
         }
 
         return "";

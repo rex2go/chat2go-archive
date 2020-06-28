@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class ChatManager {
@@ -31,9 +32,17 @@ public class ChatManager {
         this.configManager = plugin.getConfigManager();
         this.filterMode = configManager.getChatFilterMode();
 
-        badWords.add("test"); // TODO remove
-
         badWordConfigUtil = new BadWordConfigUtil(plugin);
+
+        loadBadWords();
+    }
+
+    private void loadBadWords() {
+        List<String> badWordList = (List<String>) badWordConfigUtil.getConfig().getList("badwords");
+
+        if(badWordList == null) return;
+
+        badWords.addAll(badWordList);
     }
 
     public String format(ChatUser chatUser, String message) throws BadWordException {
@@ -41,7 +50,7 @@ public class ChatManager {
     }
 
     public String format(ChatUser chatUser, String message, boolean processMessage, String format) throws BadWordException {
-        String username = chatUser.getDisplayName();
+        String username = chatUser.getName();
         String prefix = chatUser.getPrefix();
         String suffix = chatUser.getSuffix();
 
@@ -71,9 +80,9 @@ public class ChatManager {
                 // TODO
             }
 
-            if(configManager.getChatFilterMode() == FilterMode.CENSOR) {
+            if (configManager.getChatFilterMode() == FilterMode.CENSOR) {
                 message = filter(message);
-            } else if(configManager.getChatFilterMode() == FilterMode.BLOCK) {
+            } else if (configManager.getChatFilterMode() == FilterMode.BLOCK) {
                 throw new BadWordException(chatUser, message);
             }
         }
@@ -100,5 +109,17 @@ public class ChatManager {
         }
 
         return message;
+    }
+
+    public String formatMsg(String from, String to, String message) {
+        String format = configManager.getPrivateMessageFormat();
+
+        format = ChatColor.translateAlternateColorCodes('&', format);
+
+        format = format.replace("{from}", from);
+        format = format.replace("{to}", to);
+        format = format.replace("{message}", message);
+
+        return format;
     }
 }

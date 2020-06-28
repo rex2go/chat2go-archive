@@ -2,6 +2,7 @@ package eu.rex2go.chat2go.config;
 
 import eu.rex2go.chat2go.chat.FilterMode;
 import lombok.Getter;
+import lombok.Setter;
 
 public class ConfigManager {
 
@@ -20,10 +21,10 @@ public class ConfigManager {
     @Getter
     private boolean translateChatColorsEnabled = true;
 
-    @Getter
+    @Getter @Setter
     private boolean chatFilterEnabled = true;
 
-    @Getter
+    @Getter @Setter
     private FilterMode chatFilterMode = FilterMode.BLOCK;
 
     @Getter
@@ -48,6 +49,9 @@ public class ConfigManager {
     private String customLeaveMessage = "&7[&c-&7] &7{username}";
 
     @Getter
+    private String privateMessageFormat = "&8MSG &7[{from} -> {to}]&8: &f{message}";
+
+    @Getter
     private boolean rangeChatEnabled = false;
 
     @Getter
@@ -60,4 +64,8 @@ public class ConfigManager {
     private boolean antiSpamEnabled = false;
 
     // TODO chat log, chat log length
+
+    public void save() {
+
+    }
 }

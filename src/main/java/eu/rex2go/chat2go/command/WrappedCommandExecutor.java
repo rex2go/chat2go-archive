@@ -1,24 +1,33 @@
 package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
+import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.ChatUser;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 
 public abstract class WrappedCommandExecutor implements CommandExecutor {
 
     @Getter
-    private Chat2Go plugin;
+    protected Chat2Go plugin;
 
     private String command;
 
+    @Getter
+    protected PluginCommand pluginCommand;
+
     public WrappedCommandExecutor(Chat2Go plugin, String command) {
+        this.plugin = plugin;
         this.command = command;
-        Bukkit.getPluginCommand(command).setExecutor(this);
+        this.pluginCommand = Bukkit.getPluginCommand(command);
+
+        pluginCommand.setExecutor(this);
     }
 
     @Override
@@ -27,11 +36,19 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
             ChatUser user = null;
             if(sender instanceof Player) user = plugin.getUserManager().getUser((Player) sender);
 
-            execute(sender, user, args);
+            try {
+                return execute(sender, user, args);
+            } catch (CommandNoPermissionException exception) {
+                // TODO message
+            } catch (CommandPlayerNotOnlineException exception) {
+                // TODO message
+            }
+
             return true;
         }
+
         return false;
     }
 
-    protected abstract void execute(CommandSender sender, ChatUser user, String ... args);
+    protected abstract boolean execute(CommandSender sender, ChatUser user, String ... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException;
 }

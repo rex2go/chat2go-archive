@@ -6,3 +6,15 @@ softdepend:
 loadbefore:
   - Vault
 main: eu.rex2go.chat2go.Chat2Go
+commands:
+  msg:
+    description: Send a private message
+    usage: "§cUsage: /<command> <player> <message>"
+    permission: chat2go.msg
+    aliases:
+      - tell
+  chat2go:
+    usage: "§cUsage: /<command>"
+    permission: chat2go.command
+    aliases:
+      - chat

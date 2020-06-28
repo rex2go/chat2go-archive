@@ -15,6 +15,11 @@ public class PlayerChatListener extends AbstractListener {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        if(!configManager.isChatEnabled()) {
+            event.setCancelled(true);
+            return;
+        }
+
         Player player = event.getPlayer();
         ChatUser chatUser = plugin.getUserManager().getUser(player);
         String message = event.getMessage();

@@ -1,6 +1,8 @@
 package eu.rex2go.chat2go;
 
 import eu.rex2go.chat2go.chat.ChatManager;
+import eu.rex2go.chat2go.command.Chat2GoCommand;
+import eu.rex2go.chat2go.command.MessageCommand;
 import eu.rex2go.chat2go.config.ConfigManager;
 import eu.rex2go.chat2go.listener.PlayerChatListener;
 import eu.rex2go.chat2go.listener.PlayerJoinListener;
@@ -9,12 +11,16 @@ import eu.rex2go.chat2go.user.UserManager;
 import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
 public class Chat2Go extends JavaPlugin {
+
+    public static final String PREFIX =
+            ChatColor.WHITE + "[" + ChatColor.AQUA + "chat2go" + ChatColor.WHITE + "]" + ChatColor.GRAY;
 
     @Getter
     private static Chat chat;
@@ -62,6 +68,8 @@ public class Chat2Go extends JavaPlugin {
     }
 
     private void setupCommands() {
+        new Chat2GoCommand(this);
+        new MessageCommand(this);
     }
 
     private void setupListeners() {
