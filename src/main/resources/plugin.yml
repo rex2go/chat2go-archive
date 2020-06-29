@@ -18,3 +18,9 @@ commands:
     permission: chat2go.command
     aliases:
       - chat
+  reply:
+    description: Reply to a private message
+    usage: "§cUsage: /<command> <message>"
+    permission: chat2go.msg
+    aliases:
+      - r

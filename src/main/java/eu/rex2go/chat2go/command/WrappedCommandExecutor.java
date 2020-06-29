@@ -43,10 +43,11 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
             } catch (CommandNoPermissionException exception) {
                 // TODO message
             } catch (CommandPlayerNotOnlineException exception) {
-                // TODO message
+                sender.sendMessage(ChatColor.RED + exception.getPlayerName() + " is not online.");
+                // TODO customizable
             } catch (CommandWrongUsageException exception) {
                 sender.sendMessage(ChatColor.RED + "Usage: " + exception.getUsage().replace("<command>", label));
-
+                // TODO customizable
             }
 
             return true;

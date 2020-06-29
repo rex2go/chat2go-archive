@@ -3,6 +3,7 @@ package eu.rex2go.chat2go;
 import eu.rex2go.chat2go.chat.ChatManager;
 import eu.rex2go.chat2go.command.Chat2GoCommand;
 import eu.rex2go.chat2go.command.MessageCommand;
+import eu.rex2go.chat2go.command.ReplyCommand;
 import eu.rex2go.chat2go.config.ConfigManager;
 import eu.rex2go.chat2go.listener.PlayerChatListener;
 import eu.rex2go.chat2go.listener.PlayerJoinListener;
@@ -73,6 +74,7 @@ public class Chat2Go extends JavaPlugin {
     private void setupCommands() {
         new Chat2GoCommand(this);
         new MessageCommand(this);
+        new ReplyCommand(this);
     }
 
     private void setupListeners() {

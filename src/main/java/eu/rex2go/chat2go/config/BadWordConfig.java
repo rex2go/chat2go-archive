@@ -6,12 +6,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
 
-public class BadWordConfigUtil {
+public class BadWordConfig {
 
     private FileConfiguration config;
     private Chat2Go plugin;
 
-    public BadWordConfigUtil(Chat2Go plugin) {
+    public BadWordConfig(Chat2Go plugin) {
         this.plugin = plugin;
         this.config = new YamlConfiguration();
 

@@ -30,10 +30,10 @@ public class ConfigManager {
     @Getter
     private boolean badWordNotificationEnabled = true;
 
-    @Getter
+    @Getter @Setter
     private boolean slowModeEnabled = false;
 
-    @Getter
+    @Getter @Setter
     private int slowModeSeconds = 5;
 
     @Getter
@@ -52,18 +52,12 @@ public class ConfigManager {
     private String privateMessageFormat = "&8MSG &7[{from} -> {to}]&8: &f{message}";
 
     @Getter
-    private boolean rangeChatEnabled = false;
-
-    @Getter
-    private int chatRange = 50;
-
-    @Getter
     private boolean linkBlockEnabled = true;
 
     @Getter
     private boolean antiSpamEnabled = false;
 
-    // TODO chat log, chat log length
+    // TODO chat log, chat log length, range chat, range chat length
 
     public void save() {
 

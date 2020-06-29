@@ -4,15 +4,14 @@ import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.ChatUser;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class MessageCommand extends WrappedCommandExecutor {
+public class ReplyCommand extends WrappedCommandExecutor {
 
-    public MessageCommand(Chat2Go plugin) {
-        super(plugin, "msg");
+    public ReplyCommand(Chat2Go plugin) {
+        super(plugin, "reply");
     }
 
     @Override
@@ -29,29 +28,25 @@ public class MessageCommand extends WrappedCommandExecutor {
             throw new CommandNoPermissionException("chat2go.msg");
         }
 
-        if (args.length < 2) {
+        if (args.length < 1) {
             return false;
         }
 
-        String targetName = args[0];
-        if (targetName.equalsIgnoreCase(user.getName())) {
-            player.sendMessage(ChatColor.RED + "You cannot message yourself.");
-            // TODO customizable
+        ChatUser target = user.getLastChatter();
+
+        if (target == null) {
+            sender.sendMessage(ChatColor.RED + "No player to reply to.");
             return true;
         }
 
-        Player targetPlayer =
-                Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase(targetName)).findFirst().orElse(null);
+        Player targetPlayer = target.getPlayer();
 
         if (targetPlayer == null) {
-            throw new CommandPlayerNotOnlineException(targetName);
+            throw new CommandPlayerNotOnlineException(target.getName());
         }
 
-        ChatUser target = plugin.getUserManager().getUser(targetPlayer);
-        target.setLastChatter(user);
-
         StringBuilder message = new StringBuilder();
-        for (int i = 1; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             message.append(args[i]).append(" ");
         }
 
@@ -59,6 +54,9 @@ public class MessageCommand extends WrappedCommandExecutor {
 
         String formatted = plugin.getChatManager().formatMsg(user.getName(), target.getName(),
                 message.toString());
+
+        target.setLastChatter(user);
+
         targetPlayer.sendMessage(formatted);
         player.sendMessage(formatted);
 

@@ -3,7 +3,7 @@ package eu.rex2go.chat2go.chat;
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
-import eu.rex2go.chat2go.config.BadWordConfigUtil;
+import eu.rex2go.chat2go.config.BadWordConfig;
 import eu.rex2go.chat2go.config.ConfigManager;
 import eu.rex2go.chat2go.user.ChatUser;
 import lombok.Getter;
@@ -25,20 +25,20 @@ public class ChatManager {
     private FilterMode filterMode;
 
     @Getter
-    private BadWordConfigUtil badWordConfigUtil;
+    private BadWordConfig badWordConfig;
 
     public ChatManager(Chat2Go plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
         this.filterMode = configManager.getChatFilterMode();
 
-        badWordConfigUtil = new BadWordConfigUtil(plugin);
+        badWordConfig = new BadWordConfig(plugin);
 
         loadBadWords();
     }
 
     private void loadBadWords() {
-        List<String> badWordList = (List<String>) badWordConfigUtil.getConfig().getList("badwords");
+        List<String> badWordList = (List<String>) badWordConfig.getConfig().getList("badwords");
 
         if(badWordList == null) return;
 
@@ -77,11 +77,12 @@ public class ChatManager {
 
         if (!message.equals(filter(message)) && !chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_IGNORE_BAD_WORDS)) {
             if (configManager.isBadWordNotificationEnabled()) {
-                // TODO
+                // TODO ?
             }
 
             if (configManager.getChatFilterMode() == FilterMode.CENSOR) {
                 message = filter(message);
+                // TODO notify staff?
             } else if (configManager.getChatFilterMode() == FilterMode.BLOCK) {
                 throw new BadWordException(chatUser, message);
             }

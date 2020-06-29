@@ -4,7 +4,7 @@ import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
 import eu.rex2go.chat2go.user.ChatUser;
-import org.bukkit.Bukkit;
+import eu.rex2go.chat2go.util.MathUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +18,7 @@ public class PlayerChatListener extends AbstractListener {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if(!configManager.isChatEnabled()) {
+        if (!configManager.isChatEnabled()) {
             event.setCancelled(true);
             return;
         }
@@ -26,12 +26,28 @@ public class PlayerChatListener extends AbstractListener {
         Player player = event.getPlayer();
         ChatUser chatUser = plugin.getUserManager().getUser(player);
         String message = event.getMessage();
+        long currentTime = System.currentTimeMillis();
 
-        if(chatUser == null) {
+        if (chatUser == null) {
             return;
         }
 
-        chatUser.setLastMessageTime(System.currentTimeMillis());
+        if (!player.hasPermission(PermissionConstant.PERMISSION_BYPASS_SLOW_MODE)
+                && configManager.isSlowModeEnabled()) {
+            double cooldown =
+                    MathUtil.round(
+                            ((chatUser.getLastMessageTime() + configManager.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
+                            2);
+            if (cooldown > 0) {
+                player.sendMessage(ChatColor.RED + "Chat is in slow mode. Please wait " + cooldown + " seconds before" +
+                        " sending a message.");
+                // TODO customizable
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        chatUser.setLastMessageTime(currentTime);
         chatUser.setLastMessage(message);
 
         try {
@@ -40,9 +56,9 @@ public class PlayerChatListener extends AbstractListener {
             event.setCancelled(true);
 
             player.sendMessage(ChatColor.RED + "Message could not be sent: Your message contains a blocked phrase.");
-            // TODO add translation
+            // TODO customizable
 
-            if(configManager.isBadWordNotificationEnabled()) {
+            if (configManager.isBadWordNotificationEnabled()) {
                 for (ChatUser staff : plugin.getUserManager().getChatUsers()) {
                     if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_NOTIFY_BADWORD)
                             && chatUser.isBadWordNotificationEnabled()) {
