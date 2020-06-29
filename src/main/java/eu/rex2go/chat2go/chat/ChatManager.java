@@ -80,7 +80,7 @@ public class ChatManager {
                 && configManager.isChatFilterEnabled()) {
             if (configManager.isBadWordNotificationEnabled()) {
                 for (ChatUser staff : plugin.getUserManager().getChatUsers()) {
-                    if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_NOTIFY_BADWORD)
+                    if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_NOTIFY_BAD_WORD)
                             && chatUser.isBadWordNotificationEnabled()) {
                         staff.getPlayer().sendMessage(
                                 Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + chatUser.getName() + ": " + ChatColor.RED + message);

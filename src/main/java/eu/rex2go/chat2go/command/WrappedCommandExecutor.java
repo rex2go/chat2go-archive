@@ -1,6 +1,7 @@
 package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
@@ -48,6 +49,8 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
             } catch (CommandWrongUsageException exception) {
                 sender.sendMessage(ChatColor.RED + "Usage: " + exception.getUsage().replace("<command>", label));
                 // TODO customizable
+            } catch (CommandCustomErrorException exception) {
+                sender.sendMessage(ChatColor.RED + exception.getErrorMessage());
             }
 
             return true;
@@ -56,5 +59,5 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
         return false;
     }
 
-    protected abstract boolean execute(CommandSender sender, ChatUser user, String ... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException;
+    protected abstract boolean execute(CommandSender sender, ChatUser user, String ... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException;
 }

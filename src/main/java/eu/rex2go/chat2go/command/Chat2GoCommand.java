@@ -3,6 +3,7 @@ package eu.rex2go.chat2go.command;
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.FilterMode;
+import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
@@ -24,7 +25,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException, CommandWrongUsageException {
+            CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException {
         if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND)) {
             throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND);
         }
@@ -45,7 +46,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             handleFilter(sender, user, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("badword")) {
-            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_BADWORD)) {
+            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_BAD_WORD)) {
                 sender.sendMessage(pluginCommand.getPermissionMessage());
                 return true;
             }
@@ -54,6 +55,14 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             return true;
         } else if (subCommand.equalsIgnoreCase("slowmode")) {
             if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_SLOW_MODE)) {
+                sender.sendMessage(pluginCommand.getPermissionMessage());
+                return true;
+            }
+
+            handleSlowMode(sender, user, args);
+            return true;
+        } else if (subCommand.equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_RELOAD)) {
                 sender.sendMessage(pluginCommand.getPermissionMessage());
                 return true;
             }
@@ -101,9 +110,9 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 Chat2Go.PREFIX + " Chat filtering has been set to " + ChatColor.RED + censorModeString + ChatColor.GRAY + ".");
     }
 
-    private void handleBadWord(CommandSender sender, ChatUser user, String... args) throws CommandWrongUsageException {
+    private void handleBadWord(CommandSender sender, ChatUser user, String... args) throws CommandWrongUsageException, CommandCustomErrorException {
         if (args.length == 1) {
-            throw new CommandWrongUsageException("/<command> badword <list|add|remove>");
+            throw new CommandWrongUsageException("/<command> badword <list|add|remove|reload>");
         }
 
         String subCommand = args[1];
@@ -117,6 +126,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 return;
             }
 
+            // TODO pagination
             for (String badWord : plugin.getChatManager().getBadWords()) {
                 sender.sendMessage(Chat2Go.PREFIX + " - " + ChatColor.WHITE + badWord);
             }
@@ -126,9 +136,8 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 throw new CommandWrongUsageException("/<command> badword add <word>");
             }
 
-            if(plugin.getChatManager().getBadWords().stream().anyMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
-                sender.sendMessage(ChatColor.RED + "Bad word is already on the list.");
-                return;
+            if (plugin.getChatManager().getBadWords().stream().anyMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
+                throw new CommandCustomErrorException("Bad word is already on the list.");
             }
 
             plugin.getChatManager().getBadWords().add(args[2]);
@@ -140,17 +149,14 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             badWordList.add(args[2]);
             badWordConfig.getConfig().set("badwords", badWordList);
             badWordConfig.save();
-            sender.sendMessage(Chat2Go.PREFIX + " Added " + ChatColor.RED + "\"" +  args[2] + "\" " + ChatColor.GRAY
+            sender.sendMessage(Chat2Go.PREFIX + " Added " + ChatColor.RED + "\"" + args[2] + "\" " + ChatColor.GRAY
                     + "to the bad word list.");
             return;
         } else if (subCommand.equalsIgnoreCase("remove")) {
-            if (args.length == 2) {
-                throw new CommandWrongUsageException("/<command> badword remove <word>");
-            }
+            if (args.length == 2) throw new CommandWrongUsageException("/<command> badword remove <word>");
 
-            if(plugin.getChatManager().getBadWords().stream().noneMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
-                sender.sendMessage(ChatColor.RED + "Bad word is not on the list.");
-                return;
+            if (plugin.getChatManager().getBadWords().stream().noneMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
+                throw new CommandCustomErrorException("Bad word is not on the list.");
             }
 
             plugin.getChatManager().getBadWords().remove(args[2]); // TODO case sensitivity
@@ -162,15 +168,18 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             badWordList.remove(args[2]);
             badWordConfig.getConfig().set("badwords", badWordList);
             badWordConfig.save();
-            sender.sendMessage(Chat2Go.PREFIX + " Removed " + ChatColor.RED + "\"" +  args[2] + "\" " + ChatColor.GRAY
+            sender.sendMessage(Chat2Go.PREFIX + " Removed " + ChatColor.RED + "\"" + args[2] + "\" " + ChatColor.GRAY
                     + "from the bad word list.");
+            return;
+        } else if (subCommand.equalsIgnoreCase("reload")) {
+            // TODO reload configs
             return;
         }
 
-        throw new CommandWrongUsageException("/<command> badword <list|add|remove>");
+        throw new CommandWrongUsageException("/<command> badword <list|add|remove|reload>");
     }
 
-    private void handleSlowMode(CommandSender sender, ChatUser user, String... args) throws CommandWrongUsageException {
+    private void handleSlowMode(CommandSender sender, ChatUser user, String... args) throws CommandWrongUsageException, CommandCustomErrorException {
         if (args.length == 1) {
             throw new CommandWrongUsageException("/<command> slowmode <enable|disable|cooldown>");
         }
@@ -200,8 +209,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             String secondsStr = args[2];
 
             if (!MathUtil.isNumber(secondsStr)) {
-                sender.sendMessage("\"" + secondsStr + "\" is not a number."); // TODO exception?
-                return;
+                throw new CommandCustomErrorException("\"" + secondsStr + "\" is not a number."); // TODO own exception?
             }
 
             int seconds = Integer.parseInt(secondsStr);

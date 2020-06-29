@@ -7,7 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class CustomConfig {
@@ -31,10 +30,10 @@ public class CustomConfig {
     }
 
     public void save() {
-        plugin.getLogger().log(Level.INFO, "Saving badwords.yml..");
+        plugin.getLogger().log(Level.INFO, "Saving " + fileName + "..");
         try {
             config.save(file);
-            plugin.getLogger().log(Level.INFO, "Saved badwords.yml!");
+            plugin.getLogger().log(Level.INFO, "Saved " + fileName + "!");
         } catch (IOException e) {
             e.printStackTrace();
         }

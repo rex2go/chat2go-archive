@@ -1,6 +1,7 @@
 package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.ChatUser;
@@ -16,17 +17,15 @@ public class ReplyCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException {
+            CommandPlayerNotOnlineException, CommandCustomErrorException {
         if (!(sender instanceof Player)) {
-            // TODO message
+            // TODO message (exception)
             return true;
         }
 
         Player player = user.getPlayer();
 
-        if (!player.hasPermission("chat2go.msg")) {
-            throw new CommandNoPermissionException("chat2go.msg");
-        }
+        if (!player.hasPermission("chat2go.msg")) throw new CommandNoPermissionException("chat2go.msg");
 
         if (args.length < 1) {
             return false;
@@ -34,16 +33,13 @@ public class ReplyCommand extends WrappedCommandExecutor {
 
         ChatUser target = user.getLastChatter();
 
-        if (target == null) {
-            sender.sendMessage(ChatColor.RED + "No player to reply to.");
-            return true;
-        }
+        if (target == null) throw new CommandCustomErrorException("No player to reply to.");
+
 
         Player targetPlayer = target.getPlayer();
 
-        if (targetPlayer == null) {
-            throw new CommandPlayerNotOnlineException(target.getName());
-        }
+        if (targetPlayer == null) throw new CommandPlayerNotOnlineException(target.getName());
+
 
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < args.length; i++) {
