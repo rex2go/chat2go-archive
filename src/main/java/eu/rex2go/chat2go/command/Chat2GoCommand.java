@@ -7,10 +7,14 @@ import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
 import eu.rex2go.chat2go.config.ConfigManager;
+import eu.rex2go.chat2go.config.CustomConfig;
 import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.util.MathUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chat2GoCommand extends WrappedCommandExecutor {
 
@@ -72,13 +76,13 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
     private void handleFilter(CommandSender sender, ChatUser user, String... args) throws CommandWrongUsageException {
         if (args.length == 1) {
-            throw new CommandWrongUsageException("/<command> filter <censor|block|disabled>");
+            throw new CommandWrongUsageException("/<command> filter <censor|block|disable>");
         }
 
         String censorModeString = args[1].toUpperCase();
         ConfigManager configManager = plugin.getConfigManager();
 
-        if (censorModeString.equalsIgnoreCase("disabled")) {
+        if (censorModeString.equalsIgnoreCase("disable")) {
             configManager.setChatFilterEnabled(false);
             configManager.save();
         } else {
@@ -89,7 +93,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 configManager.setChatFilterMode(filterMode);
                 configManager.save();
             } catch (Exception exception) {
-                throw new CommandWrongUsageException("/<command> filter <censor|block|disabled>");
+                throw new CommandWrongUsageException("/<command> filter <censor|block|disable>");
             }
         }
 
@@ -122,20 +126,44 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 throw new CommandWrongUsageException("/<command> badword add <word>");
             }
 
-            // TODO check if already in list
+            if(plugin.getChatManager().getBadWords().stream().anyMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
+                sender.sendMessage(ChatColor.RED + "Bad word is already on the list.");
+                return;
+            }
+
             plugin.getChatManager().getBadWords().add(args[2]);
-            // TODO save & message
+            CustomConfig badWordConfig = plugin.getChatManager().getBadWordConfig();
+            List<String> badWordList = (List<String>) badWordConfig.getConfig().getList("badwords");
+
+            if (badWordList == null) badWordList = new ArrayList<>();
+
+            badWordList.add(args[2]);
+            badWordConfig.getConfig().set("badwords", badWordList);
+            badWordConfig.save();
+            sender.sendMessage(Chat2Go.PREFIX + " Added " + ChatColor.RED + "\"" +  args[2] + "\" " + ChatColor.GRAY
+                    + "to the bad word list.");
             return;
         } else if (subCommand.equalsIgnoreCase("remove")) {
             if (args.length == 2) {
                 throw new CommandWrongUsageException("/<command> badword remove <word>");
             }
 
-            if (plugin.getChatManager().getBadWords().remove(args[2])) {
-                // TODO save & message
-            } else {
-                // TODO message
+            if(plugin.getChatManager().getBadWords().stream().noneMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
+                sender.sendMessage(ChatColor.RED + "Bad word is not on the list.");
+                return;
             }
+
+            plugin.getChatManager().getBadWords().remove(args[2]); // TODO case sensitivity
+            CustomConfig badWordConfig = plugin.getChatManager().getBadWordConfig();
+            List<String> badWordList = (List<String>) badWordConfig.getConfig().getList("badwords");
+
+            if (badWordList == null) badWordList = new ArrayList<>();
+
+            badWordList.remove(args[2]);
+            badWordConfig.getConfig().set("badwords", badWordList);
+            badWordConfig.save();
+            sender.sendMessage(Chat2Go.PREFIX + " Removed " + ChatColor.RED + "\"" +  args[2] + "\" " + ChatColor.GRAY
+                    + "from the bad word list.");
             return;
         }
 
@@ -164,14 +192,14 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             sender.sendMessage(Chat2Go.PREFIX + " Chat Slow Mode has been " + ChatColor.RED + "disabled" + ChatColor.GREEN + ".");
 
             return;
-        } else if(subCommand.equalsIgnoreCase("cooldown")) {
-            if(args.length == 2) {
+        } else if (subCommand.equalsIgnoreCase("cooldown")) {
+            if (args.length == 2) {
                 throw new CommandWrongUsageException("/<command> slowmode cooldown <seconds>");
             }
 
             String secondsStr = args[2];
 
-            if(!MathUtil.isNumber(secondsStr)) {
+            if (!MathUtil.isNumber(secondsStr)) {
                 sender.sendMessage("\"" + secondsStr + "\" is not a number."); // TODO exception?
                 return;
             }
@@ -183,7 +211,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             sender.sendMessage(Chat2Go.PREFIX + " Chat cooldown set to " + seconds + "s.");
 
-            if(!configManager.isSlowModeEnabled()) {
+            if (!configManager.isSlowModeEnabled()) {
                 sender.sendMessage(Chat2Go.PREFIX + " Chat Slow Mode is currently disabled. It will take " +
                         "effect when you enable it.");
             }

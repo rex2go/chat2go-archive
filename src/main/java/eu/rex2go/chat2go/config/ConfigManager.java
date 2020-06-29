@@ -52,10 +52,10 @@ public class ConfigManager {
     private String privateMessageFormat = "&8MSG &7[{from} -> {to}]&8: &f{message}";
 
     @Getter
-    private boolean linkBlockEnabled = true;
+    private boolean linkBlockEnabled = true; // TODO
 
     @Getter
-    private boolean antiSpamEnabled = false;
+    private boolean antiSpamEnabled = false; // TODO
 
     // TODO chat log, chat log length, range chat, range chat length
 

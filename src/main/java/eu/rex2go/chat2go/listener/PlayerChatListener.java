@@ -18,12 +18,14 @@ public class PlayerChatListener extends AbstractListener {
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+
         if (!configManager.isChatEnabled()) {
             event.setCancelled(true);
+            player.sendMessage(ChatColor.RED + "Chat is disabled.");
             return;
         }
 
-        Player player = event.getPlayer();
         ChatUser chatUser = plugin.getUserManager().getUser(player);
         String message = event.getMessage();
         long currentTime = System.currentTimeMillis();
@@ -57,16 +59,6 @@ public class PlayerChatListener extends AbstractListener {
 
             player.sendMessage(ChatColor.RED + "Message could not be sent: Your message contains a blocked phrase.");
             // TODO customizable
-
-            if (configManager.isBadWordNotificationEnabled()) {
-                for (ChatUser staff : plugin.getUserManager().getChatUsers()) {
-                    if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_NOTIFY_BADWORD)
-                            && chatUser.isBadWordNotificationEnabled()) {
-                        staff.getPlayer().sendMessage(
-                                Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + player.getName() + ": " + ChatColor.RED + message);
-                    }
-                }
-            }
         }
     }
 }

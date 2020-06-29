@@ -3,8 +3,8 @@ package eu.rex2go.chat2go.chat;
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
-import eu.rex2go.chat2go.config.BadWordConfig;
 import eu.rex2go.chat2go.config.ConfigManager;
+import eu.rex2go.chat2go.config.CustomConfig;
 import eu.rex2go.chat2go.user.ChatUser;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -25,14 +25,14 @@ public class ChatManager {
     private FilterMode filterMode;
 
     @Getter
-    private BadWordConfig badWordConfig;
+    private CustomConfig badWordConfig;
 
     public ChatManager(Chat2Go plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
         this.filterMode = configManager.getChatFilterMode();
 
-        badWordConfig = new BadWordConfig(plugin);
+        badWordConfig = new CustomConfig(plugin, "badwords.yml");
 
         loadBadWords();
     }
@@ -40,7 +40,7 @@ public class ChatManager {
     private void loadBadWords() {
         List<String> badWordList = (List<String>) badWordConfig.getConfig().getList("badwords");
 
-        if(badWordList == null) return;
+        if (badWordList == null) return;
 
         badWords.addAll(badWordList);
     }
@@ -75,14 +75,21 @@ public class ChatManager {
             message = ChatColor.translateAlternateColorCodes('&', message);
         }
 
-        if (!message.equals(filter(message)) && !chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_IGNORE_BAD_WORDS)) {
+        if (!message.equals(filter(message))
+                && !chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_IGNORE_BAD_WORDS)
+                && configManager.isChatFilterEnabled()) {
             if (configManager.isBadWordNotificationEnabled()) {
-                // TODO ?
+                for (ChatUser staff : plugin.getUserManager().getChatUsers()) {
+                    if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_NOTIFY_BADWORD)
+                            && chatUser.isBadWordNotificationEnabled()) {
+                        staff.getPlayer().sendMessage(
+                                Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + chatUser.getName() + ": " + ChatColor.RED + message);
+                    }
+                }
             }
 
             if (configManager.getChatFilterMode() == FilterMode.CENSOR) {
                 message = filter(message);
-                // TODO notify staff?
             } else if (configManager.getChatFilterMode() == FilterMode.BLOCK) {
                 throw new BadWordException(chatUser, message);
             }
