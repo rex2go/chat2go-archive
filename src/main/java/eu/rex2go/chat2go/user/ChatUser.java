@@ -3,13 +3,16 @@ package eu.rex2go.chat2go.user;
 import eu.rex2go.chat2go.Chat2Go;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class ChatUser {
 
     @Getter
-    private Player player;
+    private UUID uuid;
 
     @Getter @Setter
     private String name;
@@ -32,18 +35,22 @@ public class ChatUser {
     @Getter @Setter
     private boolean badWordNotificationEnabled = true;
 
-    public ChatUser(Player player, String name) {
-        this.player = player;
+    public ChatUser(UUID uuid, String name) {
+        this.uuid = uuid;
         this.name = name;
     }
 
     public ChatUser(Player player) {
-        this(player, player.getName());
+        this(player.getUniqueId(), player.getName());
+    }
+
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
     }
 
     public String getPrefix() {
         if(Chat2Go.isVaultInstalled()) {
-            return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerPrefix(player));
+            return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerPrefix(getPlayer()));
         }
 
         return "";
@@ -51,7 +58,7 @@ public class ChatUser {
 
     public String getSuffix() {
         if(Chat2Go.isVaultInstalled()) {
-            return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerSuffix(player));
+            return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerSuffix(getPlayer()));
         }
 
         return "";

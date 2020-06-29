@@ -5,6 +5,7 @@ import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.FilterMode;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
+import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
 import eu.rex2go.chat2go.config.ConfigManager;
 import eu.rex2go.chat2go.user.ChatUser;
 import org.bukkit.ChatColor;
@@ -18,7 +19,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException {
+            CommandPlayerNotOnlineException, CommandWrongUsageException {
         if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND)) {
             throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND);
         }
@@ -60,10 +61,9 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         sender.sendMessage(ChatColor.GRAY + "---                  ---");
     }
 
-    private void handleFilter(CommandSender sender, ChatUser user, String... args) {
+    private void handleFilter(CommandSender sender, ChatUser user, String... args) throws CommandWrongUsageException {
         if (args.length == 1) {
-            sender.sendMessage(ChatColor.RED + "Usage: /chat filter <censor|block|disabled>");
-            return;
+            throw new CommandWrongUsageException("/<command> filter <censor|block|disabled>");
         }
 
         String censorModeString = args[1].toUpperCase();
@@ -80,8 +80,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 configManager.setChatFilterMode(filterMode);
                 configManager.save();
             } catch (Exception exception) {
-                sender.sendMessage(ChatColor.RED + "Usage: /chat filter <censor|block|disabled>");
-                return;
+                throw new CommandWrongUsageException("/<command> filter <censor|block|disabled>");
             }
         }
 
@@ -89,10 +88,9 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 Chat2Go.PREFIX + " Chat filtering has been set to " + ChatColor.RED + censorModeString + ChatColor.GRAY + ".");
     }
 
-    private void handleBadWord(CommandSender sender, ChatUser user, String... args) {
+    private void handleBadWord(CommandSender sender, ChatUser user, String... args) throws CommandWrongUsageException {
         if (args.length == 1) {
-            sender.sendMessage(ChatColor.RED + "Usage: /chat badword <list|add|remove>");
-            return;
+            throw new CommandWrongUsageException("/<command> badword <list|add|remove>");
         }
 
         String subCommand = args[1];
@@ -110,23 +108,21 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 sender.sendMessage(Chat2Go.PREFIX + " - " + ChatColor.WHITE + badWord);
             }
             return;
-        } else if(subCommand.equalsIgnoreCase("add")) {
+        } else if (subCommand.equalsIgnoreCase("add")) {
             if (args.length == 2) {
-                sender.sendMessage(ChatColor.RED + "Usage: /chat badword add <word>");
-                return;
+                throw new CommandWrongUsageException("/<command> badword add <word>");
             }
 
             // TODO check if already in list
             plugin.getChatManager().getBadWords().add(args[2]);
             // TODO save & message
             return;
-        } else if(subCommand.equalsIgnoreCase("remove")) {
+        } else if (subCommand.equalsIgnoreCase("remove")) {
             if (args.length == 2) {
-                sender.sendMessage(ChatColor.RED + "Usage: /chat badword add <word>");
-                return;
+                throw new CommandWrongUsageException("/<command> badword remove <word>");
             }
 
-            if(plugin.getChatManager().getBadWords().remove(args[2])) {
+            if (plugin.getChatManager().getBadWords().remove(args[2])) {
                 // TODO save & message
             } else {
                 // TODO message
@@ -134,6 +130,6 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             return;
         }
 
-        sender.sendMessage(ChatColor.RED + "Usage: /chat badword <list|add|remove>");
+        throw new CommandWrongUsageException("/<command> badword <list|add|remove>");
     }
 }

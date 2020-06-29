@@ -31,6 +31,9 @@ public class PlayerChatListener extends AbstractListener {
             return;
         }
 
+        chatUser.setLastMessageTime(System.currentTimeMillis());
+        chatUser.setLastMessage(message);
+
         try {
             event.setFormat(plugin.getChatManager().format(chatUser, message));
         } catch (BadWordException e) {

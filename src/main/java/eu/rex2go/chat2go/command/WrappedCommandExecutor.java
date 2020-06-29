@@ -3,9 +3,11 @@ package eu.rex2go.chat2go.command;
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
+import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
 import eu.rex2go.chat2go.user.ChatUser;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -42,6 +44,9 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
                 // TODO message
             } catch (CommandPlayerNotOnlineException exception) {
                 // TODO message
+            } catch (CommandWrongUsageException exception) {
+                sender.sendMessage(ChatColor.RED + "Usage: " + exception.getUsage().replace("<command>", label));
+
             }
 
             return true;
@@ -50,5 +55,5 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
         return false;
     }
 
-    protected abstract boolean execute(CommandSender sender, ChatUser user, String ... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException;
+    protected abstract boolean execute(CommandSender sender, ChatUser user, String ... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException;
 }
