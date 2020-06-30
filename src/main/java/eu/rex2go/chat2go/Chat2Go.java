@@ -5,6 +5,7 @@ import eu.rex2go.chat2go.command.Chat2GoCommand;
 import eu.rex2go.chat2go.command.MessageCommand;
 import eu.rex2go.chat2go.command.ReplyCommand;
 import eu.rex2go.chat2go.config.ConfigManager;
+import eu.rex2go.chat2go.config.MessageConfig;
 import eu.rex2go.chat2go.listener.PlayerChatListener;
 import eu.rex2go.chat2go.listener.PlayerJoinListener;
 import eu.rex2go.chat2go.listener.PlayerQuitListener;
@@ -13,6 +14,7 @@ import lombok.Getter;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -33,6 +35,9 @@ public class Chat2Go extends JavaPlugin {
     private static boolean vaultInstalled;
 
     @Getter
+    private static MessageConfig messageConfig;
+
+    @Getter
     private UserManager userManager;
 
     @Getter
@@ -40,6 +45,8 @@ public class Chat2Go extends JavaPlugin {
 
     @Getter
     private ChatManager chatManager;
+
+
 
     @Override
     public void onEnable() {
@@ -51,6 +58,9 @@ public class Chat2Go extends JavaPlugin {
             getLogger().log(Level.WARNING, "Vault is not installed. There will be no support for prefixes and " +
                     "suffixes.");
         }
+
+        messageConfig = new MessageConfig(this);
+        messageConfig.load();
 
         setupManagers();
         setupCommands();
@@ -81,5 +91,9 @@ public class Chat2Go extends JavaPlugin {
         new PlayerChatListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
+    }
+
+    public static void sendMessage(CommandSender sender, String key, boolean prefix, String... args) {
+        sender.sendMessage((prefix ? Chat2Go.PREFIX + " " : "") + Chat2Go.getMessageConfig().getMessage(key, args));
     }
 }

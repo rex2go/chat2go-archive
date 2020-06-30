@@ -15,7 +15,7 @@ public class CustomConfig {
     private String fileName;
     @Getter
     private FileConfiguration config;
-    private Chat2Go plugin;
+    protected Chat2Go plugin;
     @Getter
     private File file;
 

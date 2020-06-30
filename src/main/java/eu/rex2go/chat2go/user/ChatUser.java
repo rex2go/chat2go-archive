@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -14,25 +15,32 @@ public class ChatUser {
     @Getter
     private UUID uuid;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String name;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String lastMessage = null;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private long lastMessageTime = 0;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean muted = false;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private long mutedTime = 0;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private ChatUser lastChatter;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean badWordNotificationEnabled = true;
 
     public ChatUser(UUID uuid, String name) {
@@ -49,7 +57,7 @@ public class ChatUser {
     }
 
     public String getPrefix() {
-        if(Chat2Go.isVaultInstalled()) {
+        if (Chat2Go.isVaultInstalled()) {
             return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerPrefix(getPlayer()));
         }
 
@@ -57,10 +65,18 @@ public class ChatUser {
     }
 
     public String getSuffix() {
-        if(Chat2Go.isVaultInstalled()) {
+        if (Chat2Go.isVaultInstalled()) {
             return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerSuffix(getPlayer()));
         }
 
         return "";
     }
+
+    public void sendMessage(String key, boolean prefix, String... args) {
+        if(getPlayer() == null) return;
+
+        Chat2Go.sendMessage(getPlayer(), key, prefix, args);
+    }
+
+
 }

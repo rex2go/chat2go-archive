@@ -23,6 +23,7 @@ public class PlayerChatListener extends AbstractListener {
         if (!configManager.isChatEnabled()) {
             event.setCancelled(true);
             player.sendMessage(ChatColor.RED + "Chat is disabled.");
+            // TODO customizable
             return;
         }
 
@@ -34,7 +35,7 @@ public class PlayerChatListener extends AbstractListener {
             return;
         }
 
-        if (!player.hasPermission(PermissionConstant.PERMISSION_BYPASS_SLOW_MODE)
+        if (!player.hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_SLOW_MODE)
                 && configManager.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(

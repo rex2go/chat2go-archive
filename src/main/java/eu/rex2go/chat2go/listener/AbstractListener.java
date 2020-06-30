@@ -7,9 +7,9 @@ import org.bukkit.event.Listener;
 public abstract class AbstractListener implements Listener {
 
     protected Chat2Go plugin;
-    protected ConfigManager configManager;
+    ConfigManager configManager;
 
-    public AbstractListener(Chat2Go plugin) {
+    AbstractListener(Chat2Go plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();
 

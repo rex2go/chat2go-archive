@@ -1,0 +1,37 @@
+chat2go:
+  command:
+    error:
+      no_permission: "&cYou do not have permission to execute this command!"
+      # {0} equals player name
+      player_not_online: "&c{0} is not online."
+      # {0} equals command usage
+      wrong_usage: "&cUsage: {0}"
+      no_player: "&cThis command can only be executed by a player."
+      # {0} equals number
+      not_a_number: '&c"{0}" is not a number!'
+    message:
+      no_player_to_reply_to: "&cNo player to reply to."
+      message_yourself: "&cYou cannot message yourself."
+    chat:
+      # {0} equals command sub command, {1} equals command typed
+      unknown_sub_command: 'Unknown sub command "{0}". Type "/{1} help" for help.'
+
+      filter:
+        # {0} equals filter mode
+        set_to: "&7Chat filtering has been set to &c{0}&7."
+
+      badword:
+        # {0} equals bad word
+        add: '&7Added &c"{0}" &7to the bad word list.'
+        remove: '&7Removed &c"{0}" &7from the bad word list.'
+        list: "&7The list of banned words:"
+        # {0} equals command typed
+        list_empty: '&cThis list is empty. You can add words to it using "/{0} badword add <word>"'
+
+        error:
+          already_on_the_list: "Bad word is already on the list."
+          not_on_the_list: "Bad word is not on the list."
+
+      slowmode:
+        enable: "&7Chat Slow Mode has been &aenabled&7."
+        disable: "&7Chat Slow Mode has been &cdisabled&7."

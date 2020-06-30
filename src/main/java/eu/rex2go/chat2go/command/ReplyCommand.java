@@ -1,8 +1,10 @@
 package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
+import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.ChatUser;
 import org.bukkit.ChatColor;
@@ -16,16 +18,17 @@ public class ReplyCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, ChatUser user, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException, CommandCustomErrorException {
+    protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
+            CommandPlayerNotOnlineException, CommandCustomErrorException, CommandNoPlayerException {
         if (!(sender instanceof Player)) {
-            // TODO message (exception)
-            return true;
+            throw new CommandNoPlayerException();
         }
 
         Player player = user.getPlayer();
 
-        if (!player.hasPermission("chat2go.msg")) throw new CommandNoPermissionException("chat2go.msg");
+        if (!player.hasPermission(PermissionConstant.PERMISSION_COMMAND_MSG)) {
+            throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_MSG);
+        }
 
         if (args.length < 1) {
             return false;
@@ -33,8 +36,7 @@ public class ReplyCommand extends WrappedCommandExecutor {
 
         ChatUser target = user.getLastChatter();
 
-        if (target == null) throw new CommandCustomErrorException("No player to reply to.");
-
+        if (target == null) throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message.no_player_to_reply_to"));
 
         Player targetPlayer = target.getPlayer();
 
@@ -42,8 +44,8 @@ public class ReplyCommand extends WrappedCommandExecutor {
 
 
         StringBuilder message = new StringBuilder();
-        for (int i = 0; i < args.length; i++) {
-            message.append(args[i]).append(" ");
+        for (String arg : args) {
+            message.append(arg).append(" ");
         }
 
         message = new StringBuilder(message.substring(0, message.length() - 1));

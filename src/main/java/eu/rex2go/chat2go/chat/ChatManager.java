@@ -76,11 +76,11 @@ public class ChatManager {
         }
 
         if (!message.equals(filter(message))
-                && !chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_IGNORE_BAD_WORDS)
+                && !chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_BAD_WORD_IGNORE)
                 && configManager.isChatFilterEnabled()) {
             if (configManager.isBadWordNotificationEnabled()) {
                 for (ChatUser staff : plugin.getUserManager().getChatUsers()) {
-                    if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_NOTIFY_BAD_WORD)
+                    if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_BAD_WORD_NOTIFY)
                             && chatUser.isBadWordNotificationEnabled()) {
                         staff.getPlayer().sendMessage(
                                 Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + chatUser.getName() + ": " + ChatColor.RED + message);
