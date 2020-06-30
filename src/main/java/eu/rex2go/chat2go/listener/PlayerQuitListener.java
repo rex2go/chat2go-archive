@@ -18,14 +18,16 @@ public class PlayerQuitListener extends AbstractListener {
         Player player = event.getPlayer();
         ChatUser user = plugin.getUserManager().getUser(player);
 
-        // TODO test
-        if(user != null) plugin.getUserManager().getChatUsers().remove(user);
+        if(user != null) {
+            plugin.getUserManager().getChatUsers().remove(user);
 
-        if (mainConfig.isCustomLeaveMessageEnabled()) {
-            try {
-                event.setQuitMessage(plugin.getChatManager().format(
-                        user, "", false, mainConfig.getCustomLeaveMessage()));
-            } catch (BadWordException ignored) { }
+            if (mainConfig.isCustomLeaveMessageEnabled()) {
+                try {
+                    event.setQuitMessage(plugin.getChatManager().format(
+                            user, "", false, mainConfig.getCustomLeaveMessage()));
+                } catch (BadWordException ignored) {
+                }
+            }
         }
     }
 }
