@@ -38,7 +38,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             handleFilter(sender, user, label, args);
             return true;
-        } else if (subCommand.equalsIgnoreCase("badword")) {
+        } else if (subCommand.equalsIgnoreCase("badword") || subCommand.equalsIgnoreCase("badwords")) {
             if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD)) {
                 throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD);
             }
@@ -79,9 +79,25 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
     }
 
     private void sendHelp(CommandSender sender) {
+        net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.AQUA;
+
+        if (Chat2Go.isHexSupported()) {
+            color = net.md_5.bungee.api.ChatColor.of("#4287f5");
+        }
+
         sender.sendMessage(ChatColor.GRAY + "--- " + ChatColor.AQUA + "chat2go help" + ChatColor.GRAY + " ---");
 
-        // TODO
+        sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat filter " + ChatColor.WHITE + " | "
+                + ChatColor.GRAY + " set the chat filtering mode");
+
+        sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat slowmode " + ChatColor.WHITE + " | "
+                + ChatColor.GRAY + " manage the chat slow mode");
+
+        sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat badword " + ChatColor.WHITE + " | "
+                + ChatColor.GRAY + " manage the bad word list");
+
+        sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat reload " + ChatColor.WHITE + " | "
+                + ChatColor.GRAY + " reload all files");
 
         sender.sendMessage(ChatColor.GRAY + "---                  ---");
     }
@@ -162,9 +178,6 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.badword.remove", true, args[2]);
             return;
-        } else if (subCommand.equalsIgnoreCase("reload")) {
-            // TODO reload configs
-            return;
         }
 
         throw new CommandWrongUsageException("/<command> badword <list|add|remove|reload>");
@@ -208,11 +221,11 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             mainConfig.setSlowModeSeconds(seconds);
             mainConfig.save();
 
-            // TODO customizable
+            // TODO customizable?
             sender.sendMessage(Chat2Go.PREFIX + " Chat cooldown set to " + seconds + "s.");
 
             if (!mainConfig.isSlowModeEnabled()) {
-                // TODO customizable
+                // TODO customizable?
                 sender.sendMessage(Chat2Go.PREFIX + " Chat Slow Mode is currently disabled. It will take " +
                         "effect when you enable it.");
             }

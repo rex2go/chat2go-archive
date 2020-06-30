@@ -2,6 +2,7 @@ package eu.rex2go.chat2go;
 
 import eu.rex2go.chat2go.chat.ChatManager;
 import eu.rex2go.chat2go.command.Chat2GoCommand;
+import eu.rex2go.chat2go.command.ClearChatCommand;
 import eu.rex2go.chat2go.command.MessageCommand;
 import eu.rex2go.chat2go.command.ReplyCommand;
 import eu.rex2go.chat2go.config.BadWordConfig;
@@ -10,6 +11,7 @@ import eu.rex2go.chat2go.config.MessageConfig;
 import eu.rex2go.chat2go.listener.PlayerChatListener;
 import eu.rex2go.chat2go.listener.PlayerJoinListener;
 import eu.rex2go.chat2go.listener.PlayerQuitListener;
+import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.user.UserManager;
 import eu.rex2go.chat2go.util.MathUtil;
 import lombok.Getter;
@@ -17,6 +19,7 @@ import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -92,6 +95,11 @@ public class Chat2Go extends JavaPlugin {
         setupManagers();
         setupCommands();
         setupListeners();
+
+        for(Player all : Bukkit.getOnlinePlayers()) {
+            ChatUser user = new ChatUser(all);
+            getUserManager().getChatUsers().add(user);
+        }
     }
 
     private void setupChat() {
@@ -108,6 +116,7 @@ public class Chat2Go extends JavaPlugin {
     }
 
     private void setupCommands() {
+        new ClearChatCommand(this);
         new Chat2GoCommand(this);
         new MessageCommand(this);
         new ReplyCommand(this);

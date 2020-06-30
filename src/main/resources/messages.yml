@@ -1,4 +1,9 @@
 chat2go:
+  chat:
+    disabled: "&cChat is disabled."
+    blocked_message: "&cMessage could not be sent: Your message contains a blocked phrase."
+    # {0} equals seconds
+    cooldown: "&cChat is in slow mode. Please wait {0} seconds before sending a message."
   command:
     error:
       no_permission: "&cYou do not have permission to execute this command!"

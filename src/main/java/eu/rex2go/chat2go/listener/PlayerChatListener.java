@@ -19,21 +19,20 @@ public class PlayerChatListener extends AbstractListener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-
-        if (!mainConfig.isChatEnabled()) {
-            event.setCancelled(true);
-            player.sendMessage(ChatColor.RED + "Chat is disabled.");
-            // TODO customizable
-            return;
-        }
-
         ChatUser chatUser = plugin.getUserManager().getUser(player);
-        String message = event.getMessage();
-        long currentTime = System.currentTimeMillis();
 
         if (chatUser == null) {
             return;
         }
+
+        if (!mainConfig.isChatEnabled()) {
+            event.setCancelled(true);
+            chatUser.sendMessage("chat2go.chat.disabled", false);
+            return;
+        }
+
+        String message = event.getMessage();
+        long currentTime = System.currentTimeMillis();
 
         if (!player.hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_SLOW_MODE)
                 && mainConfig.isSlowModeEnabled()) {
@@ -42,9 +41,7 @@ public class PlayerChatListener extends AbstractListener {
                             ((chatUser.getLastMessageTime() + mainConfig.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
                             2);
             if (cooldown > 0) {
-                player.sendMessage(ChatColor.RED + "Chat is in slow mode. Please wait " + cooldown + " seconds before" +
-                        " sending a message.");
-                // TODO customizable
+                chatUser.sendMessage("chat2go.chat.cooldown", false, String.valueOf(cooldown));
                 event.setCancelled(true);
                 return;
             }
@@ -57,9 +54,7 @@ public class PlayerChatListener extends AbstractListener {
             event.setFormat(plugin.getChatManager().format(chatUser, message));
         } catch (BadWordException e) {
             event.setCancelled(true);
-
-            player.sendMessage(ChatColor.RED + "Message could not be sent: Your message contains a blocked phrase.");
-            // TODO customizable
+            chatUser.sendMessage("chat2go.chat.blocked_message", false);
         }
     }
 }

@@ -18,7 +18,6 @@ public class PlayerJoinListener extends AbstractListener {
         Player player = event.getPlayer();
         ChatUser user = new ChatUser(player);
 
-        // TODO test
         plugin.getUserManager().getChatUsers().add(user);
 
         if(mainConfig.isCustomJoinMessageEnabled()) {

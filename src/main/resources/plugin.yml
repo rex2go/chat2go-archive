@@ -1,6 +1,7 @@
 name: chat2go
-version: 1.0.0
+version: 0.1-PRE
 author: rex2go
+description: chat2go is an easy to use chat management plugin with 1.16 color support
 softdepend:
   - Vault
 loadbefore:
@@ -10,17 +11,23 @@ commands:
   msg:
     description: Send a private message
     usage: "§cUsage: /<command> <player> <message>"
-    permission: chat2go.msg
+    permission: chat2go.command.msg
     aliases:
       - tell
   chat2go:
     usage: "§cUsage: /<command>"
-    permission: chat2go.command
+    permission: chat2go.command.chat
     aliases:
       - chat
   reply:
     description: Reply to a private message
     usage: "§cUsage: /<command> <message>"
-    permission: chat2go.msg
+    permission: chat2go.command.msg
     aliases:
       - r
+  clearchat:
+    description: Clears the chat
+    usage: "§cUsage: /<command>"
+    permission: chat2go.command.clearchat
+    aliases:
+      - cc

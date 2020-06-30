@@ -14,7 +14,7 @@ public class PermissionConstant {
     public static final String PERMISSION_COMMAND_CHAT_SLOW_MODE = "chat2go.command.chat.slow_mode";
     public static final String PERMISSION_COMMAND_CHAT_RELOAD = "chat2go.command.chat.reload";
 
-    public static final String PERMISSION_COMMAND_MSG = "chat2go.command.msg";
+    public static final String PERMISSION_COMMAND_CLEAR_CHAT = "chat2go.command.clear_chat";
 
-    public static final String PERMISSION_COMMAND_SPY = "chat2go.command.spy";
+    public static final String PERMISSION_COMMAND_MSG = "chat2go.command.msg";
 }

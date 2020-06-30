@@ -11,6 +11,9 @@ public class MainConfig extends CustomConfig {
     private boolean chatEnabled = true;
 
     @Getter
+    private boolean configSync = false;
+
+    @Getter
     private String chatFormat = "{prefix}{username}{suffix}&7: &f{message}";
 
     @Getter
@@ -67,6 +70,7 @@ public class MainConfig extends CustomConfig {
     @Override
     public void load() {
         chatEnabled = getConfig().getBoolean("chatEnabled");
+        configSync = getConfig().getBoolean("configSync");
         chatFormat = getConfig().getString("chatFormat");
         prefixTrailingSpaceEnabled = getConfig().getBoolean("prefixTrailingSpaceEnabled");
         suffixLeadingSpaceEnabled = getConfig().getBoolean("suffixLeadingSpaceEnabled");
@@ -102,7 +106,10 @@ public class MainConfig extends CustomConfig {
 
     @Override
     public void save() {
+        if(!configSync) return;
+
         getConfig().set("chatEnabled", chatEnabled);
+        getConfig().set("configSync", configSync);
         getConfig().set("chatFormat", chatFormat);
         getConfig().set("prefixTrailingSpaceEnabled", prefixTrailingSpaceEnabled);
         getConfig().set("suffixLeadingSpaceEnabled", suffixLeadingSpaceEnabled);

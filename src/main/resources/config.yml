@@ -1,26 +1,62 @@
+# description: if set to false chatting will be disabled
 chatEnabled: true
 
+# description: config gets updated as you're changing it in game
+# warning: comments will will disappear
+# example: /chat filter censor will update the config for permanent chat censoring
+syncConfig: false
+
+# description: set the format
 chatFormat: "{prefix}{username}{suffix}&7: &f{message}"
 
+# description: adds a space after {prefix} - useful for formatting
 prefixTrailingSpaceEnabled: true
+
+# description: adds a space before {suffix} - useful for formatting
 suffixLeadingSpaceEnabled: true
 
+# description: enables colored chatting, in 1.16+ hex colors are supported
+# permission: chat2go.chat.color
+# example: &6 turns golden
+# example (1.16+): <#ff0000> turns red
 translateChatColorsEnabled: true
 
+# description: enables chat filtering for bad words defined in badwords.yml
+# permission: chat2go.bad_word.ignore
 chatFilterEnabled: true
+
+# description: if chat filtering is enabled, the message containing a bad word will either be completely blocked or censored
+# possible values: [BLOCK, CENSOR]
 chatFilterMode: BLOCK
+
+# description: if enabled, staff will get notified when a player sends a bad word
+# permission: chat2go.bad_word.notify
 badWordNotificationEnabled: true
 
+# implemented in the next version
 linkBlockEnabled: true
+
+# implemented in the next version
 antiSpamEnabled: false
 
+# description: chatting will be available with a cooldown
+# permission: chat2go.chat.bypass_slow_mode
 slowModeEnabled: false
+
+# description: the cooldown given in seconds
 slowModeSeconds: 5
 
+# description: custom join message
 customJoinMessageEnabled: true
+
+# description: custom join message format
 customJoinMessage: "&7[&a+&7] &7{username}"
 
+# description: custom leave message
 customLeaveMessageEnabled: true
+
+# description: custom leave message format
 customLeaveMessage: "&7[&c-&7] &7{username}"
 
+# description: msg format
 privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
