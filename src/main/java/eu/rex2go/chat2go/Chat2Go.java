@@ -130,16 +130,16 @@ public class Chat2Go extends JavaPlugin {
 
     public String parseHexColor(String str) {
         if (Chat2Go.isHexSupported()) {
-            Pattern pattern = Pattern.compile("<(.*)>");
+            Pattern pattern = Pattern.compile("<(.*?)>");
             Matcher matcher = pattern.matcher(str);
-            int i = 1;
+            int i = 0;
 
             while (matcher.find()) {
                 String hex = matcher.group(i++);
                 try {
                     net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hex);
                     str = str.replaceAll("<" + hex + ">", color.toString());
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {}
             }
         }
 
