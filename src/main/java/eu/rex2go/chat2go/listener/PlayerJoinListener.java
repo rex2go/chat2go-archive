@@ -21,10 +21,10 @@ public class PlayerJoinListener extends AbstractListener {
         // TODO test
         plugin.getUserManager().getChatUsers().add(user);
 
-        if(configManager.isCustomJoinMessageEnabled()) {
+        if(mainConfig.isCustomJoinMessageEnabled()) {
             try {
                 event.setJoinMessage(plugin.getChatManager().format(
-                        user, "", false, configManager.getCustomJoinMessage()));
+                        user, "", false, mainConfig.getCustomJoinMessage()));
             } catch (BadWordException ignored) { }
         }
     }

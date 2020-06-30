@@ -21,10 +21,10 @@ public class PlayerQuitListener extends AbstractListener {
         // TODO test
         if(user != null) plugin.getUserManager().getChatUsers().remove(user);
 
-        if (configManager.isCustomLeaveMessageEnabled()) {
+        if (mainConfig.isCustomLeaveMessageEnabled()) {
             try {
                 event.setQuitMessage(plugin.getChatManager().format(
-                        user, "", false, configManager.getCustomLeaveMessage()));
+                        user, "", false, mainConfig.getCustomLeaveMessage()));
             } catch (BadWordException ignored) { }
         }
     }

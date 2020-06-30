@@ -20,7 +20,7 @@ public class PlayerChatListener extends AbstractListener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
-        if (!configManager.isChatEnabled()) {
+        if (!mainConfig.isChatEnabled()) {
             event.setCancelled(true);
             player.sendMessage(ChatColor.RED + "Chat is disabled.");
             // TODO customizable
@@ -36,10 +36,10 @@ public class PlayerChatListener extends AbstractListener {
         }
 
         if (!player.hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_SLOW_MODE)
-                && configManager.isSlowModeEnabled()) {
+                && mainConfig.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(
-                            ((chatUser.getLastMessageTime() + configManager.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
+                            ((chatUser.getLastMessageTime() + mainConfig.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
                             2);
             if (cooldown > 0) {
                 player.sendMessage(ChatColor.RED + "Chat is in slow mode. Please wait " + cooldown + " seconds before" +

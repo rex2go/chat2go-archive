@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-public class CustomConfig {
+public abstract class CustomConfig {
 
     @Getter
     private String fileName;
@@ -19,13 +19,27 @@ public class CustomConfig {
     @Getter
     private File file;
 
-    public CustomConfig(Chat2Go plugin, String fileName) {
+    CustomConfig(Chat2Go plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName;
-
-        plugin.saveResource(fileName, false);
-
         this.file = new File(plugin.getDataFolder() + File.separator + fileName);
+
+        if(!file.exists()) {
+            plugin.saveResource(fileName, false);
+        }
+
+        this.config = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public abstract void load();
+
+    public void reload() {
+        this.file = new File(plugin.getDataFolder() + File.separator + fileName);
+
+        if(!file.exists()) {
+            plugin.saveResource(fileName, false);
+        }
+
         this.config = YamlConfiguration.loadConfiguration(file);
     }
 

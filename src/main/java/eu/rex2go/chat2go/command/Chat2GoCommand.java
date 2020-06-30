@@ -4,15 +4,11 @@ import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.FilterMode;
 import eu.rex2go.chat2go.command.exception.*;
-import eu.rex2go.chat2go.config.ConfigManager;
-import eu.rex2go.chat2go.config.CustomConfig;
+import eu.rex2go.chat2go.config.MainConfig;
 import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.util.MathUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Chat2GoCommand extends WrappedCommandExecutor {
 
@@ -22,7 +18,8 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException, CommandNotANumberException {
+            CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException,
+            CommandNotANumberException {
         if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_CHAT)) {
             throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT);
         }
@@ -60,12 +57,25 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                 throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT_RELOAD);
             }
 
-            // TODO
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
+                    Chat2Go.getMainConfig().getFileName());
+            Chat2Go.getMainConfig().reload();
+
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
+                    Chat2Go.getBadWordConfig().getFileName());
+            Chat2Go.getBadWordConfig().reload();
+
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
+                    Chat2Go.getMessageConfig().getFileName());
+            Chat2Go.getMessageConfig().reload();
+
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.done", true);
             return true;
         }
 
-        Chat2Go.sendMessage(sender, "chat2go.command.chat.unknown_sub_command", false, subCommand, label);
-        return true;
+        throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.chat" +
+                        ".unknown_sub_command",
+                subCommand, label));
     }
 
     private void sendHelp(CommandSender sender) {
@@ -82,18 +92,18 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         }
 
         String censorModeString = args[1].toUpperCase();
-        ConfigManager configManager = plugin.getConfigManager();
+        MainConfig mainConfig = Chat2Go.getMainConfig();
 
         if (censorModeString.equalsIgnoreCase("disable")) {
-            configManager.setChatFilterEnabled(false);
-            configManager.save();
+            mainConfig.setChatFilterEnabled(false);
+            mainConfig.save();
         } else {
             try {
                 FilterMode filterMode = FilterMode.valueOf(censorModeString);
 
-                configManager.setChatFilterEnabled(true);
-                configManager.setChatFilterMode(filterMode);
-                configManager.save();
+                mainConfig.setChatFilterEnabled(true);
+                mainConfig.setChatFilterMode(filterMode);
+                mainConfig.save();
             } catch (Exception exception) {
                 throw new CommandWrongUsageException("/<command> filter <censor|block|disable>");
             }
@@ -128,18 +138,12 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             }
 
             if (plugin.getChatManager().getBadWords().stream().anyMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
-                throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.chat.badword.error.already_on_the_list"));
+                throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.chat" +
+                        ".badword.error.already_on_the_list"));
             }
 
             plugin.getChatManager().getBadWords().add(args[2]);
-            CustomConfig badWordConfig = plugin.getChatManager().getBadWordConfig();
-            List<String> badWordList = (List<String>) badWordConfig.getConfig().getList("badwords");
-
-            if (badWordList == null) badWordList = new ArrayList<>();
-
-            badWordList.add(args[2]);
-            badWordConfig.getConfig().set("badwords", badWordList);
-            badWordConfig.save();
+            plugin.getChatManager().getBadWordConfig().save();
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.badword.add", true, args[2]);
             return;
@@ -149,18 +153,12 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             }
 
             if (plugin.getChatManager().getBadWords().stream().noneMatch(badWord -> badWord.equalsIgnoreCase(args[2]))) {
-                throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.chat.badword.error.not_on_the_list"));
+                throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.chat" +
+                        ".badword.error.not_on_the_list"));
             }
 
             plugin.getChatManager().getBadWords().remove(args[2]); // TODO case sensitivity
-            CustomConfig badWordConfig = plugin.getChatManager().getBadWordConfig();
-            List<String> badWordList = (List<String>) badWordConfig.getConfig().getList("badwords");
-
-            if (badWordList == null) badWordList = new ArrayList<>();
-
-            badWordList.remove(args[2]);
-            badWordConfig.getConfig().set("badwords", badWordList);
-            badWordConfig.save();
+            plugin.getChatManager().getBadWordConfig().save();
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.badword.remove", true, args[2]);
             return;
@@ -178,18 +176,18 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         }
 
         String subCommand = args[1];
-        ConfigManager configManager = plugin.getConfigManager();
+        MainConfig mainConfig = Chat2Go.getMainConfig();
 
         if (subCommand.equalsIgnoreCase("enable")) {
-            configManager.setSlowModeEnabled(true);
-            configManager.save();
+            mainConfig.setSlowModeEnabled(true);
+            mainConfig.save();
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.slowmode.enable", true);
 
             return;
         } else if (subCommand.equalsIgnoreCase("disable")) {
-            configManager.setSlowModeEnabled(false);
-            configManager.save();
+            mainConfig.setSlowModeEnabled(false);
+            mainConfig.save();
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.slowmode.disable", true);
 
@@ -207,13 +205,13 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             int seconds = Integer.parseInt(secondsStr);
 
-            configManager.setSlowModeSeconds(seconds);
-            configManager.save();
+            mainConfig.setSlowModeSeconds(seconds);
+            mainConfig.save();
 
             // TODO customizable
             sender.sendMessage(Chat2Go.PREFIX + " Chat cooldown set to " + seconds + "s.");
 
-            if (!configManager.isSlowModeEnabled()) {
+            if (!mainConfig.isSlowModeEnabled()) {
                 // TODO customizable
                 sender.sendMessage(Chat2Go.PREFIX + " Chat Slow Mode is currently disabled. It will take " +
                         "effect when you enable it.");

@@ -29,9 +29,14 @@ chat2go:
         list_empty: '&cThis list is empty. You can add words to it using "/{0} badword add <word>"'
 
         error:
-          already_on_the_list: "Bad word is already on the list."
-          not_on_the_list: "Bad word is not on the list."
+          already_on_the_list: "&cBad word is already on the list."
+          not_on_the_list: "&cBad word is not on the list."
 
       slowmode:
         enable: "&7Chat Slow Mode has been &aenabled&7."
         disable: "&7Chat Slow Mode has been &cdisabled&7."
+
+      reload:
+        # {0} equals config name
+        reloading: "&7Reloading {0}.."
+        done: "&aAll configs have been reloaded!"

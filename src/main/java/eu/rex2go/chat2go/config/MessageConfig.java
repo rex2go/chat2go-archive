@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MessageConfig extends CustomConfig {
 
@@ -21,6 +23,7 @@ public class MessageConfig extends CustomConfig {
         super(plugin, "messages.yml");
     }
 
+    @Override
     public void load() {
         Map<String, Object> values = getConfig().getValues(true);
 
@@ -36,6 +39,12 @@ public class MessageConfig extends CustomConfig {
         }
     }
 
+    @Override
+    public void reload() {
+        super.reload();
+        load();
+    }
+
     public String getMessage(String key, String... args) {
         if (!messages.containsKey(key)) {
             plugin.getLogger().log(Level.WARNING, "Missing message: " + key);
@@ -48,6 +57,8 @@ public class MessageConfig extends CustomConfig {
 
             message = message.replace("{" + i + "}", arg);
         }
+
+        message = plugin.parseHexColor(message);
 
         message = ChatColor.translateAlternateColorCodes('&', message);
 

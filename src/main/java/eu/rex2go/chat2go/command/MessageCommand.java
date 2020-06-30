@@ -2,6 +2,7 @@ package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
+import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
@@ -19,7 +20,7 @@ public class MessageCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException, CommandNoPlayerException {
+            CommandPlayerNotOnlineException, CommandNoPlayerException, CommandCustomErrorException {
         if (!(sender instanceof Player)) {
             throw new CommandNoPlayerException();
         }
@@ -36,8 +37,8 @@ public class MessageCommand extends WrappedCommandExecutor {
 
         String targetName = args[0];
         if (targetName.equalsIgnoreCase(user.getName())) {
-            user.sendMessage("chatgo.command.message.message_yourself", false);
-            return true;
+            throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message" +
+                    ".message_yourself"));
         }
 
         Player targetPlayer =

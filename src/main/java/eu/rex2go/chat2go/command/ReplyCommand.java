@@ -36,12 +36,15 @@ public class ReplyCommand extends WrappedCommandExecutor {
 
         ChatUser target = user.getLastChatter();
 
-        if (target == null) throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message.no_player_to_reply_to"));
+        if (target == null) {
+            throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message.no_player_to_reply_to"));
+        }
 
         Player targetPlayer = target.getPlayer();
 
-        if (targetPlayer == null) throw new CommandPlayerNotOnlineException(target.getName());
-
+        if (targetPlayer == null) {
+            throw new CommandPlayerNotOnlineException(target.getName());
+        }
 
         StringBuilder message = new StringBuilder();
         for (String arg : args) {

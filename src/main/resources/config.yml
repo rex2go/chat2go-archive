@@ -1,3 +1,26 @@
 chatEnabled: true
-chatFormat: %prefix%
+
+chatFormat: "{prefix}{username}{suffix}&7: &f{message}"
+
+prefixTrailingSpaceEnabled: true
+suffixLeadingSpaceEnabled: true
+
 translateChatColorsEnabled: true
+
+chatFilterEnabled: true
+chatFilterMode: BLOCK
+badWordNotificationEnabled: true
+
+linkBlockEnabled: true
+antiSpamEnabled: false
+
+slowModeEnabled: false
+slowModeSeconds: 5
+
+customJoinMessageEnabled: true
+customJoinMessage: "&7[&a+&7] &7{username}"
+
+customLeaveMessageEnabled: true
+customLeaveMessage: "&7[&c-&7] &7{username}"
+
+privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
