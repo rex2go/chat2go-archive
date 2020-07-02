@@ -8,6 +8,7 @@ chat2go:
     antispam:
       repeating: "&cYou are repeating yourself."
       suspicious: "&cYour message seems suspicious."
+      too_fast: "&cYou're chatting too fast."
   command:
     error:
       no_permission: "&cYou do not have permission to execute this command!"

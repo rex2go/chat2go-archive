@@ -161,7 +161,13 @@ public class ChatManager {
             return message;
         }
 
-        if (((System.currentTimeMillis() - user.getLastMessageTime()) / 1000) < 30) {
+        double diff = ((System.currentTimeMillis() - user.getLastMessageTime()) / 1000D);
+
+        if(diff < 0.5) {
+            throw new AntiSpamException("chat2go.chat.antispam.too_fast");
+        }
+
+        if (diff < 30) {
             if (user.getLastMessage().equalsIgnoreCase(message)) {
                 throw new AntiSpamException("chat2go.chat.antispam.repeating");
             }
