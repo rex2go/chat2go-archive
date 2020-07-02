@@ -28,6 +28,10 @@ commands:
   clearchat:
     description: Clears the chat
     usage: "§cUsage: /<command>"
-    permission: chat2go.command.clearchat
+    permission: chat2go.command.clear_chat
     aliases:
       - cc
+  slowmode:
+    description: Toggles chat slow mode
+    usage: "§cUsage: /<command> <time>"
+    permission: chat2go.command.slow_mode

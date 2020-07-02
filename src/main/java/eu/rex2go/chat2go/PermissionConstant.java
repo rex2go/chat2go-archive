@@ -8,6 +8,8 @@ public class PermissionConstant {
     public static final String PERMISSION_BAD_WORD_IGNORE = "chat2go.bad_word.ignore";
     public static final String PERMISSION_BAD_WORD_NOTIFY = "chat2go.bad_word.notify";
 
+    // command permissions
+
     public static final String PERMISSION_COMMAND_CHAT = "chat2go.command.chat";
     public static final String PERMISSION_COMMAND_CHAT_FILTER = "chat2go.command.chat.filter";
     public static final String PERMISSION_COMMAND_CHAT_BAD_WORD = "chat2go.command.chat.bad_word";
@@ -17,4 +19,17 @@ public class PermissionConstant {
     public static final String PERMISSION_COMMAND_CLEAR_CHAT = "chat2go.command.clear_chat";
 
     public static final String PERMISSION_COMMAND_MSG = "chat2go.command.msg";
+
+    public static final String PERMISSION_COMMAND_SLOW_MODE = "chat2go.command.slow_mode";
+
+    // alternatives
+
+    public static final String PERMISSION_COMMAND_CHAT_BADWORD = "chat2go.command.chat.badword";
+    public static final String PERMISSION_COMMAND_CHAT_SLOWMODE = "chat2go.command.chat.slowmode";
+
+    public static final String PERMISSION_COMMAND_CLEARCHAT = "chat2go.command.clearchat";
+
+    public static final String PERMISSION_COMMAND_SLOWMODE = "chat2go.command.slowmode";
+
+
 }

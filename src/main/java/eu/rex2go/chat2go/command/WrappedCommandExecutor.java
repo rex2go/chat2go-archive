@@ -62,5 +62,24 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
         return false;
     }
 
+    public void checkAllPermissions(CommandSender sender, String... permissions) throws CommandNoPermissionException {
+        for(String permission : permissions) {
+            if(!sender.hasPermission(permission)) throw new CommandNoPermissionException(permission);
+        }
+    }
+
+    public void checkPermission(CommandSender sender, String... permissions) throws CommandNoPermissionException {
+        boolean check = false;
+
+        for(String permission : permissions) {
+            if(sender.hasPermission(permission)) {
+                check = true;
+                break;
+            }
+        }
+
+        if(!check) throw new CommandNoPermissionException(permissions[0]);
+    }
+
     protected abstract boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException, CommandNoPlayerException, CommandNotANumberException;
 }

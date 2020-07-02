@@ -1,10 +1,7 @@
 package eu.rex2go.chat2go;
 
 import eu.rex2go.chat2go.chat.ChatManager;
-import eu.rex2go.chat2go.command.Chat2GoCommand;
-import eu.rex2go.chat2go.command.ClearChatCommand;
-import eu.rex2go.chat2go.command.MessageCommand;
-import eu.rex2go.chat2go.command.ReplyCommand;
+import eu.rex2go.chat2go.command.*;
 import eu.rex2go.chat2go.config.BadWordConfig;
 import eu.rex2go.chat2go.config.MainConfig;
 import eu.rex2go.chat2go.config.MessageConfig;
@@ -120,6 +117,7 @@ public class Chat2Go extends JavaPlugin {
         new Chat2GoCommand(this);
         new MessageCommand(this);
         new ReplyCommand(this);
+        new SlowModeCommand(this);
     }
 
     private void setupListeners() {
