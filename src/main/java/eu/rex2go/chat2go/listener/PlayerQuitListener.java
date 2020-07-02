@@ -28,7 +28,9 @@ public class PlayerQuitListener extends AbstractListener {
 
             plugin.getUserManager().getChatUsers().remove(user);
 
-            if (mainConfig.isCustomLeaveMessageEnabled()) {
+            if(mainConfig.isHideJoinMessage()) {
+                event.setQuitMessage(null);
+            } else if (mainConfig.isCustomLeaveMessageEnabled()) {
                 try {
                     event.setQuitMessage(plugin.getChatManager().format(
                             user, "", false, mainConfig.getCustomLeaveMessage()));

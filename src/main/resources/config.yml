@@ -46,11 +46,17 @@ slowModeEnabled: false
 # description: the cooldown given in seconds
 slowModeSeconds: 5
 
+# description: disables the join message
+hideJoinMessage: false
+
 # description: custom join message
 customJoinMessageEnabled: true
 
 # description: custom join message format
 customJoinMessage: "&7[&a+&7] &7{username}"
+
+# description: disables the leave message
+hideLeaveMessage: false
 
 # description: custom leave message
 customLeaveMessageEnabled: true

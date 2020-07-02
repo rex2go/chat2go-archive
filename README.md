@@ -8,7 +8,7 @@
 #### v0.2-PRE
 - [x] slow mode command
 - [x] bad word reload
-- [ ] hide join / leave message
+- [x] hide join / leave message
 - [ ] block links and ips
 - [ ] anti spam
 - [ ] message spy command

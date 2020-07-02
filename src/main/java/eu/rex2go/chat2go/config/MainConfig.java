@@ -41,10 +41,16 @@ public class MainConfig extends CustomConfig {
     private int slowModeSeconds = 5;
 
     @Getter
+    private boolean hideJoinMessage = false;
+
+    @Getter
     private boolean customJoinMessageEnabled = true;
 
     @Getter
     private String customJoinMessage = "&7[&a+&7] &7{username}";
+
+    @Getter
+    private boolean hideLeaveMessage = false;
 
     @Getter
     private boolean customLeaveMessageEnabled = true;
@@ -89,8 +95,10 @@ public class MainConfig extends CustomConfig {
         badWordNotificationEnabled = getConfig().getBoolean("badWordNotificationEnabled");
         slowModeEnabled = getConfig().getBoolean("slowModeEnabled");
         slowModeSeconds = getConfig().getInt("slowModeSeconds");
+        hideJoinMessage = getConfig().getBoolean("hideJoinMessage");
         customJoinMessageEnabled = getConfig().getBoolean("customJoinMessageEnabled");
         customJoinMessage = getConfig().getString("customJoinMessage");
+        hideLeaveMessage = getConfig().getBoolean("hideLeaveMessage");
         customLeaveMessageEnabled = getConfig().getBoolean("customLeaveMessageEnabled");
         customLeaveMessage = getConfig().getString("customLeaveMessage");
         privateMessageFormat = getConfig().getString("privateMessageFormat");
@@ -118,8 +126,10 @@ public class MainConfig extends CustomConfig {
         getConfig().set("badWordNotificationEnabled", badWordNotificationEnabled);
         getConfig().set("slowModeEnabled", slowModeEnabled);
         getConfig().set("slowModeSeconds", slowModeSeconds);
+        getConfig().set("hideJoinMessage", hideJoinMessage);
         getConfig().set("customJoinMessageEnabled", customJoinMessageEnabled);
         getConfig().set("customJoinMessage", customJoinMessage);
+        getConfig().set("hideLeaveMessage", hideLeaveMessage);
         getConfig().set("customLeaveMessageEnabled", customLeaveMessageEnabled);
         getConfig().set("customLeaveMessage", customLeaveMessage);
         getConfig().set("privateMessageFormat", privateMessageFormat);
