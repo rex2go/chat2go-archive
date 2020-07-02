@@ -6,7 +6,7 @@
 
     <groupId>rex2go.eu</groupId>
     <artifactId>chat2go</artifactId>
-    <version>0.1-PRE</version>
+    <version>0.2-PRE</version>
 
     <build>
         <plugins>
