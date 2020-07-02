@@ -7,7 +7,6 @@ import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.ChatUser;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -37,7 +36,8 @@ public class ReplyCommand extends WrappedCommandExecutor {
         ChatUser target = user.getLastChatter();
 
         if (target == null) {
-            throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message.no_player_to_reply_to"));
+            throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message" +
+                    ".no_player_to_reply_to"));
         }
 
         Player targetPlayer = target.getPlayer();
