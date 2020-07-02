@@ -1,6 +1,6 @@
 # chat2go
 
-## version status
+## development status
 
 #### v0.1-PRE
 - [x] basic features
