@@ -32,6 +32,8 @@ chat2go:
         list: "&7The list of banned words:"
         # {0} equals command typed
         list_empty: '&cThis list is empty. You can add words to it using "/{0} badword add <word>"'
+        # {0} equals filename of the bad word storage file
+        reload: '&a{0} has been reloaded.'
 
         error:
           already_on_the_list: "&cBad word is already on the list."

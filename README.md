@@ -7,7 +7,7 @@
 
 #### v0.2-PRE
 - [x] slow mode command
-- [ ] bad word reload
+- [x] bad word reload
 - [ ] hide join / leave message
 - [ ] block links and ips
 - [ ] anti spam
