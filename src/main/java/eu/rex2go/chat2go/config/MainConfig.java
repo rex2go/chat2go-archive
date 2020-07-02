@@ -73,6 +73,9 @@ public class MainConfig extends CustomConfig {
     @Getter
     private double spaceThreshold = 0.3;
 
+    @Getter
+    private String broadcastFormat = "&f[&cBroadcast&f] {message}";
+
     // TODO chat log, chat log length, range chat, range chat length
 
     public MainConfig(Chat2Go plugin) {
@@ -112,6 +115,7 @@ public class MainConfig extends CustomConfig {
         antiSpamEnabled = getConfig().getBoolean("antiSpamEnabled");
         capsThreshold = getConfig().getDouble("capsThreshold");
         spaceThreshold = getConfig().getDouble("spaceThreshold");
+        broadcastFormat = getConfig().getString("broadcastFormat");
     }
 
     @Override
@@ -145,6 +149,8 @@ public class MainConfig extends CustomConfig {
         getConfig().set("antiSpamEnabled", antiSpamEnabled);
         getConfig().set("capsThreshold", capsThreshold);
         getConfig().set("spaceThreshold", spaceThreshold);
+        getConfig().set("broadcastFormat", broadcastFormat);
+
         super.save();
     }
 }

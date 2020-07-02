@@ -74,3 +74,6 @@ customLeaveMessage: "&7[&c-&7] &7{username}"
 
 # description: msg format
 privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
+
+# description: broadcast format
+broadcastFormat: "&f[&cBroadcast&f] {message}"

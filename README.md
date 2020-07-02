@@ -10,10 +10,9 @@
 - [x] bad word reload
 - [x] hide join / leave message
 - [x] block links and ips
-- [ ] link / ip whitelist
+- [x] link / ip whitelist
 - [x] anti spam
-- [ ] message spy command
-- [ ] broadcast
+- [x] broadcast
 - [ ] auto broadcast
 
 #### v0.3-PRE
@@ -22,6 +21,7 @@
 - [ ] update notify
 
 #### v0.4-PRE
+- [ ] message spy command
 - [ ] offline mail
 - [ ] chat log
 - [ ] mute command

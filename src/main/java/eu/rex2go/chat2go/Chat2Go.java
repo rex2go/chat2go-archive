@@ -2,9 +2,7 @@ package eu.rex2go.chat2go;
 
 import eu.rex2go.chat2go.chat.ChatManager;
 import eu.rex2go.chat2go.command.*;
-import eu.rex2go.chat2go.config.BadWordConfig;
-import eu.rex2go.chat2go.config.MainConfig;
-import eu.rex2go.chat2go.config.MessageConfig;
+import eu.rex2go.chat2go.config.*;
 import eu.rex2go.chat2go.listener.PlayerChatListener;
 import eu.rex2go.chat2go.listener.PlayerJoinListener;
 import eu.rex2go.chat2go.listener.PlayerQuitListener;
@@ -48,6 +46,12 @@ public class Chat2Go extends JavaPlugin {
     private static MainConfig mainConfig;
 
     @Getter
+    private static LinkWhitelistConfig linkWhitelistConfig;
+
+    @Getter
+    private static AutoBroadcastConfig autoBroadcastConfig;
+
+    @Getter
     private UserManager userManager;
 
     @Getter
@@ -83,20 +87,12 @@ public class Chat2Go extends JavaPlugin {
         getLogger().log(Level.WARNING, "This build is still under heavy development. If you used a previous version " +
                 "of this plugin it is highly recommended to regenerate the config by deleting it.");
 
-        mainConfig = new MainConfig(this);
-        mainConfig.load();
-
-        messageConfig = new MessageConfig(this);
-        messageConfig.load();
-
-        badWordConfig = new BadWordConfig(this);
-        badWordConfig.load();
-
+        setupConfigs();
         setupManagers();
         setupCommands();
         setupListeners();
 
-        for(Player all : Bukkit.getOnlinePlayers()) {
+        for (Player all : Bukkit.getOnlinePlayers()) {
             ChatUser user = new ChatUser(all);
             getUserManager().getChatUsers().add(user);
         }
@@ -110,12 +106,30 @@ public class Chat2Go extends JavaPlugin {
         }
     }
 
+    private void setupConfigs() {
+        mainConfig = new MainConfig(this);
+        mainConfig.load();
+
+        messageConfig = new MessageConfig(this);
+        messageConfig.load();
+
+        badWordConfig = new BadWordConfig(this);
+        badWordConfig.load();
+
+        linkWhitelistConfig = new LinkWhitelistConfig(this);
+        linkWhitelistConfig.load();
+
+        autoBroadcastConfig = new AutoBroadcastConfig(this);
+        autoBroadcastConfig.load();
+    }
+
     private void setupManagers() {
         userManager = new UserManager();
         chatManager = new ChatManager(this);
     }
 
     private void setupCommands() {
+        new BroadcastCommand(this);
         new ClearChatCommand(this);
         new Chat2GoCommand(this);
         new MessageCommand(this);
@@ -140,7 +154,8 @@ public class Chat2Go extends JavaPlugin {
                 try {
                     net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hex);
                     str = str.replaceAll("<" + hex + ">", color.toString());
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
 

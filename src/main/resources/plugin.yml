@@ -35,3 +35,15 @@ commands:
     description: Toggles chat slow mode
     usage: "§cUsage: /<command> <time>"
     permission: chat2go.command.slow_mode
+  broadcast:
+    description: Broadcasts a message
+    usage: "§cUsage: /<command> <message>"
+    permission: chat2go.command.broadcast
+    aliases:
+      - bcast
+  autobroadcast:
+    description: Automatic broadcasts
+    usage: "§cUsage: /<command> <list|add|remove|reload>"
+    permission: chat2go.command.auto_broadcast
+    aliases:
+      - abcast

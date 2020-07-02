@@ -3,7 +3,10 @@ package eu.rex2go.chat2go.command;
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
 import eu.rex2go.chat2go.chat.FilterMode;
-import eu.rex2go.chat2go.command.exception.*;
+import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
+import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
+import eu.rex2go.chat2go.command.exception.CommandNotANumberException;
+import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
 import eu.rex2go.chat2go.config.MainConfig;
 import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.util.MathUtil;
@@ -18,8 +21,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException,
-            CommandNotANumberException {
+            CommandWrongUsageException, CommandCustomErrorException, CommandNotANumberException {
         checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT);
 
         if (args.length < 1) {
@@ -35,12 +37,14 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             handleFilter(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("badword") || subCommand.equalsIgnoreCase("badwords")) {
-            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD, PermissionConstant.PERMISSION_COMMAND_CHAT_BADWORD);
+            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD,
+                    PermissionConstant.PERMISSION_COMMAND_CHAT_BADWORD);
 
             handleBadWord(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("slowmode")) {
-            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_SLOW_MODE, PermissionConstant.PERMISSION_COMMAND_CHAT_SLOWMODE);
+            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_SLOW_MODE,
+                    PermissionConstant.PERMISSION_COMMAND_CHAT_SLOWMODE);
 
             handleSlowMode(sender, user, label, args);
             return true;
@@ -64,6 +68,12 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             Chat2Go.getMessageConfig().reload();
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
                     Chat2Go.getMessageConfig().getFileName());
+
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
+                    Chat2Go.getLinkWhitelistConfig().getFileName());
+            Chat2Go.getLinkWhitelistConfig().reload();
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
+                    Chat2Go.getLinkWhitelistConfig().getFileName());
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.done", true);
             return true;

@@ -24,6 +24,9 @@ public class PermissionConstant {
 
     public static final String PERMISSION_COMMAND_SLOW_MODE = "chat2go.command.slow_mode";
 
+    public static final String PERMISSION_COMMAND_BROADCAST = "chat2go.command.broadcast";
+    public static final String PERMISSION_COMMAND_AUTO_BROADCAST = "chat2go.command.auto_broadcast";
+
     // alternatives
     public static final String PERMISSION_CHAT_BYPASS_SLOWMODE = "chat2go.chat.bypass_slowmode";
     public static final String PERMISSION_CHAT_BYPASS_ANTISPAM = "chat2go.chat.bypass_antispam";
@@ -35,6 +38,9 @@ public class PermissionConstant {
     public static final String PERMISSION_COMMAND_CLEARCHAT = "chat2go.command.clearchat";
 
     public static final String PERMISSION_COMMAND_SLOWMODE = "chat2go.command.slowmode";
+
+    public static final String PERMISSION_COMMAND_AUTOBROADCAST = "chat2go.command.autobroadcast";
+
 
 
 }

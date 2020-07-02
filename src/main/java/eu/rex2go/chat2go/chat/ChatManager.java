@@ -137,14 +137,22 @@ public class ChatManager {
             Matcher matcher = pattern.matcher(message);
 
             while (matcher.find()) {
-                ads.add(matcher.group());
+                String ip = matcher.group();
+
+                if(Chat2Go.getLinkWhitelistConfig().getLinkWhitelist().stream().noneMatch(ip::equalsIgnoreCase)) {
+                    ads.add(ip);
+                }
             }
 
             pattern = Pattern.compile("(\\w*\\.[^0-9]{1,4}\\b)");
             matcher = pattern.matcher(message);
 
             while (matcher.find()) {
-                ads.add(matcher.group());
+                String link = matcher.group();
+
+                if(Chat2Go.getLinkWhitelistConfig().getLinkWhitelist().stream().noneMatch(link::equalsIgnoreCase)) {
+                    ads.add(link);
+                }
             }
         }
 
@@ -203,10 +211,22 @@ public class ChatManager {
     public String formatMsg(String from, String to, String message) {
         String format = mainConfig.getPrivateMessageFormat();
 
+        format = plugin.parseHexColor(format);
         format = ChatColor.translateAlternateColorCodes('&', format);
 
         format = format.replace("{from}", from);
         format = format.replace("{to}", to);
+        format = format.replace("{message}", message);
+
+        return format;
+    }
+
+    public String formatBroadcast(String message) {
+        String format = mainConfig.getBroadcastFormat();
+
+        format = plugin.parseHexColor(format);
+        format = ChatColor.translateAlternateColorCodes('&', format);
+
         format = format.replace("{message}", message);
 
         return format;
