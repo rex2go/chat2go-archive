@@ -4,6 +4,10 @@ chat2go:
     blocked_message: "&cMessage could not be sent: Your message contains a blocked phrase."
     # {0} equals seconds
     cooldown: "&cChat is in slow mode. Please wait {0} seconds before sending a message."
+
+    antispam:
+      repeating: "&cYou are repeating yourself."
+      suspicious: "&cYour message seems suspicious."
   command:
     error:
       no_permission: "&cYou do not have permission to execute this command!"

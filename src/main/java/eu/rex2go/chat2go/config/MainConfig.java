@@ -62,10 +62,16 @@ public class MainConfig extends CustomConfig {
     private String privateMessageFormat = "&8MSG &7[{from} -> {to}]&8: &f{message}";
 
     @Getter
-    private boolean linkBlockEnabled = true; // TODO
+    private boolean linkBlockEnabled = true;
 
     @Getter
-    private boolean antiSpamEnabled = false; // TODO
+    private boolean antiSpamEnabled = false;
+
+    @Getter
+    private double capsThreshold = 0.5;
+
+    @Getter
+    private double spaceThreshold = 0.3;
 
     // TODO chat log, chat log length, range chat, range chat length
 
@@ -104,6 +110,8 @@ public class MainConfig extends CustomConfig {
         privateMessageFormat = getConfig().getString("privateMessageFormat");
         linkBlockEnabled = getConfig().getBoolean("linkBlockEnabled");
         antiSpamEnabled = getConfig().getBoolean("antiSpamEnabled");
+        capsThreshold = getConfig().getDouble("capsThreshold");
+        spaceThreshold = getConfig().getDouble("spaceThreshold");
     }
 
     @Override
@@ -135,6 +143,8 @@ public class MainConfig extends CustomConfig {
         getConfig().set("privateMessageFormat", privateMessageFormat);
         getConfig().set("linkBlockEnabled", linkBlockEnabled);
         getConfig().set("antiSpamEnabled", antiSpamEnabled);
+        getConfig().set("capsThreshold", capsThreshold);
+        getConfig().set("spaceThreshold", spaceThreshold);
         super.save();
     }
 }

@@ -80,6 +80,9 @@ public class Chat2Go extends JavaPlugin {
             }
         }
 
+        getLogger().log(Level.WARNING, "This build is still under heavy development. If you used a previous version " +
+                "of this plugin it is highly recommended to regenerate the config by deleting it.");
+
         mainConfig = new MainConfig(this);
         mainConfig.load();
 

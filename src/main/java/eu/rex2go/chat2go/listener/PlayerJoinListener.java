@@ -1,6 +1,7 @@
 package eu.rex2go.chat2go.listener;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.chat.exception.AntiSpamException;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
 import eu.rex2go.chat2go.user.ChatUser;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class PlayerJoinListener extends AbstractListener {
             try {
                 event.setJoinMessage(plugin.getChatManager().format(
                         user, "", false, mainConfig.getCustomJoinMessage()));
-            } catch (BadWordException ignored) { }
+            } catch (BadWordException | AntiSpamException ignored) { }
         }
     }
 }

@@ -33,11 +33,19 @@ chatFilterMode: BLOCK
 # permission: chat2go.bad_word.notify
 badWordNotificationEnabled: true
 
-# implemented in the next version
+# description: if chat filter is enabled, it will block links and ips
+# permission: chat2go.chat.bypass_ip
 linkBlockEnabled: true
 
-# implemented in the next version
+# description: will try it best to prevent chat spamming
+# permission: chat2go.chat.bypass_anti_spam
 antiSpamEnabled: false
+
+# description: threshold of caps lock detection
+capsThreshold: 0.5
+
+# description: threshold of spacing detection
+spaceThreshold: 0.3
 
 # description: chatting will be available with a cooldown
 # permission: chat2go.chat.bypass_slow_mode

@@ -2,6 +2,7 @@ package eu.rex2go.chat2go.listener;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
+import eu.rex2go.chat2go.chat.exception.AntiSpamException;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
 import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.util.MathUtil;
@@ -35,6 +36,7 @@ public class PlayerChatListener extends AbstractListener {
         long currentTime = System.currentTimeMillis();
 
         if (!player.hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_SLOW_MODE)
+                && !player.hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_SLOWMODE)
                 && mainConfig.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(
@@ -47,14 +49,11 @@ public class PlayerChatListener extends AbstractListener {
             }
         }
 
-        chatUser.setLastMessageTime(currentTime);
-        chatUser.setLastMessage(message);
-
         try {
             event.setFormat(plugin.getChatManager().format(chatUser, message));
-        } catch (BadWordException e) {
+        } catch (BadWordException | AntiSpamException e) {
             event.setCancelled(true);
-            chatUser.sendMessage("chat2go.chat.blocked_message", false);
+            chatUser.sendMessage(e.getMessage(), false);
         }
     }
 }

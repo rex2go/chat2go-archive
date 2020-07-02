@@ -9,8 +9,9 @@
 - [x] slow mode command
 - [x] bad word reload
 - [x] hide join / leave message
-- [ ] block links and ips
-- [ ] anti spam
+- [x] block links and ips
+- [ ] link / ip whitelist
+- [x] anti spam
 - [ ] message spy command
 - [ ] broadcast
 - [ ] auto broadcast
@@ -28,6 +29,7 @@
 - [ ] first join message
 
 #### v1.0 RELEASE
+- [ ] letter whitelist / blacklist
 - [ ] factions support
 - [ ] multiverse support
 - [ ] some kind of tellraw command

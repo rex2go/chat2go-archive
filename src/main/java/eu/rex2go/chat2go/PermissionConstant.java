@@ -4,6 +4,8 @@ public class PermissionConstant {
 
     public static final String PERMISSION_CHAT_COLOR = "chat2go.chat.color";
     public static final String PERMISSION_CHAT_BYPASS_SLOW_MODE = "chat2go.chat.bypass_slow_mode";
+    public static final String PERMISSION_CHAT_BYPASS_ANTI_SPAM = "chat2go.chat.bypass_anti_spam";
+    public static final String PERMISSION_CHAT_BYPASS_IP = "chat2go.chat.bypass_ip";
 
     public static final String PERMISSION_BAD_WORD_IGNORE = "chat2go.bad_word.ignore";
     public static final String PERMISSION_BAD_WORD_NOTIFY = "chat2go.bad_word.notify";
@@ -23,6 +25,9 @@ public class PermissionConstant {
     public static final String PERMISSION_COMMAND_SLOW_MODE = "chat2go.command.slow_mode";
 
     // alternatives
+    public static final String PERMISSION_CHAT_BYPASS_SLOWMODE = "chat2go.chat.bypass_slowmode";
+    public static final String PERMISSION_CHAT_BYPASS_ANTISPAM = "chat2go.chat.bypass_antispam";
+
 
     public static final String PERMISSION_COMMAND_CHAT_BADWORD = "chat2go.command.chat.badword";
     public static final String PERMISSION_COMMAND_CHAT_SLOWMODE = "chat2go.command.chat.slowmode";

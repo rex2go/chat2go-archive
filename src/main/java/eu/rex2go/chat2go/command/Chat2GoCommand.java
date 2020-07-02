@@ -95,6 +95,8 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat reload " + ChatColor.WHITE + " | "
                 + ChatColor.GRAY + " reload all files");
 
+        // TODO add msg, slowmode, reply, broadcast, autobroadcast, spy
+
         sender.sendMessage(ChatColor.GRAY + "---                  ---");
     }
 
