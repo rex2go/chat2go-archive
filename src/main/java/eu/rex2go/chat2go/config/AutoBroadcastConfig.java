@@ -31,4 +31,46 @@ public class AutoBroadcastConfig extends CustomConfig {
         // TODO
         super.save();
     }
+
+    public boolean remove(int id) {
+        AutoBroadcast autoBroadcast = null;
+
+        for (AutoBroadcast abcast : autoBroadcasts) {
+            if (abcast.getId() == id) {
+                autoBroadcast = abcast;
+                break;
+            }
+        }
+
+        if (autoBroadcast == null) {
+            return false;
+        }
+
+        autoBroadcasts.remove(autoBroadcast);
+        return true;
+    }
+
+    public int getNextId() {
+        boolean found = false;
+        int id = 1;
+
+        while (!found) {
+            boolean contains = false;
+
+            for (AutoBroadcast abcast : autoBroadcasts) {
+                if (abcast.getId() == id) {
+                    contains = true;
+                    break;
+                }
+            }
+
+            if (!contains) {
+                found = true;
+            } else {
+                id++;
+            }
+        }
+
+        return id;
+    }
 }

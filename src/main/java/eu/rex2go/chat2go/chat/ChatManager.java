@@ -227,6 +227,9 @@ public class ChatManager {
         format = plugin.parseHexColor(format);
         format = ChatColor.translateAlternateColorCodes('&', format);
 
+        message = plugin.parseHexColor(message);
+        message = ChatColor.translateAlternateColorCodes('&', message);
+
         format = format.replace("{message}", message);
 
         return format;

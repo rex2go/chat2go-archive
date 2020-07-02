@@ -129,6 +129,7 @@ public class Chat2Go extends JavaPlugin {
     }
 
     private void setupCommands() {
+        new AutoBroadcastCommand(this);
         new BroadcastCommand(this);
         new ClearChatCommand(this);
         new Chat2GoCommand(this);
