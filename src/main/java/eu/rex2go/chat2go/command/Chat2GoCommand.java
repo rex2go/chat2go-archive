@@ -50,14 +50,20 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
                     Chat2Go.getMainConfig().getFileName());
             Chat2Go.getMainConfig().reload();
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
+                    Chat2Go.getMainConfig().getFileName());
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
                     Chat2Go.getBadWordConfig().getFileName());
             Chat2Go.getBadWordConfig().reload();
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
+                    Chat2Go.getBadWordConfig().getFileName());
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
                     Chat2Go.getMessageConfig().getFileName());
             Chat2Go.getMessageConfig().reload();
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
+                    Chat2Go.getMessageConfig().getFileName());
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.done", true);
             return true;
@@ -173,7 +179,8 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
                     Chat2Go.getBadWordConfig().getFileName());
             Chat2Go.getBadWordConfig().reload();
 
-            Chat2Go.sendMessage(sender, "chat2go.command.chat.badword.reload", true, Chat2Go.getBadWordConfig().getFileName());
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
+                    Chat2Go.getBadWordConfig().getFileName());
             return;
         }
 
