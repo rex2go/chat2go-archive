@@ -174,6 +174,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             Chat2Go.getBadWordConfig().reload();
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.badword.reload", true);
+            return;
         }
 
         throw new CommandWrongUsageException("/<command> badword <list|add|remove|reload>");

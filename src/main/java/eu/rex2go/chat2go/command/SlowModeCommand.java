@@ -38,7 +38,7 @@ public class SlowModeCommand extends WrappedCommandExecutor {
         mainConfig.setSlowModeEnabled(updatedState);
         mainConfig.setSlowModeSeconds(cooldown);
 
-        Chat2Go.sendMessage(sender, "chat2go.command.slowmode." + (updatedState ? "enable" : "disable)"), true, String.valueOf(cooldown));
+        Chat2Go.sendMessage(sender, "chat2go.command.slowmode." + (updatedState ? "enable" : "disable"), true, String.valueOf(cooldown));
         return true;
     }
 }
