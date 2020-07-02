@@ -7,7 +7,6 @@ import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.ChatUser;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -20,15 +19,13 @@ public class ReplyCommand extends WrappedCommandExecutor {
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
             CommandPlayerNotOnlineException, CommandCustomErrorException, CommandNoPlayerException {
+        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_MSG);
+
         if (!(sender instanceof Player)) {
             throw new CommandNoPlayerException();
         }
 
         Player player = user.getPlayer();
-
-        if (!player.hasPermission(PermissionConstant.PERMISSION_COMMAND_MSG)) {
-            throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_MSG);
-        }
 
         if (args.length < 1) {
             return false;

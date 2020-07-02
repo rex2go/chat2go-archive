@@ -20,9 +20,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
             CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException,
             CommandNotANumberException {
-        if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_CHAT)) {
-            throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT);
-        }
+        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT);
 
         if (args.length < 1) {
             sendHelp(sender);
@@ -32,30 +30,22 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         String subCommand = args[0];
 
         if (subCommand.equalsIgnoreCase("filter")) {
-            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_CHAT_FILTER)) {
-                throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT_FILTER);
-            }
+            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_FILTER);
 
             handleFilter(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("badword") || subCommand.equalsIgnoreCase("badwords")) {
-            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD)) {
-                throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD);
-            }
+            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD, PermissionConstant.PERMISSION_COMMAND_CHAT_BADWORD);
 
             handleBadWord(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("slowmode")) {
-            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_CHAT_SLOW_MODE)) {
-                throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT_SLOW_MODE);
-            }
+            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_SLOW_MODE, PermissionConstant.PERMISSION_COMMAND_CHAT_SLOWMODE);
 
             handleSlowMode(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("reload")) {
-            if (!sender.hasPermission(PermissionConstant.PERMISSION_COMMAND_CHAT_RELOAD)) {
-                throw new CommandNoPermissionException(PermissionConstant.PERMISSION_COMMAND_CHAT_RELOAD);
-            }
+            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_RELOAD);
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
                     Chat2Go.getMainConfig().getFileName());
@@ -178,6 +168,8 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.badword.remove", true, args[2]);
             return;
+        } else if (subCommand.equalsIgnoreCase("reload")) {
+            // TODO
         }
 
         throw new CommandWrongUsageException("/<command> badword <list|add|remove|reload>");
