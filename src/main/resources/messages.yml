@@ -50,5 +50,5 @@ chat2go:
 
     slowmode:
       # {0} equals cooldown seconds
-      enable: "&7Chat Slow Mode has been &aenabled&7 wtih cooldown of {0}s."
+      enable: "&7Chat Slow Mode has been &aenabled&7 with a cooldown of {0}s."
       disable: "&7Chat Slow Mode has been &cdisabled&7."
