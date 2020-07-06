@@ -145,7 +145,7 @@ public class ChatManager {
             }
 
             pattern = Pattern.compile("(\\w*\\.[^0-9]{1,4}\\b)");
-            matcher = pattern.matcher(message);
+            matcher = pattern.matcher(message.toLowerCase());
 
             while (matcher.find()) {
                 String link = matcher.group();
