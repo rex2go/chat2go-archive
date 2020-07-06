@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -73,7 +72,7 @@ public class ChatUser {
     }
 
     public void sendMessage(String key, boolean prefix, String... args) {
-        if(getPlayer() == null) return;
+        if (getPlayer() == null) return;
 
         Chat2Go.sendMessage(getPlayer(), key, prefix, args);
     }

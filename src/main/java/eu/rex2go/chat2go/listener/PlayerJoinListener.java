@@ -21,13 +21,14 @@ public class PlayerJoinListener extends AbstractListener {
 
         plugin.getUserManager().getChatUsers().add(user);
 
-        if(mainConfig.isHideJoinMessage()) {
+        if (mainConfig.isHideJoinMessage()) {
             event.setJoinMessage(null);
-        } else if(mainConfig.isCustomJoinMessageEnabled()) {
+        } else if (mainConfig.isCustomJoinMessageEnabled()) {
             try {
                 event.setJoinMessage(plugin.getChatManager().format(
                         user, "", false, mainConfig.getCustomJoinMessage()));
-            } catch (BadWordException | AntiSpamException ignored) { }
+            } catch (BadWordException | AntiSpamException ignored) {
+            }
         }
     }
 }

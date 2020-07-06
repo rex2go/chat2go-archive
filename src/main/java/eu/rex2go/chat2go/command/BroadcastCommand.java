@@ -2,14 +2,10 @@ package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
-import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
-import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
-import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.ChatUser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class BroadcastCommand extends WrappedCommandExecutor {
 

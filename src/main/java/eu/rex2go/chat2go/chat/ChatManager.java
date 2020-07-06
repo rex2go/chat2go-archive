@@ -45,7 +45,7 @@ public class ChatManager {
         String suffix = chatUser.getSuffix();
 
         format = ChatColor.translateAlternateColorCodes('&', format);
-        format = plugin.parseHexColor(format);
+        format = Chat2Go.parseHexColor(format);
 
         if (processMessage) {
             format = format.replaceAll(Pattern.quote(" +"), " ");
@@ -77,7 +77,7 @@ public class ChatManager {
         if (mainConfig.isTranslateChatColorsEnabled()
                 && chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_CHAT_COLOR)) {
             message = ChatColor.translateAlternateColorCodes('&', message);
-            message = plugin.parseHexColor(message);
+            message = Chat2Go.parseHexColor(message);
         }
 
         if (!message.equals(filter(message, ads))
@@ -139,7 +139,7 @@ public class ChatManager {
             while (matcher.find()) {
                 String ip = matcher.group();
 
-                if(Chat2Go.getLinkWhitelistConfig().getLinkWhitelist().stream().noneMatch(ip::equalsIgnoreCase)) {
+                if (Chat2Go.getLinkWhitelistConfig().getLinkWhitelist().stream().noneMatch(ip::equalsIgnoreCase)) {
                     ads.add(ip);
                 }
             }
@@ -150,7 +150,7 @@ public class ChatManager {
             while (matcher.find()) {
                 String link = matcher.group();
 
-                if(Chat2Go.getLinkWhitelistConfig().getLinkWhitelist().stream().noneMatch(link::equalsIgnoreCase)) {
+                if (Chat2Go.getLinkWhitelistConfig().getLinkWhitelist().stream().noneMatch(link::equalsIgnoreCase)) {
                     ads.add(link);
                 }
             }
@@ -171,7 +171,7 @@ public class ChatManager {
 
         double diff = ((System.currentTimeMillis() - user.getLastMessageTime()) / 1000D);
 
-        if(diff < 0.5) {
+        if (diff < 0.5) {
             throw new AntiSpamException("chat2go.chat.antispam.too_fast");
         }
 
@@ -211,7 +211,7 @@ public class ChatManager {
     public String formatMsg(String from, String to, String message) {
         String format = mainConfig.getPrivateMessageFormat();
 
-        format = plugin.parseHexColor(format);
+        format = Chat2Go.parseHexColor(format);
         format = ChatColor.translateAlternateColorCodes('&', format);
 
         format = format.replace("{from}", from);
@@ -224,10 +224,10 @@ public class ChatManager {
     public String formatBroadcast(String message) {
         String format = mainConfig.getBroadcastFormat();
 
-        format = plugin.parseHexColor(format);
+        format = Chat2Go.parseHexColor(format);
         format = ChatColor.translateAlternateColorCodes('&', format);
 
-        message = plugin.parseHexColor(message);
+        message = Chat2Go.parseHexColor(message);
         message = ChatColor.translateAlternateColorCodes('&', message);
 
         format = format.replace("{message}", message);

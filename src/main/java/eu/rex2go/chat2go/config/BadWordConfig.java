@@ -2,13 +2,9 @@ package eu.rex2go.chat2go.config;
 
 import eu.rex2go.chat2go.Chat2Go;
 import lombok.Getter;
-import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 
 public class BadWordConfig extends CustomConfig {
 
@@ -25,7 +21,7 @@ public class BadWordConfig extends CustomConfig {
 
         this.badWords.clear();
 
-        if(badWords == null) return;
+        if (badWords == null) return;
 
         this.badWords.addAll(badWords);
     }

@@ -2,7 +2,7 @@
 chatEnabled: true
 
 # description: config gets updated as you're changing it in game
-# warning: comments will will disappear
+# warning: comments in config will disappear
 # example: /chat filter censor will update the config for permanent chat censoring
 syncConfig: false
 
@@ -41,10 +41,10 @@ linkBlockEnabled: true
 # permission: chat2go.chat.bypass_anti_spam
 antiSpamEnabled: false
 
-# description: threshold of caps lock detection
+# description: (anti spam) threshold of caps lock detection
 capsThreshold: 0.5
 
-# description: threshold of spacing detection
+# description: (anti spam) threshold of spacing detection
 spaceThreshold: 0.3
 
 # description: chatting will be available with a cooldown

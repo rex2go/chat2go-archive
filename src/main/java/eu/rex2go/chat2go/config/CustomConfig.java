@@ -11,11 +11,11 @@ import java.util.logging.Level;
 
 public abstract class CustomConfig {
 
+    protected Chat2Go plugin;
     @Getter
     private String fileName;
     @Getter
     private FileConfiguration config;
-    protected Chat2Go plugin;
     @Getter
     private File file;
 
@@ -24,7 +24,7 @@ public abstract class CustomConfig {
         this.fileName = fileName;
         this.file = new File(plugin.getDataFolder() + File.separator + fileName);
 
-        if(!file.exists()) {
+        if (!file.exists()) {
             plugin.saveResource(fileName, false);
         }
 
@@ -36,7 +36,7 @@ public abstract class CustomConfig {
     public void reload() {
         this.file = new File(plugin.getDataFolder() + File.separator + fileName);
 
-        if(!file.exists()) {
+        if (!file.exists()) {
             plugin.saveResource(fileName, false);
         }
 

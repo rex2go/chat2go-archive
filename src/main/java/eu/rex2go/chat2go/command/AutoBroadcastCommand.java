@@ -40,38 +40,39 @@ public class AutoBroadcastCommand extends WrappedCommandExecutor {
             // TODO pagination
             for (AutoBroadcast autoBroadcast : Chat2Go.getAutoBroadcastConfig().getAutoBroadcasts()) {
                 sender.sendMessage(Chat2Go.PREFIX + " #" + autoBroadcast.getId() + " " + ChatColor.WHITE
-                        + autoBroadcast.getMessage() + ChatColor.GRAY + " (" + autoBroadcast.getInterval() + "s)"); //
-                // formatting
+                        + autoBroadcast.getMessage() + ChatColor.GRAY + " (interval: " + autoBroadcast.getInterval() +
+                        "s, " +
+                        "offset: " + autoBroadcast.getOffset() + "s)"); //
+                // TODO formatting
             }
+            return true;
         } else if (subCommand.equalsIgnoreCase("add")) {
-            if (args.length < 3) {
-                throw new CommandWrongUsageException("/<command> add <interval> <message>");
+            if (args.length < 4) {
+                throw new CommandWrongUsageException("/<command> add <interval> <offset> <message>");
             }
 
             StringBuilder message = new StringBuilder();
-            for (int i = 2; i < args.length; i++) {
+            for (int i = 3; i < args.length; i++) {
                 message.append(args[i]).append(" ");
             }
 
             message = new StringBuilder(message.substring(0, message.length() - 1));
 
             String intervalStr = args[1];
+            int interval = getSeconds(intervalStr);
 
-            // TODO e.g. 2m3s
-            if (!MathUtil.isNumber(intervalStr)) {
-                throw new CommandNotANumberException(intervalStr);
-            }
+            String offsetStr = args[2];
+            int offset = getSeconds(offsetStr);
 
-            int interval = Integer.parseInt(intervalStr);
             int id = Chat2Go.getAutoBroadcastConfig().getNextId();
 
-            AutoBroadcast autoBroadcast = new AutoBroadcast(id, interval, message.toString());
+            AutoBroadcast autoBroadcast = new AutoBroadcast(id, interval, offset, message.toString());
 
             Chat2Go.getAutoBroadcastConfig().getAutoBroadcasts().add(autoBroadcast);
             Chat2Go.getAutoBroadcastConfig().save();
 
-            // TODO message
-            Bukkit.broadcastMessage("add #" + id);
+            Chat2Go.sendMessage(sender, "chat2go.command.autobroadcast.add", true, String.valueOf(id));
+            return true;
         } else if (subCommand.equalsIgnoreCase("remove")) {
             if (args.length < 2) {
                 throw new CommandWrongUsageException("/<command> remove <id>");
@@ -85,14 +86,13 @@ public class AutoBroadcastCommand extends WrappedCommandExecutor {
 
             int id = Integer.parseInt(idStr);
 
-            if(Chat2Go.getAutoBroadcastConfig().remove(id)) {
+            if (Chat2Go.getAutoBroadcastConfig().remove(id)) {
                 Chat2Go.getAutoBroadcastConfig().save();
-                Bukkit.broadcastMessage("remove #" + id); // TODO message
+                Chat2Go.sendMessage(sender, "chat2go.command.autobroadcast.remove", true, String.valueOf(id));
                 return true;
             }
 
-            // TODO message
-            Bukkit.broadcastMessage("not found"); // TODO message
+            Chat2Go.sendMessage(sender, "chat2go.command.autobroadcast.not_found", true, String.valueOf(id));
             return true;
         } else if (subCommand.equalsIgnoreCase("reload")) {
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
@@ -105,5 +105,56 @@ public class AutoBroadcastCommand extends WrappedCommandExecutor {
         }
 
         return false;
+    }
+
+    private int getSeconds(String timeString) {
+        int seconds = 0;
+        String mode = "s";
+        String store = "";
+
+        for (int i = timeString.length() - 1; i >= 0; i--) {
+            char c = timeString.charAt(i);
+
+            if (Character.isDigit(c)) {
+                store = c + store;
+            } else {
+                if (!store.equalsIgnoreCase("")) {
+                    if (mode.equalsIgnoreCase("s")) {
+                        seconds += Integer.parseInt(store);
+                    } else if (mode.equalsIgnoreCase("m")) {
+                        seconds += Integer.parseInt(store) * 60;
+                    } else if (mode.equalsIgnoreCase("h")) {
+                        seconds += Integer.parseInt(store) * 60 * 60;
+                    } else {
+                        seconds += Integer.parseInt(store) * 60 * 60 * 24;
+                    }
+                    store = "";
+                }
+
+                if (c == 's' || c == 'S') {
+                    mode = "s";
+                } else if (c == 'm' || c == 'M') {
+                    mode = "m";
+                } else if (c == 'h' || c == 'H') {
+                    mode = "h";
+                } else if (c == 'd' || c == 'D') {
+                    mode = "d";
+                }
+            }
+        }
+
+        if (!store.equalsIgnoreCase("")) {
+            if (mode.equalsIgnoreCase("s")) {
+                seconds += Integer.parseInt(store);
+            } else if (mode.equalsIgnoreCase("m")) {
+                seconds += Integer.parseInt(store) * 60;
+            } else if (mode.equalsIgnoreCase("h")) {
+                seconds += Integer.parseInt(store) * 60 * 60;
+            } else {
+                seconds += Integer.parseInt(store) * 60 * 60 * 24;
+            }
+        }
+
+        return seconds;
     }
 }

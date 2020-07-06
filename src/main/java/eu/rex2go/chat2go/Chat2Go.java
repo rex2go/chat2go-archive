@@ -1,5 +1,6 @@
 package eu.rex2go.chat2go;
 
+import eu.rex2go.chat2go.broadcast.AutoBroadcastTask;
 import eu.rex2go.chat2go.chat.ChatManager;
 import eu.rex2go.chat2go.command.*;
 import eu.rex2go.chat2go.config.*;
@@ -61,6 +62,25 @@ public class Chat2Go extends JavaPlugin {
         sender.sendMessage((prefix ? Chat2Go.PREFIX + " " : "") + Chat2Go.getMessageConfig().getMessage(key, args));
     }
 
+    public static String parseHexColor(String str) {
+        if (Chat2Go.isHexSupported()) {
+            Pattern pattern = Pattern.compile("<(.*?)>");
+            Matcher matcher = pattern.matcher(str);
+            int i = 0;
+
+            while (matcher.find()) {
+                try {
+                    String hex = matcher.group(i++);
+                    net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hex);
+                    str = str.replaceAll("<" + hex + ">", color.toString());
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        return str;
+    }
+
     @Override
     public void onEnable() {
         vaultInstalled = Bukkit.getPluginManager().isPluginEnabled("Vault");
@@ -96,6 +116,8 @@ public class Chat2Go extends JavaPlugin {
             ChatUser user = new ChatUser(all);
             getUserManager().getChatUsers().add(user);
         }
+
+        new AutoBroadcastTask(this).runTaskTimer(this, 20, 20);
     }
 
     private void setupChat() {
@@ -142,24 +164,5 @@ public class Chat2Go extends JavaPlugin {
         new PlayerChatListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
-    }
-
-    public String parseHexColor(String str) {
-        if (Chat2Go.isHexSupported()) {
-            Pattern pattern = Pattern.compile("<(.*?)>");
-            Matcher matcher = pattern.matcher(str);
-            int i = 0;
-
-            while (matcher.find()) {
-                String hex = matcher.group(i++);
-                try {
-                    net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hex);
-                    str = str.replaceAll("<" + hex + ">", color.toString());
-                } catch (Exception ignored) {
-                }
-            }
-        }
-
-        return str;
     }
 }

@@ -42,5 +42,4 @@ public class PermissionConstant {
     public static final String PERMISSION_COMMAND_AUTOBROADCAST = "chat2go.command.autobroadcast";
 
 
-
 }

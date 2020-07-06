@@ -2,7 +2,8 @@ package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstant;
-import eu.rex2go.chat2go.command.exception.*;
+import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
+import eu.rex2go.chat2go.command.exception.CommandNotANumberException;
 import eu.rex2go.chat2go.config.MainConfig;
 import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.util.MathUtil;
@@ -17,7 +18,8 @@ public class SlowModeCommand extends WrappedCommandExecutor {
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
             CommandNotANumberException {
-        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_SLOW_MODE, PermissionConstant.PERMISSION_COMMAND_SLOWMODE);
+        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_SLOW_MODE,
+                PermissionConstant.PERMISSION_COMMAND_SLOWMODE);
 
         MainConfig mainConfig = Chat2Go.getMainConfig();
         String cooldownStr = null;
@@ -38,7 +40,8 @@ public class SlowModeCommand extends WrappedCommandExecutor {
         mainConfig.setSlowModeEnabled(updatedState);
         mainConfig.setSlowModeSeconds(cooldown);
 
-        Chat2Go.sendMessage(sender, "chat2go.command.slowmode." + (updatedState ? "enable" : "disable"), true, String.valueOf(cooldown));
+        Chat2Go.sendMessage(sender, "chat2go.command.slowmode." + (updatedState ? "enable" : "disable"), true,
+                String.valueOf(cooldown));
         return true;
     }
 }

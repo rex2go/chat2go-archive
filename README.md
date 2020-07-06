@@ -13,7 +13,7 @@
 - [x] link / ip whitelist
 - [x] anti spam
 - [x] broadcast
-- [ ] auto broadcast
+- [x] auto broadcast
 
 #### v0.3-PRE
 - [ ] mysql support
@@ -26,6 +26,7 @@
 - [ ] chat log
 - [ ] mute command
 - [ ] range chat
+- [ ] countdown command
 - [ ] first join message
 
 #### v1.0 RELEASE

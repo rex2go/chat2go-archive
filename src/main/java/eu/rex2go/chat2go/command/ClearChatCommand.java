@@ -15,7 +15,8 @@ public class ClearChatCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException {
-        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CLEAR_CHAT, PermissionConstant.PERMISSION_COMMAND_CLEARCHAT);
+        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CLEAR_CHAT,
+                PermissionConstant.PERMISSION_COMMAND_CLEARCHAT);
 
         for (int i = 0; i < 100; i++) {
             Bukkit.broadcastMessage("  ");

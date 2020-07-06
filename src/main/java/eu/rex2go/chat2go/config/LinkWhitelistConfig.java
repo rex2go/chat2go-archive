@@ -21,7 +21,7 @@ public class LinkWhitelistConfig extends CustomConfig {
 
         this.linkWhitelist.clear();
 
-        if(linkWhitelist == null) return;
+        if (linkWhitelist == null) return;
 
         this.linkWhitelist.addAll(linkWhitelist);
     }

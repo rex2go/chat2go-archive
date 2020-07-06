@@ -16,11 +16,9 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
 
     @Getter
     protected Chat2Go plugin;
-
-    private String command;
-
     @Getter
     protected PluginCommand pluginCommand;
+    private String command;
 
     public WrappedCommandExecutor(Chat2Go plugin, String command) {
         this.plugin = plugin;
@@ -30,7 +28,8 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
         pluginCommand.setExecutor(this);
 
         if (pluginCommand.getPermissionMessage() == null) {
-            pluginCommand.setPermissionMessage(Chat2Go.getMessageConfig().getMessage("chat2go.command.error.no_permission"));
+            pluginCommand.setPermissionMessage(Chat2Go.getMessageConfig().getMessage("chat2go.command.error" +
+                    ".no_permission"));
         }
     }
 
@@ -45,9 +44,11 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
             } catch (CommandNoPermissionException exception) {
                 Chat2Go.sendMessage(sender, "chat2go.command.error.no_permission", false);
             } catch (CommandPlayerNotOnlineException exception) {
-                Chat2Go.sendMessage(sender, "chat2go.command.error.player_not_online", false, exception.getPlayerName());
+                Chat2Go.sendMessage(sender, "chat2go.command.error.player_not_online", false,
+                        exception.getPlayerName());
             } catch (CommandWrongUsageException exception) {
-                Chat2Go.sendMessage(sender, "chat2go.command.error.wrong_usage", false, exception.getUsage().replace("<command>", label));
+                Chat2Go.sendMessage(sender, "chat2go.command.error.wrong_usage", false, exception.getUsage().replace(
+                        "<command>", label));
             } catch (CommandCustomErrorException exception) {
                 sender.sendMessage(ChatColor.RED + exception.getErrorMessage());
             } catch (CommandNoPlayerException exception) {
@@ -63,22 +64,22 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
     }
 
     public void checkAllPermissions(CommandSender sender, String... permissions) throws CommandNoPermissionException {
-        for(String permission : permissions) {
-            if(!sender.hasPermission(permission)) throw new CommandNoPermissionException(permission);
+        for (String permission : permissions) {
+            if (!sender.hasPermission(permission)) throw new CommandNoPermissionException(permission);
         }
     }
 
     public void checkPermission(CommandSender sender, String... permissions) throws CommandNoPermissionException {
         boolean check = false;
 
-        for(String permission : permissions) {
-            if(sender.hasPermission(permission)) {
+        for (String permission : permissions) {
+            if (sender.hasPermission(permission)) {
                 check = true;
                 break;
             }
         }
 
-        if(!check) throw new CommandNoPermissionException(permissions[0]);
+        if (!check) throw new CommandNoPermissionException(permissions[0]);
     }
 
     protected abstract boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException, CommandNoPlayerException, CommandNotANumberException;

@@ -3,16 +3,10 @@ package eu.rex2go.chat2go.config;
 import eu.rex2go.chat2go.Chat2Go;
 import lombok.Getter;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MessageConfig extends CustomConfig {
 
@@ -52,13 +46,13 @@ public class MessageConfig extends CustomConfig {
         }
         String message = messages.get(key);
 
-        for(int i = 0; i<args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             String arg = args[i];
 
             message = message.replace("{" + i + "}", arg);
         }
 
-        message = plugin.parseHexColor(message);
+        message = Chat2Go.parseHexColor(message);
 
         message = ChatColor.translateAlternateColorCodes('&', message);
 

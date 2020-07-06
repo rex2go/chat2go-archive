@@ -75,6 +75,12 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
                     Chat2Go.getLinkWhitelistConfig().getFileName());
 
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
+                    Chat2Go.getAutoBroadcastConfig().getFileName());
+            Chat2Go.getAutoBroadcastConfig().reload();
+            Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloaded", true,
+                    Chat2Go.getAutoBroadcastConfig().getFileName());
+
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.done", true);
             return true;
         }

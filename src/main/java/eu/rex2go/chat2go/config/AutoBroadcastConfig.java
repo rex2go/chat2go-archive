@@ -5,6 +5,7 @@ import eu.rex2go.chat2go.broadcast.AutoBroadcast;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class AutoBroadcastConfig extends CustomConfig {
 
@@ -17,7 +18,23 @@ public class AutoBroadcastConfig extends CustomConfig {
 
     @Override
     public void load() {
-        // TODO
+        try {
+            getConfig().getConfigurationSection("autoBroadcasts").getKeys(false).forEach(id -> {
+                try {
+                    int idd = Integer.parseInt(id);
+                    int interval = getConfig().getInt("autoBroadcasts." + id + ".interval");
+                    String message = getConfig().getString("autoBroadcasts." + id + ".message");
+                    int offset = getConfig().getInt("autoBroadcasts." + id + ".offset");
+
+                    AutoBroadcast autoBroadcast = new AutoBroadcast(idd, interval, offset, message);
+
+                    autoBroadcasts.add(autoBroadcast);
+                } catch (NumberFormatException exception) {
+                    plugin.getLogger().log(Level.WARNING, "Error in " + getFileName());
+                }
+            });
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -28,7 +45,11 @@ public class AutoBroadcastConfig extends CustomConfig {
 
     @Override
     public void save() {
-        // TODO
+        for (AutoBroadcast autoBroadcast : autoBroadcasts) {
+            getConfig().set("autoBroadcasts." + autoBroadcast.getId() + ".interval", autoBroadcast.getInterval());
+            getConfig().set("autoBroadcasts." + autoBroadcast.getId() + ".message", autoBroadcast.getMessage());
+            getConfig().set("autoBroadcasts." + autoBroadcast.getId() + ".offset", autoBroadcast.getOffset());
+        }
         super.save();
     }
 

@@ -57,3 +57,13 @@ chat2go:
       # {0} equals cooldown seconds
       enable: "&7Chat Slow Mode has been &aenabled&7 with a cooldown of {0}s."
       disable: "&7Chat Slow Mode has been &cdisabled&7."
+    autobroadcast:
+      # {0} equals the id
+      not_found: "Auto broadcast with id #{0} could not be found."
+      # {0} equals the id of the added broadcast
+      add: "You added an auto broadcast with id #{0}."
+      # {0} equals the id of the removed broadcast
+      remove: "You removed the auto broadcast with id #{0}."
+      list: "&7The list of auto broadcasts:"
+      # {0} equals command typed
+      list_empty: '&cThis list is empty. You can add words to it using "/{0} add <interval> <offset> <message>"'

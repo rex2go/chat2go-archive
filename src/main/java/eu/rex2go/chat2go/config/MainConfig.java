@@ -25,19 +25,23 @@ public class MainConfig extends CustomConfig {
     @Getter
     private boolean translateChatColorsEnabled = true;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean chatFilterEnabled = true;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private FilterMode chatFilterMode = FilterMode.BLOCK;
 
     @Getter
     private boolean badWordNotificationEnabled = true;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private boolean slowModeEnabled = false;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private int slowModeSeconds = 5;
 
     @Getter
@@ -92,7 +96,7 @@ public class MainConfig extends CustomConfig {
         translateChatColorsEnabled = getConfig().getBoolean("translateChatColorsEnabled");
 
         String chatFilterString = getConfig().getString("chatFilterMode");
-        if(chatFilterString != null) {
+        if (chatFilterString != null) {
             try {
                 chatFilterMode = FilterMode.valueOf(chatFilterString.toUpperCase());
             } catch (Exception exception) {
@@ -126,7 +130,7 @@ public class MainConfig extends CustomConfig {
 
     @Override
     public void save() {
-        if(!configSync) return;
+        if (!configSync) return;
 
         getConfig().set("chatEnabled", chatEnabled);
         getConfig().set("configSync", configSync);
