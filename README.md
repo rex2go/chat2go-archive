@@ -20,6 +20,13 @@
 - [x] config backup mechanism
 - [x] minor improvements
 
+#### v0.2.2-PRE
+- [x] resolve cryptic error message
+
+#### v0.2.3-PRE
+- [ ] add alternate hex color format #(xxxxxx)
+- [ ] enable / disable chat formatting
+
 #### v0.3-PRE
 - [ ] mysql support
 - [ ] command tab completion
