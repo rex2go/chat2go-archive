@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.UnknownFormatConversionException;
+import java.util.logging.Level;
+
 public class PlayerChatListener extends AbstractListener {
 
     public PlayerChatListener(Chat2Go plugin) {
@@ -53,6 +56,9 @@ public class PlayerChatListener extends AbstractListener {
         } catch (BadWordException | AntiSpamException e) {
             event.setCancelled(true);
             chatUser.sendMessage(e.getMessage(), false);
+        } catch(UnknownFormatConversionException e) {
+            plugin.getLogger().log(Level.SEVERE, "Error in chat formatting. If you're using Placeholder API, check if" +
+                    " all required extensions are installed.");
         }
     }
 }
