@@ -15,6 +15,11 @@
 - [x] broadcast
 - [x] auto broadcast
 
+#### v0.2.1-PRE
+- [x] Placeholder API support
+- [x] config backup mechanism
+- [ ] minor improvements
+
 #### v0.3-PRE
 - [ ] mysql support
 - [ ] command tab completion

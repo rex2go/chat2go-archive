@@ -1,7 +1,7 @@
 package eu.rex2go.chat2go.listener;
 
 import eu.rex2go.chat2go.Chat2Go;
-import eu.rex2go.chat2go.PermissionConstant;
+import eu.rex2go.chat2go.PermissionConstants;
 import eu.rex2go.chat2go.chat.exception.AntiSpamException;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
 import eu.rex2go.chat2go.user.ChatUser;
@@ -34,8 +34,8 @@ public class PlayerChatListener extends AbstractListener {
         String message = event.getMessage();
         long currentTime = System.currentTimeMillis();
 
-        if (!player.hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_SLOW_MODE)
-                && !player.hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_SLOWMODE)
+        if (!player.hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_SLOW_MODE)
+                && !player.hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_SLOWMODE)
                 && mainConfig.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(

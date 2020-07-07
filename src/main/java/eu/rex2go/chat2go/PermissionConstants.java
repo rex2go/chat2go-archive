@@ -1,6 +1,6 @@
 package eu.rex2go.chat2go;
 
-public class PermissionConstant {
+public class PermissionConstants {
 
     public static final String PERMISSION_CHAT_COLOR = "chat2go.chat.color";
     public static final String PERMISSION_CHAT_BYPASS_SLOW_MODE = "chat2go.chat.bypass_slow_mode";

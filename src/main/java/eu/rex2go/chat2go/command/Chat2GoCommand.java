@@ -1,7 +1,7 @@
 package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
-import eu.rex2go.chat2go.PermissionConstant;
+import eu.rex2go.chat2go.PermissionConstants;
 import eu.rex2go.chat2go.chat.FilterMode;
 import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
@@ -22,7 +22,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
             CommandWrongUsageException, CommandCustomErrorException, CommandNotANumberException {
-        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT);
+        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT);
 
         if (args.length < 1) {
             sendHelp(sender);
@@ -32,24 +32,24 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         String subCommand = args[0];
 
         if (subCommand.equalsIgnoreCase("filter")) {
-            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_FILTER);
+            checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT_FILTER);
 
             handleFilter(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("badword") || subCommand.equalsIgnoreCase("badwords")) {
-            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_BAD_WORD,
-                    PermissionConstant.PERMISSION_COMMAND_CHAT_BADWORD);
+            checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT_BAD_WORD,
+                    PermissionConstants.PERMISSION_COMMAND_CHAT_BADWORD);
 
             handleBadWord(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("slowmode")) {
-            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_SLOW_MODE,
-                    PermissionConstant.PERMISSION_COMMAND_CHAT_SLOWMODE);
+            checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT_SLOW_MODE,
+                    PermissionConstants.PERMISSION_COMMAND_CHAT_SLOWMODE);
 
             handleSlowMode(sender, user, label, args);
             return true;
         } else if (subCommand.equalsIgnoreCase("reload")) {
-            checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_CHAT_RELOAD);
+            checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT_RELOAD);
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.reloading", true,
                     Chat2Go.getMainConfig().getFileName());

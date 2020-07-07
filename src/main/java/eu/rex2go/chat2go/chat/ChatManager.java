@@ -1,13 +1,14 @@
 package eu.rex2go.chat2go.chat;
 
 import eu.rex2go.chat2go.Chat2Go;
-import eu.rex2go.chat2go.PermissionConstant;
+import eu.rex2go.chat2go.PermissionConstants;
 import eu.rex2go.chat2go.chat.exception.AntiSpamException;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
 import eu.rex2go.chat2go.config.BadWordConfig;
 import eu.rex2go.chat2go.config.MainConfig;
 import eu.rex2go.chat2go.user.ChatUser;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -57,6 +58,11 @@ public class ChatManager {
         format = format.replace("{username}", username);
         format = format.replace("{suffix}",
                 suffix.equals("") ? suffix : (mainConfig.isSuffixLeadingSpaceEnabled() ? " " : "") + suffix);
+
+        if (Chat2Go.isPlaceholderInstalled()) {
+            format = PlaceholderAPI.setPlaceholders(chatUser.getPlayer(), format);
+        }
+
         format = format.replace("{message}", message);
 
         return format.trim();
@@ -67,7 +73,7 @@ public class ChatManager {
         message = antiSpamCheck(chatUser, message);
         String[] ads = new String[0];
 
-        if (!chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_IP)) {
+        if (!chatUser.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_IP)) {
             ads = filterAdvertisement(message);
         }
 
@@ -75,17 +81,17 @@ public class ChatManager {
         chatUser.setLastMessageTime(System.currentTimeMillis());
 
         if (mainConfig.isTranslateChatColorsEnabled()
-                && chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_CHAT_COLOR)) {
+                && chatUser.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_COLOR)) {
             message = ChatColor.translateAlternateColorCodes('&', message);
             message = Chat2Go.parseHexColor(message);
         }
 
         if (!message.equals(filter(message, ads))
-                && !chatUser.getPlayer().hasPermission(PermissionConstant.PERMISSION_BAD_WORD_IGNORE)
+                && !chatUser.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_IGNORE)
                 && mainConfig.isChatFilterEnabled()) {
             if (mainConfig.isBadWordNotificationEnabled()) {
                 for (ChatUser staff : plugin.getUserManager().getChatUsers()) {
-                    if (staff.getPlayer().hasPermission(PermissionConstant.PERMISSION_BAD_WORD_NOTIFY)
+                    if (staff.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_NOTIFY)
                             && chatUser.isBadWordNotificationEnabled()) {
                         staff.getPlayer().sendMessage(
                                 Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + chatUser.getName() + ": " + ChatColor.RED + message);
@@ -164,8 +170,8 @@ public class ChatManager {
             return message;
         }
 
-        if (user.getPlayer().hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_ANTI_SPAM)
-                || user.getPlayer().hasPermission(PermissionConstant.PERMISSION_CHAT_BYPASS_ANTISPAM)) {
+        if (user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTI_SPAM)
+                || user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTISPAM)) {
             return message;
         }
 

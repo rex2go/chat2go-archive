@@ -83,7 +83,7 @@ public class MainConfig extends CustomConfig {
     // TODO chat log, chat log length, range chat, range chat length
 
     public MainConfig(Chat2Go plugin) {
-        super(plugin, "config.yml");
+        super(plugin, "config.yml",1);
     }
 
     @Override

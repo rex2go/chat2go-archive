@@ -1,7 +1,7 @@
 package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
-import eu.rex2go.chat2go.PermissionConstant;
+import eu.rex2go.chat2go.PermissionConstants;
 import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
@@ -19,7 +19,7 @@ public class ReplyCommand extends WrappedCommandExecutor {
     @Override
     protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
             CommandPlayerNotOnlineException, CommandCustomErrorException, CommandNoPlayerException {
-        checkPermission(sender, PermissionConstant.PERMISSION_COMMAND_MSG);
+        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_MSG);
 
         if (!(sender instanceof Player)) {
             throw new CommandNoPlayerException();

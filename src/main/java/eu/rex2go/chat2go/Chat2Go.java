@@ -11,6 +11,7 @@ import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.user.UserManager;
 import eu.rex2go.chat2go.util.MathUtil;
 import lombok.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,7 +36,7 @@ public class Chat2Go extends JavaPlugin {
     private static Chat chat;
 
     @Getter
-    private static boolean vaultInstalled, hexSupported = false;
+    private static boolean vaultInstalled, hexSupported, placeholderInstalled = false;
 
     @Getter
     private static MessageConfig messageConfig;
@@ -88,8 +89,14 @@ public class Chat2Go extends JavaPlugin {
         if (vaultInstalled) {
             setupChat();
         } else {
-            getLogger().log(Level.WARNING, "Vault is not installed. There will be no support for prefixes and " +
-                    "suffixes.");
+            getLogger().log(Level.WARNING, "Vault is not installed. There's a chance prefixes and suffixes won't be " +
+                    "detected.");
+        }
+
+        placeholderInstalled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
+
+        if (placeholderInstalled) {
+            getLogger().log(Level.INFO, "Placeholder API is installed.");
         }
 
         String[] versionParts = getServer().getBukkitVersion().split("\\.");

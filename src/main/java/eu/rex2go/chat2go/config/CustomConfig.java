@@ -18,17 +18,36 @@ public abstract class CustomConfig {
     private FileConfiguration config;
     @Getter
     private File file;
+    @Getter
+    private int version;
 
     CustomConfig(Chat2Go plugin, String fileName) {
+        this(plugin, fileName, 0);
+    }
+
+    CustomConfig(Chat2Go plugin, String fileName, int version) {
         this.plugin = plugin;
         this.fileName = fileName;
         this.file = new File(plugin.getDataFolder() + File.separator + fileName);
+        this.version = version;
 
         if (!file.exists()) {
             plugin.saveResource(fileName, false);
         }
 
         this.config = YamlConfiguration.loadConfiguration(file);
+
+        int ver = config.getInt("version");
+        if (version != 0 && version > ver) {
+            file.renameTo(new File(file.getPath() + ".outdated"));
+
+            this.file = new File(plugin.getDataFolder() + File.separator + fileName);
+            if (!file.exists()) {
+                plugin.saveResource(fileName, false);
+            }
+
+            this.config = YamlConfiguration.loadConfiguration(file);
+        }
     }
 
     public abstract void load();

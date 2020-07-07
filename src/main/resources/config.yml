@@ -1,12 +1,8 @@
 # description: if set to false chatting will be disabled
 chatEnabled: true
 
-# description: config gets updated as you're changing it in game
-# warning: comments in config will disappear
-# example: /chat filter censor will update the config for permanent chat censoring
-syncConfig: false
-
 # description: set the format
+# placeholder api is supported
 chatFormat: "{prefix}{username}{suffix}&7: &f{message}"
 
 # description: adds a space after {prefix} - useful for formatting
@@ -61,6 +57,7 @@ hideJoinMessage: false
 customJoinMessageEnabled: true
 
 # description: custom join message format
+# placeholder api is supported
 customJoinMessage: "&7[&a+&7] &7{username}"
 
 # description: disables the leave message
@@ -70,6 +67,7 @@ hideLeaveMessage: false
 customLeaveMessageEnabled: true
 
 # description: custom leave message format
+# placeholder api is supported
 customLeaveMessage: "&7[&c-&7] &7{username}"
 
 # description: msg format
@@ -77,3 +75,6 @@ privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
 
 # description: broadcast format
 broadcastFormat: "&f[&cBroadcast&f] {message}"
+
+# do not touch
+version: 1

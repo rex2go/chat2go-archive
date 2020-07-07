@@ -67,3 +67,6 @@ chat2go:
       list: "&7The list of auto broadcasts:"
       # {0} equals command typed
       list_empty: '&cThis list is empty. You can add words to it using "/{0} add <interval> <offset> <message>"'
+
+# do not touch
+version: 1
