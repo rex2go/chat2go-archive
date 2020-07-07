@@ -11,7 +11,6 @@ import eu.rex2go.chat2go.user.ChatUser;
 import eu.rex2go.chat2go.user.UserManager;
 import eu.rex2go.chat2go.util.MathUtil;
 import lombok.Getter;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -67,11 +66,11 @@ public class Chat2Go extends JavaPlugin {
         if (Chat2Go.isHexSupported()) {
             Pattern pattern = Pattern.compile("<(.*?)>");
             Matcher matcher = pattern.matcher(str);
-            int i = 0;
 
             while (matcher.find()) {
+                String hex = matcher.group(0).replace("<", "").replace(">", "");
+
                 try {
-                    String hex = matcher.group(i++);
                     net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hex);
                     str = str.replaceAll("<" + hex + ">", color.toString());
                 } catch (Exception ignored) {
@@ -110,9 +109,6 @@ public class Chat2Go extends JavaPlugin {
                 getLogger().log(Level.INFO, "Hex color is supported on this server.");
             }
         }
-
-        getLogger().log(Level.WARNING, "This build is still under heavy development. If you used a previous version " +
-                "of this plugin it is highly recommended to regenerate the config by deleting it.");
 
         setupConfigs();
         setupManagers();
