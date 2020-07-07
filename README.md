@@ -18,7 +18,7 @@
 #### v0.2.1-PRE
 - [x] Placeholder API support
 - [x] config backup mechanism
-- [ ] minor improvements
+- [x] minor improvements
 
 #### v0.3-PRE
 - [ ] mysql support
