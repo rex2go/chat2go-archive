@@ -29,24 +29,24 @@
 - [x] fix auto broadcast bug
 
 #### v0.3-PRE
+- [ ] json actions support (click / hover)
+- [ ] chat format spacing with optional spaces
+- [ ] chat toggle command
+
+#### v0.4-PRE
 - [ ] mysql support
 - [ ] command tab completion
 - [ ] update notify
 
-#### v0.4-PRE
+#### v0.5-PRE
 - [ ] message spy command
-- [ ] offline mail
 - [ ] chat log
 - [ ] mute command
-- [ ] range chat
 - [ ] countdown command
 - [ ] first join message
 
 #### v1.0 RELEASE
 - [ ] letter whitelist / blacklist
-- [ ] factions support
-- [ ] multiverse support
+- [ ] offline mail
+- [ ] range chat
 - [ ] some kind of tellraw command
-
-#### additional
-- [ ] config sync improvements
