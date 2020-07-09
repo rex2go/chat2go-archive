@@ -68,7 +68,7 @@ public class ChatManager {
         return format.trim();
     }
 
-    private String processMessage(ChatUser chatUser, String message) throws BadWordException, AntiSpamException {
+    public String processMessage(ChatUser chatUser, String message) throws BadWordException, AntiSpamException {
         message = message.replace("%", "%%");
         message = antiSpamCheck(chatUser, message);
         String[] ads = new String[0];

@@ -67,7 +67,14 @@ public class AutoBroadcastConfig extends CustomConfig {
             return false;
         }
 
+        getConfig().set("autoBroadcasts." + autoBroadcast.getId() + ".interval", null);
+        getConfig().set("autoBroadcasts." + autoBroadcast.getId() + ".message", null);
+        getConfig().set("autoBroadcasts." + autoBroadcast.getId() + ".offset", null);
+        getConfig().set("autoBroadcasts." + autoBroadcast.getId(), null);
+
         autoBroadcasts.remove(autoBroadcast);
+
+        save();
         return true;
     }
 

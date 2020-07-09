@@ -14,6 +14,9 @@ public class MainConfig extends CustomConfig {
     private boolean configSync = false;
 
     @Getter
+    private boolean chatFormatEnabled = true;
+
+    @Getter
     private String chatFormat = "{prefix}{username}{suffix}&7: &f{message}";
 
     @Getter
@@ -83,13 +86,14 @@ public class MainConfig extends CustomConfig {
     // TODO chat log, chat log length, range chat, range chat length
 
     public MainConfig(Chat2Go plugin) {
-        super(plugin, "config.yml",1);
+        super(plugin, "config.yml",2);
     }
 
     @Override
     public void load() {
         chatEnabled = getConfig().getBoolean("chatEnabled");
         configSync = getConfig().getBoolean("configSync");
+        chatFormatEnabled = getConfig().getBoolean("chatFormatEnabled");
         chatFormat = getConfig().getString("chatFormat");
         prefixTrailingSpaceEnabled = getConfig().getBoolean("prefixTrailingSpaceEnabled");
         suffixLeadingSpaceEnabled = getConfig().getBoolean("suffixLeadingSpaceEnabled");
@@ -134,6 +138,7 @@ public class MainConfig extends CustomConfig {
 
         getConfig().set("chatEnabled", chatEnabled);
         getConfig().set("configSync", configSync);
+        getConfig().set("chatFormatEnabled", chatFormatEnabled);
         getConfig().set("chatFormat", chatFormat);
         getConfig().set("prefixTrailingSpaceEnabled", prefixTrailingSpaceEnabled);
         getConfig().set("suffixLeadingSpaceEnabled", suffixLeadingSpaceEnabled);

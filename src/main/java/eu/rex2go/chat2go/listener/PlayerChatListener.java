@@ -52,7 +52,11 @@ public class PlayerChatListener extends AbstractListener {
         }
 
         try {
-            event.setFormat(plugin.getChatManager().format(chatUser, message));
+            if(mainConfig.isChatFormatEnabled()) {
+                event.setFormat(plugin.getChatManager().format(chatUser, message));
+            } else {
+                event.setMessage(plugin.getChatManager().processMessage(chatUser, message));
+            }
         } catch (BadWordException | AntiSpamException e) {
             event.setCancelled(true);
             chatUser.sendMessage(e.getMessage(), false);

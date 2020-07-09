@@ -1,6 +1,9 @@
 # description: if set to false chatting will be disabled
 chatEnabled: true
 
+# description: enables chat formatting
+chatFormatEnabled: true
+
 # description: set the format
 # placeholder api is supported
 chatFormat: "{prefix}{username}{suffix}&7: &f{message}"
@@ -15,6 +18,8 @@ suffixLeadingSpaceEnabled: true
 # permission: chat2go.chat.color
 # example: &6 turns golden
 # example (1.16+): <#ff0000> turns red
+# example (1.16+): &#ff0000 turns red
+# example (1.16+): #(ff0000) turns red
 translateChatColorsEnabled: true
 
 # description: enables chat filtering for bad words defined in badwords.yml

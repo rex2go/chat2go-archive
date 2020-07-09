@@ -64,16 +64,22 @@ public class Chat2Go extends JavaPlugin {
 
     public static String parseHexColor(String str) {
         if (Chat2Go.isHexSupported()) {
-            Pattern pattern = Pattern.compile("<(.*?)>");
-            Matcher matcher = pattern.matcher(str);
+            String[] patterns = new String[]{"<#(.{6}?)>", "#\\((.{6}?)\\)", "&#(.{6}?)"};
 
-            while (matcher.find()) {
-                String hex = matcher.group(0).replace("<", "").replace(">", "");
+            for (String patternStr : patterns) {
+                Pattern pattern = Pattern.compile(patternStr);
+                Matcher matcher = pattern.matcher(str);
 
-                try {
-                    net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hex);
-                    str = str.replaceAll("<" + hex + ">", color.toString());
-                } catch (Exception ignored) {
+                while (matcher.find()) {
+                    String hexMatch = matcher.group(0);
+                    String hex = hexMatch.replaceAll("[<>#()&]", "");
+                    hex = "#" + hex;
+
+                    try {
+                        net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.of(hex);
+                        str = str.replace(hexMatch, color.toString());
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         }

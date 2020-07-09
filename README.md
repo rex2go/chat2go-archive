@@ -24,8 +24,9 @@
 - [x] resolve cryptic error message
 
 #### v0.2.3-PRE
-- [ ] add alternate hex color format #(xxxxxx)
-- [ ] enable / disable chat formatting
+- [x] add alternate hex color format #(xxxxxx) &#xxxxxx
+- [x] enable / disable chat formatting
+- [x] fix auto broadcast bug
 
 #### v0.3-PRE
 - [ ] mysql support
