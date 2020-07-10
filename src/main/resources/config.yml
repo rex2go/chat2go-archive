@@ -1,5 +1,13 @@
+# --- general ---
+
 # description: if set to false chatting will be disabled
 chatEnabled: true
+
+# description: config version - please do not change
+version: 3
+
+
+# --- chat formatting ---
 
 # description: enables chat formatting
 chatFormatEnabled: true
@@ -15,6 +23,9 @@ chatFormat: "{prefix }{username}{ suffix}&7: &f{message}"
 # example (1.16+): &#ff0000 turns red
 # example (1.16+): #(ff0000) turns red
 translateChatColorsEnabled: true
+
+
+# --- chat filtering ---
 
 # description: enables chat filtering for bad words defined in badwords.yml
 # permission: chat2go.bad_word.ignore
@@ -32,6 +43,9 @@ badWordNotificationEnabled: true
 # permission: chat2go.chat.bypass_ip
 linkBlockEnabled: true
 
+
+# --- anti spam ---
+
 # description: will try it best to prevent chat spamming
 # permission: chat2go.chat.bypass_anti_spam
 antiSpamEnabled: false
@@ -42,12 +56,18 @@ capsThreshold: 0.5
 # description: (anti spam) threshold of spacing detection
 spaceThreshold: 0.3
 
+
+# --- slow mode ---
+
 # description: chatting will be available with a cooldown
 # permission: chat2go.chat.bypass_slow_mode
 slowModeEnabled: false
 
 # description: the cooldown given in seconds
 slowModeSeconds: 5
+
+
+# --- join and leave messages ---
 
 # description: disables the join message
 hideJoinMessage: false
@@ -69,11 +89,11 @@ customLeaveMessageEnabled: true
 # placeholder api is supported
 customLeaveMessage: "&7[&c-&7] &7{username}"
 
+
+# --- formatting ---
+
 # description: msg format
 privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
 
 # description: broadcast format
 broadcastFormat: "&f[&cBroadcast&f] {message}"
-
-# do not touch
-version: 3
