@@ -53,6 +53,8 @@ public class ChatManager {
             message = processMessage(chatUser, message);
         }
 
+        // {( *)(.*?)( *)}
+
         format = format.replace("{prefix}",
                 prefix.equals("") ? prefix : prefix + (mainConfig.isPrefixTrailingSpaceEnabled() ? " " : ""));
         format = format.replace("{username}", username);

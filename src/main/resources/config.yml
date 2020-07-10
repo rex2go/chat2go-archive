@@ -6,13 +6,7 @@ chatFormatEnabled: true
 
 # description: set the format
 # placeholder api is supported
-chatFormat: "{prefix}{username}{suffix}&7: &f{message}"
-
-# description: adds a space after {prefix} - useful for formatting
-prefixTrailingSpaceEnabled: true
-
-# description: adds a space before {suffix} - useful for formatting
-suffixLeadingSpaceEnabled: true
+chatFormat: "{prefix }{username}{ suffix}&7: &f{message}"
 
 # description: enables colored chatting, in 1.16+ hex colors are supported
 # permission: chat2go.chat.color
@@ -82,4 +76,4 @@ privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
 broadcastFormat: "&f[&cBroadcast&f] {message}"
 
 # do not touch
-version: 1
+version: 3
