@@ -9,11 +9,13 @@ import eu.rex2go.chat2go.config.MainConfig;
 import eu.rex2go.chat2go.user.ChatUser;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,10 +43,6 @@ public class ChatManager {
     }
 
     public String format(ChatUser chatUser, String message, boolean processMessage, String format) throws BadWordException, AntiSpamException {
-        String username = chatUser.getName();
-        String prefix = chatUser.getPrefix();
-        String suffix = chatUser.getSuffix();
-
         format = ChatColor.translateAlternateColorCodes('&', format);
         format = Chat2Go.parseHexColor(format);
 
@@ -52,6 +50,16 @@ public class ChatManager {
             format = format.replaceAll(Pattern.quote(" +"), " ");
             message = processMessage(chatUser, message);
         }
+
+        format = processPlaceholders(chatUser, format, message);
+
+        return format;
+    }
+
+    public String processPlaceholders(ChatUser chatUser, String format, String message) {
+        String username = chatUser.getName();
+        String prefix = chatUser.getPrefix();
+        String suffix = chatUser.getSuffix();
 
         if (Chat2Go.isPlaceholderInstalled()) {
             format = PlaceholderAPI.setPlaceholders(chatUser.getPlayer(), format);
@@ -65,29 +73,53 @@ public class ChatManager {
             String leadingSpaces = matcher.group(1);
             String placeholder = matcher.group(2);
             String trailingSpaces = matcher.group(3);
-            String placeholderContent;
+            String placeholderContent = "";
+            TextComponent jsonContent = null;
 
-            if(placeholder.equalsIgnoreCase("prefix")) {
+            if (placeholder.equalsIgnoreCase("prefix")) {
                 placeholderContent = prefix;
-            } else if(placeholder.equalsIgnoreCase("suffix")) {
+            } else if (placeholder.equalsIgnoreCase("suffix")) {
                 placeholderContent = suffix;
-            } else if(placeholder.equalsIgnoreCase("username")) {
+            } else if (placeholder.equalsIgnoreCase("username")) {
                 placeholderContent = username;
-            } else if(placeholder.equalsIgnoreCase("message")) {
+            } else if (placeholder.equalsIgnoreCase("message")) {
                 placeholderContent = message;
             } else {
-                placeholderContent = placeholder;
+                Optional<JSONElement> jsonElementOptional
+                        = mainConfig.getJsonElements().stream().filter(json -> json.getId().equalsIgnoreCase(placeholder)).findFirst();
+                if (jsonElementOptional.isPresent()) {
+                    jsonContent = jsonElementOptional.get().build(plugin, chatUser);
+                } else {
+                    placeholderContent = placeholder;
+                }
             }
 
-            if(placeholderContent.equals("")) {
+            if (placeholderContent.equals("")) {
                 format = format.replace(match, "");
                 continue;
             }
 
-            format = format.replace(match, leadingSpaces + placeholderContent + trailingSpaces);
+            if (jsonContent != null) {
+                String[] parts = format.split(match);
+
+                if(parts.length > 1) {
+                    format = parts[0] + jsonContent.toString() + parts[1]; // TODO TextComponent...
+                } else if(parts.length > 0) {
+                    if(format.startsWith(match)) {
+                        format = jsonContent.toString() + parts[0]; // TODO TextComponent...
+                    } else {
+                        format = parts[0] + jsonContent.toString(); // TODO TextComponent...
+                    }
+                } else {
+                    format = jsonContent.toString(); // TODO TextComponent...
+                }
+            } else {
+                format = format.replace(match, leadingSpaces + placeholderContent + trailingSpaces);
+            }
         }
 
-        return format.trim();
+        return format;
+
     }
 
     public String processMessage(ChatUser chatUser, String message) throws BadWordException, AntiSpamException {

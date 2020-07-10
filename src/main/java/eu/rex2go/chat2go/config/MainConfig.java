@@ -2,8 +2,11 @@ package eu.rex2go.chat2go.config;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.chat.FilterMode;
+import eu.rex2go.chat2go.chat.JSONElement;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
 
 public class MainConfig extends CustomConfig {
 
@@ -83,6 +86,9 @@ public class MainConfig extends CustomConfig {
     @Getter
     private String broadcastFormat = "&f[&cBroadcast&f] {message}";
 
+    @Getter // TODO config stuff
+    private ArrayList<JSONElement> jsonElements = new ArrayList<>();
+
     // TODO chat log, chat log length, range chat, range chat length
 
     // version auch in config anpassen..
@@ -125,6 +131,9 @@ public class MainConfig extends CustomConfig {
         capsThreshold = getConfig().getDouble("capsThreshold");
         spaceThreshold = getConfig().getDouble("spaceThreshold");
         broadcastFormat = getConfig().getString("broadcastFormat");
+
+        // TODO debug
+        jsonElements.add(new JSONElement("test", "test", "moin", "test lol", null, null));
     }
 
     @Override
