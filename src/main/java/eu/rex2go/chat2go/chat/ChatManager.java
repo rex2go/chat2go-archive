@@ -99,6 +99,7 @@ public class ChatManager {
                 continue;
             }
 
+            // TODO wieder entfernen und json erst beim packet senden hinzufügen..
             if (jsonContent != null) {
                 String[] parts = format.split(match);
 
