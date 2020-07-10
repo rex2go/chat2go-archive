@@ -49,6 +49,9 @@ public class ChatManager {
         if (processMessage) {
             format = format.replaceAll(Pattern.quote(" +"), " ");
             message = processMessage(chatUser, message);
+
+            // TODO test
+            message = message.replace("{", "\\{").replace("}", "\\}");
         }
 
         format = processPlaceholders(chatUser, format, message);
@@ -73,8 +76,7 @@ public class ChatManager {
             String leadingSpaces = matcher.group(1);
             String placeholder = matcher.group(2);
             String trailingSpaces = matcher.group(3);
-            String placeholderContent = "";
-            TextComponent jsonContent = null;
+            String placeholderContent;
 
             if (placeholder.equalsIgnoreCase("prefix")) {
                 placeholderContent = prefix;
@@ -85,13 +87,7 @@ public class ChatManager {
             } else if (placeholder.equalsIgnoreCase("message")) {
                 placeholderContent = message;
             } else {
-                Optional<JSONElement> jsonElementOptional
-                        = mainConfig.getJsonElements().stream().filter(json -> json.getId().equalsIgnoreCase(placeholder)).findFirst();
-                if (jsonElementOptional.isPresent()) {
-                    jsonContent = jsonElementOptional.get().build(plugin, chatUser);
-                } else {
-                    placeholderContent = placeholder;
-                }
+                placeholderContent = placeholder;
             }
 
             if (placeholderContent.equals("")) {
@@ -99,24 +95,7 @@ public class ChatManager {
                 continue;
             }
 
-            // TODO wieder entfernen und json erst beim packet senden hinzufügen..
-            if (jsonContent != null) {
-                String[] parts = format.split(match);
-
-                if(parts.length > 1) {
-                    format = parts[0] + jsonContent.toString() + parts[1]; // TODO TextComponent...
-                } else if(parts.length > 0) {
-                    if(format.startsWith(match)) {
-                        format = jsonContent.toString() + parts[0]; // TODO TextComponent...
-                    } else {
-                        format = parts[0] + jsonContent.toString(); // TODO TextComponent...
-                    }
-                } else {
-                    format = jsonContent.toString(); // TODO TextComponent...
-                }
-            } else {
-                format = format.replace(match, leadingSpaces + placeholderContent + trailingSpaces);
-            }
+            format = format.replace(match, leadingSpaces + placeholderContent + trailingSpaces);
         }
 
         return format;
