@@ -1,3 +1,13 @@
+# --- notes ---
+
+# 1.  chat2go uses curly brackets ({}) to imply placeholders
+# 2.  spaces inside curly brackets are "optional spaces"
+#     meaning they will only appear if the placeholder won't
+#     be empty (see chatFormat for example usage)
+# 3.  PlaceholderAPI is mostly supported and uses the default
+#     placeholder format using % (e.g. %player_name%)
+
+
 # --- general ---
 
 # description: if set to false chatting will be disabled
@@ -13,8 +23,14 @@ version: 3
 chatFormatEnabled: true
 
 # description: set the format
+# chat2go placeholders:
+# - {prefix}
+# - (suffix}
+# - {username}
+# - (message}
 # placeholder api is supported
-chatFormat: "{prefix }{username}{ suffix}&7: &f{message}"
+chatFormat: "{prefix }{user}{ suffix}&7: &f{message}" # in this example "{user}" is a json element (listed at the bottom
+                                                      # of the file) in which "{username}" is referred.
 
 # description: enables colored chatting, in 1.16+ hex colors are supported
 # permission: chat2go.chat.color
@@ -93,7 +109,20 @@ customLeaveMessage: "&7[&c-&7] &7{username}"
 # --- formatting ---
 
 # description: msg format
+# chat2go placeholders:
+# - {from}
+# - (to}
+# - {message}
 privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
 
 # description: broadcast format
 broadcastFormat: "&f[&cBroadcast&f] {message}"
+
+
+# --- json elements ---
+
+jsonElements:
+  user:
+    text: "{username}"
+    hover-text: "Send a private message"
+    suggest-command: "/msg {username} "
