@@ -82,4 +82,4 @@ privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
 broadcastFormat: "&f[&cBroadcast&f] {message}"
 
 # do not touch
-version: 1
+version: 2
