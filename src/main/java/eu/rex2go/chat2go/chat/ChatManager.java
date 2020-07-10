@@ -53,19 +53,39 @@ public class ChatManager {
             message = processMessage(chatUser, message);
         }
 
-        // {( *)(.*?)( *)}
-
-        format = format.replace("{prefix}",
-                prefix.equals("") ? prefix : prefix + (mainConfig.isPrefixTrailingSpaceEnabled() ? " " : ""));
-        format = format.replace("{username}", username);
-        format = format.replace("{suffix}",
-                suffix.equals("") ? suffix : (mainConfig.isSuffixLeadingSpaceEnabled() ? " " : "") + suffix);
-
         if (Chat2Go.isPlaceholderInstalled()) {
             format = PlaceholderAPI.setPlaceholders(chatUser.getPlayer(), format);
         }
 
-        format = format.replace("{message}", message);
+        Pattern pattern = Pattern.compile("\\{( *)(.*?)( *)}");
+        Matcher matcher = pattern.matcher(format);
+
+        while (matcher.find()) {
+            String match = matcher.group(0);
+            String leadingSpaces = matcher.group(1);
+            String placeholder = matcher.group(2);
+            String trailingSpaces = matcher.group(3);
+            String placeholderContent;
+
+            if(placeholder.equalsIgnoreCase("prefix")) {
+                placeholderContent = prefix;
+            } else if(placeholder.equalsIgnoreCase("suffix")) {
+                placeholderContent = suffix;
+            } else if(placeholder.equalsIgnoreCase("username")) {
+                placeholderContent = username;
+            } else if(placeholder.equalsIgnoreCase("message")) {
+                placeholderContent = message;
+            } else {
+                placeholderContent = placeholder;
+            }
+
+            if(placeholderContent.equals("")) {
+                format = format.replace(match, "");
+                continue;
+            }
+
+            format = format.replace(match, leadingSpaces + placeholderContent + trailingSpaces);
+        }
 
         return format.trim();
     }

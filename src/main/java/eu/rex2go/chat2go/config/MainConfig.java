@@ -85,6 +85,7 @@ public class MainConfig extends CustomConfig {
 
     // TODO chat log, chat log length, range chat, range chat length
 
+    // version auch in config anpassen..
     public MainConfig(Chat2Go plugin) {
         super(plugin, "config.yml",3);
     }
