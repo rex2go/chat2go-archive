@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainConfig extends CustomConfig {
 
@@ -93,7 +94,7 @@ public class MainConfig extends CustomConfig {
 
     // version auch in config anpassen..
     public MainConfig(Chat2Go plugin) {
-        super(plugin, "config.yml",3);
+        super(plugin, "config.yml", 3);
     }
 
     @Override
@@ -133,7 +134,14 @@ public class MainConfig extends CustomConfig {
         broadcastFormat = getConfig().getString("broadcastFormat");
 
         // TODO debug
-        jsonElements.add(new JSONElement("test", "test", "moin", "test lol", null, null));
+        HashMap<String, String> placeholders = new HashMap<>();
+        placeholders.put("username", "test-username");
+        placeholders.put("prefix", "test-prefix");
+        placeholders.put("suffix", "test-suffix");
+        placeholders.put("message", "test-message");
+
+        jsonElements.add(new JSONElement("test", "test", "moin",
+                "test lol", null, null, placeholders));
     }
 
     @Override

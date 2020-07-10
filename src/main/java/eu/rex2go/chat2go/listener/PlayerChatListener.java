@@ -4,7 +4,7 @@ import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstants;
 import eu.rex2go.chat2go.chat.exception.AntiSpamException;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.util.MathUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,15 +22,15 @@ public class PlayerChatListener extends AbstractListener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        ChatUser chatUser = plugin.getUserManager().getUser(player);
+        User user = plugin.getUserManager().getUser(player);
 
-        if (chatUser == null) {
+        if (user == null) {
             return;
         }
 
         if (!mainConfig.isChatEnabled()) {
             event.setCancelled(true);
-            chatUser.sendMessage("chat2go.chat.disabled", false);
+            user.sendMessage("chat2go.chat.disabled", false);
             return;
         }
 
@@ -42,25 +42,25 @@ public class PlayerChatListener extends AbstractListener {
                 && mainConfig.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(
-                            ((chatUser.getLastMessageTime() + mainConfig.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
+                            ((user.getLastMessageTime() + mainConfig.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
                             2);
             if (cooldown > 0) {
-                chatUser.sendMessage("chat2go.chat.cooldown", false, String.valueOf(cooldown));
+                user.sendMessage("chat2go.chat.cooldown", false, String.valueOf(cooldown));
                 event.setCancelled(true);
                 return;
             }
         }
 
         try {
-            event.setMessage(plugin.getChatManager().processMessage(chatUser, message)); // TODO test
+            event.setMessage(plugin.getChatManager().processMessage(user, message)); // TODO test
 
-            if(mainConfig.isChatFormatEnabled()) {
-                event.setFormat(plugin.getChatManager().format(chatUser, message));
+            if (mainConfig.isChatFormatEnabled()) {
+                event.setFormat(plugin.getChatManager().format(user, message));
             }
         } catch (BadWordException | AntiSpamException e) {
             event.setCancelled(true);
-            chatUser.sendMessage(e.getMessage(), false);
-        } catch(UnknownFormatConversionException e) {
+            user.sendMessage(e.getMessage(), false);
+        } catch (UnknownFormatConversionException e) {
             plugin.getLogger().log(Level.SEVERE, "Error in chat formatting. If you're using Placeholder API, check if" +
                     " all required extensions are installed.");
         }

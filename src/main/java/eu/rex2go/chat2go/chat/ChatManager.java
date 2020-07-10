@@ -6,16 +6,13 @@ import eu.rex2go.chat2go.chat.exception.AntiSpamException;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
 import eu.rex2go.chat2go.config.BadWordConfig;
 import eu.rex2go.chat2go.config.MainConfig;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,34 +35,40 @@ public class ChatManager {
         badWordConfig = Chat2Go.getBadWordConfig();
     }
 
-    public String format(ChatUser chatUser, String message) throws BadWordException, AntiSpamException {
-        return format(chatUser, message, true, mainConfig.getChatFormat());
+    public String format(User user, String message) throws BadWordException, AntiSpamException {
+        return format(user, message, true, mainConfig.getChatFormat());
     }
 
-    public String format(ChatUser chatUser, String message, boolean processMessage, String format) throws BadWordException, AntiSpamException {
+    public String format(User user, String message, boolean processMessage, String format) throws BadWordException, AntiSpamException {
         format = ChatColor.translateAlternateColorCodes('&', format);
         format = Chat2Go.parseHexColor(format);
 
         if (processMessage) {
             format = format.replaceAll(Pattern.quote(" +"), " ");
-            message = processMessage(chatUser, message);
+            message = processMessage(user, message);
 
-            // TODO test
+            // TODO test escaping, un-escape in packet
             message = message.replace("{", "\\{").replace("}", "\\}");
         }
 
-        format = processPlaceholders(chatUser, format, message);
+        String username = user.getName();
+        String prefix = user.getPrefix();
+        String suffix = user.getSuffix();
+        HashMap<String, String> placeholderMap = new HashMap<>();
+
+        placeholderMap.put("username", username);
+        placeholderMap.put("prefix", prefix);
+        placeholderMap.put("suffix", suffix);
+        placeholderMap.put("message", message);
+
+        format = processPlaceholders(user.getPlayer(), format, placeholderMap);
 
         return format;
     }
 
-    public String processPlaceholders(ChatUser chatUser, String format, String message) {
-        String username = chatUser.getName();
-        String prefix = chatUser.getPrefix();
-        String suffix = chatUser.getSuffix();
-
+    public String processPlaceholders(Player player, String format, Map<String, String> placeholderMap) {
         if (Chat2Go.isPlaceholderInstalled()) {
-            format = PlaceholderAPI.setPlaceholders(chatUser.getPlayer(), format);
+            format = PlaceholderAPI.setPlaceholders(player, format);
         }
 
         Pattern pattern = Pattern.compile("\\{( *)(.*?)( *)}");
@@ -76,18 +79,16 @@ public class ChatManager {
             String leadingSpaces = matcher.group(1);
             String placeholder = matcher.group(2);
             String trailingSpaces = matcher.group(3);
-            String placeholderContent;
+            String placeholderContent = placeholder;
 
-            if (placeholder.equalsIgnoreCase("prefix")) {
-                placeholderContent = prefix;
-            } else if (placeholder.equalsIgnoreCase("suffix")) {
-                placeholderContent = suffix;
-            } else if (placeholder.equalsIgnoreCase("username")) {
-                placeholderContent = username;
-            } else if (placeholder.equalsIgnoreCase("message")) {
-                placeholderContent = message;
-            } else {
-                placeholderContent = placeholder;
+            for (Map.Entry<String, String> entry : placeholderMap.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                if (placeholder.equalsIgnoreCase(key)) {
+                    placeholderContent = value;
+                    break;
+                }
             }
 
             if (placeholderContent.equals("")) {
@@ -102,33 +103,33 @@ public class ChatManager {
 
     }
 
-    public String processMessage(ChatUser chatUser, String message) throws BadWordException, AntiSpamException {
+    public String processMessage(User user, String message) throws BadWordException, AntiSpamException {
         message = message.replace("%", "%%");
-        message = antiSpamCheck(chatUser, message);
+        message = antiSpamCheck(user, message);
         String[] ads = new String[0];
 
-        if (!chatUser.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_IP)) {
+        if (!user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_IP)) {
             ads = filterAdvertisement(message);
         }
 
-        chatUser.setLastMessage(message);
-        chatUser.setLastMessageTime(System.currentTimeMillis());
+        user.setLastMessage(message);
+        user.setLastMessageTime(System.currentTimeMillis());
 
         if (mainConfig.isTranslateChatColorsEnabled()
-                && chatUser.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_COLOR)) {
+                && user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_COLOR)) {
             message = ChatColor.translateAlternateColorCodes('&', message);
             message = Chat2Go.parseHexColor(message);
         }
 
         if (!message.equals(filter(message, ads))
-                && !chatUser.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_IGNORE)
+                && !user.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_IGNORE)
                 && mainConfig.isChatFilterEnabled()) {
             if (mainConfig.isBadWordNotificationEnabled()) {
-                for (ChatUser staff : plugin.getUserManager().getChatUsers()) {
+                for (User staff : plugin.getUserManager().getUsers()) {
                     if (staff.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_NOTIFY)
-                            && chatUser.isBadWordNotificationEnabled()) {
+                            && user.isBadWordNotificationEnabled()) {
                         staff.getPlayer().sendMessage(
-                                Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + chatUser.getName() + ": " + ChatColor.RED + message);
+                                Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + user.getName() + ": " + ChatColor.RED + message);
                     }
                 }
             }
@@ -136,7 +137,7 @@ public class ChatManager {
             if (mainConfig.getChatFilterMode() == FilterMode.CENSOR) {
                 message = filter(message, ads);
             } else if (mainConfig.getChatFilterMode() == FilterMode.BLOCK) {
-                throw new BadWordException(chatUser, message);
+                throw new BadWordException(user, message);
             }
         }
 
@@ -199,7 +200,7 @@ public class ChatManager {
         return ads.toArray(new String[0]);
     }
 
-    private String antiSpamCheck(ChatUser user, String message) throws AntiSpamException {
+    private String antiSpamCheck(User user, String message) throws AntiSpamException {
         if (!mainConfig.isAntiSpamEnabled()) {
             return message;
         }

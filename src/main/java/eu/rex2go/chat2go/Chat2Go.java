@@ -1,5 +1,6 @@
 package eu.rex2go.chat2go;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import eu.rex2go.chat2go.broadcast.AutoBroadcastTask;
 import eu.rex2go.chat2go.chat.ChatManager;
 import eu.rex2go.chat2go.command.*;
@@ -7,7 +8,8 @@ import eu.rex2go.chat2go.config.*;
 import eu.rex2go.chat2go.listener.PlayerChatListener;
 import eu.rex2go.chat2go.listener.PlayerJoinListener;
 import eu.rex2go.chat2go.listener.PlayerQuitListener;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.packetadapter.ServerChatPacketAdapter;
+import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.user.UserManager;
 import eu.rex2go.chat2go.util.MathUtil;
 import lombok.Getter;
@@ -120,13 +122,15 @@ public class Chat2Go extends JavaPlugin {
         setupManagers();
         setupCommands();
         setupListeners();
+        setupPacketAdapters();
+        setupTasks();
 
         for (Player all : Bukkit.getOnlinePlayers()) {
-            ChatUser user = new ChatUser(all);
-            getUserManager().getChatUsers().add(user);
+            User user = new User(all);
+            getUserManager().getUsers().add(user);
         }
 
-        new AutoBroadcastTask(this).runTaskTimer(this, 20, 20);
+
     }
 
     private void setupChat() {
@@ -173,5 +177,13 @@ public class Chat2Go extends JavaPlugin {
         new PlayerChatListener(this);
         new PlayerJoinListener(this);
         new PlayerQuitListener(this);
+    }
+
+    private void setupPacketAdapters() {
+        new AutoBroadcastTask(this).runTaskTimer(this, 20, 20);
+    }
+
+    private void setupTasks() {
+        ProtocolLibrary.getProtocolManager().addPacketListener(new ServerChatPacketAdapter(this));
     }
 }

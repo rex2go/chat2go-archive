@@ -6,7 +6,7 @@ import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -17,7 +17,7 @@ public class ReplyCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException,
             CommandPlayerNotOnlineException, CommandCustomErrorException, CommandNoPlayerException {
         checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_MSG);
 
@@ -31,7 +31,7 @@ public class ReplyCommand extends WrappedCommandExecutor {
             return false;
         }
 
-        ChatUser target = user.getLastChatter();
+        User target = user.getLastChatter();
 
         if (target == null) {
             throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message" +

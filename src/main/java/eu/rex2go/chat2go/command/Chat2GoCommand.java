@@ -8,7 +8,7 @@ import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNotANumberException;
 import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
 import eu.rex2go.chat2go.config.MainConfig;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.util.MathUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +20,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException,
             CommandWrongUsageException, CommandCustomErrorException, CommandNotANumberException {
         checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT);
 
@@ -116,7 +116,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         sender.sendMessage(ChatColor.GRAY + "---                  ---");
     }
 
-    private void handleFilter(CommandSender sender, ChatUser user, String label, String... args) throws CommandWrongUsageException {
+    private void handleFilter(CommandSender sender, User user, String label, String... args) throws CommandWrongUsageException {
         if (args.length == 1) {
             throw new CommandWrongUsageException("/<command> filter <censor|block|disable>");
         }
@@ -142,7 +142,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         Chat2Go.sendMessage(sender, "chat2go.command.chat.filter.set_to", true, censorModeString);
     }
 
-    private void handleBadWord(CommandSender sender, ChatUser user, String label, String... args) throws CommandWrongUsageException, CommandCustomErrorException {
+    private void handleBadWord(CommandSender sender, User user, String label, String... args) throws CommandWrongUsageException, CommandCustomErrorException {
         if (args.length == 1) {
             throw new CommandWrongUsageException("/<command> badword <list|add|remove|reload>");
         }
@@ -205,7 +205,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         throw new CommandWrongUsageException("/<command> badword <list|add|remove|reload>");
     }
 
-    private void handleSlowMode(CommandSender sender, ChatUser user, String label, String... args) throws CommandWrongUsageException, CommandCustomErrorException, CommandNotANumberException {
+    private void handleSlowMode(CommandSender sender, User user, String label, String... args) throws CommandWrongUsageException, CommandCustomErrorException, CommandNotANumberException {
         if (args.length == 1) {
             throw new CommandWrongUsageException("/<command> slowmode <enable|disable|cooldown>");
         }

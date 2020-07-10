@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class UserManager {
 
     @Getter
-    private ArrayList<ChatUser> chatUsers = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
 
-    public ChatUser getUser(final Player player) {
-        return chatUsers.stream().filter(user -> user.getPlayer().getUniqueId().equals(player.getUniqueId())).findFirst().orElse(null);
+    public User getUser(final Player player) {
+        return users.stream().filter(user -> user.getPlayer().getUniqueId().equals(player.getUniqueId())).findFirst().orElse(null);
     }
 }

@@ -1,12 +1,12 @@
 package eu.rex2go.chat2go.listener;
 
 import eu.rex2go.chat2go.Chat2Go;
-import eu.rex2go.chat2go.chat.exception.AntiSpamException;
-import eu.rex2go.chat2go.chat.exception.BadWordException;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.HashMap;
 
 public class PlayerJoinListener extends AbstractListener {
 
@@ -17,18 +17,26 @@ public class PlayerJoinListener extends AbstractListener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        ChatUser user = new ChatUser(player);
+        User user = new User(player);
 
-        plugin.getUserManager().getChatUsers().add(user);
+        plugin.getUserManager().getUsers().add(user);
 
         if (mainConfig.isHideJoinMessage()) {
             event.setJoinMessage(null);
         } else if (mainConfig.isCustomJoinMessageEnabled()) {
-            try {
-                event.setJoinMessage(plugin.getChatManager().format(
-                        user, "", false, mainConfig.getCustomJoinMessage()));
-            } catch (BadWordException | AntiSpamException ignored) {
-            }
+            HashMap<String, String> placeholderMap = new HashMap<>();
+
+            String username = user.getName();
+            String prefix = user.getPrefix();
+            String suffix = user.getSuffix();
+
+            placeholderMap.put("username", username);
+            placeholderMap.put("prefix", prefix);
+            placeholderMap.put("suffix", suffix);
+
+            String format = plugin.getChatManager().processPlaceholders(player, mainConfig.getCustomJoinMessage(), placeholderMap);
+
+            event.setJoinMessage(format);
         }
     }
 }

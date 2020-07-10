@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class ChatUser {
+public class User {
 
     @Getter
     private UUID uuid;
@@ -36,18 +36,18 @@ public class ChatUser {
 
     @Getter
     @Setter
-    private ChatUser lastChatter;
+    private User lastChatter;
 
     @Getter
     @Setter
     private boolean badWordNotificationEnabled = true;
 
-    public ChatUser(UUID uuid, String name) {
+    public User(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
     }
 
-    public ChatUser(Player player) {
+    public User(Player player) {
         this(player.getUniqueId(), player.getName());
     }
 
