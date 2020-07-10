@@ -2,6 +2,7 @@ package eu.rex2go.chat2go.listener;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.user.User;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -43,6 +44,8 @@ public class PlayerQuitListener extends AbstractListener {
                 placeholderMap.put("suffix", suffix);
 
                 String format = plugin.getChatManager().processPlaceholders(player, mainConfig.getCustomJoinMessage(), placeholderMap);
+                format = ChatColor.translateAlternateColorCodes('&', format);
+                format = Chat2Go.parseHexColor(format);
 
                 event.setQuitMessage(format);
             }
