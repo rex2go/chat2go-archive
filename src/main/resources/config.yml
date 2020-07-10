@@ -28,7 +28,7 @@ chatFormatEnabled: true
 # - (suffix}
 # - {username}
 # - (message}
-# placeholder api is supported
+# PlaceholderAPI is supported
 chatFormat: "{prefix }{user}{ suffix}&7: &f{message}" # in this example "{user}" is a json element (listed at the bottom
                                                       # of the file) in which "{username}" is referred.
 
@@ -92,7 +92,11 @@ hideJoinMessage: false
 customJoinMessageEnabled: true
 
 # description: custom join message format
-# placeholder api is supported
+# chat2go placeholders:
+# - {prefix}
+# - (suffix}
+# - {username}
+# PlaceholderAPI is supported
 customJoinMessage: "&7[&a+&7] &7{username}"
 
 # description: disables the leave message
@@ -102,7 +106,11 @@ hideLeaveMessage: false
 customLeaveMessageEnabled: true
 
 # description: custom leave message format
-# placeholder api is supported
+# chat2go placeholders:
+# - {prefix}
+# - (suffix}
+# - {username}
+# PlaceholderAPI is supported
 customLeaveMessage: "&7[&c-&7] &7{username}"
 
 
@@ -116,6 +124,8 @@ customLeaveMessage: "&7[&c-&7] &7{username}"
 privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
 
 # description: broadcast format
+# chat2go placeholders:
+# - {message}
 broadcastFormat: "&f[&cBroadcast&f] {message}"
 
 
