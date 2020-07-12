@@ -51,9 +51,6 @@ public class ChatManager {
         if (processMessage) {
             format = format.replaceAll(Pattern.quote(" +"), " ");
             message = processMessage(user, message);
-
-            // TODO test escaping, un-escape in packet
-            message = message.replace("{", "\\{").replace("}", "\\}");
         }
 
         Placeholder username = new Placeholder("username", user.getName(), true);
