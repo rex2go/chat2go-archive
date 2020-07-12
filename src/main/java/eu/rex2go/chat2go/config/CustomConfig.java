@@ -39,7 +39,12 @@ public abstract class CustomConfig {
 
         int ver = config.getInt("version");
         if (version != 0 && version > ver) {
-            file.renameTo(new File(file.getPath() + ".outdated"));
+            File outdated = new File(file.getPath() + ".outdated");
+            if (outdated.exists()) {
+                outdated.delete();
+            }
+
+            file.renameTo(outdated);
 
             this.file = new File(plugin.getDataFolder() + File.separator + fileName);
             if (!file.exists()) {

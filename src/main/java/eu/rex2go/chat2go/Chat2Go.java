@@ -1,23 +1,24 @@
 package eu.rex2go.chat2go;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import eu.rex2go.chat2go.broadcast.AutoBroadcastTask;
 import eu.rex2go.chat2go.chat.ChatManager;
 import eu.rex2go.chat2go.command.*;
 import eu.rex2go.chat2go.config.*;
 import eu.rex2go.chat2go.listener.PlayerChatListener;
 import eu.rex2go.chat2go.listener.PlayerJoinListener;
 import eu.rex2go.chat2go.listener.PlayerQuitListener;
-import eu.rex2go.chat2go.packetadapter.ServerChatPacketAdapter;
+import eu.rex2go.chat2go.task.MainTask;
 import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.user.UserManager;
 import eu.rex2go.chat2go.util.MathUtil;
 import lombok.Getter;
+import lombok.Setter;
 import net.milkbowl.vault.chat.Chat;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +38,7 @@ public class Chat2Go extends JavaPlugin {
     private static Chat chat;
 
     @Getter
+    @Setter
     private static boolean vaultInstalled, hexSupported, placeholderInstalled = false;
 
     @Getter
@@ -91,20 +93,7 @@ public class Chat2Go extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        vaultInstalled = Bukkit.getPluginManager().isPluginEnabled("Vault");
-
-        if (vaultInstalled) {
-            setupChat();
-        } else {
-            getLogger().log(Level.WARNING, "Vault is not installed. There's a chance prefixes and suffixes won't be " +
-                    "detected.");
-        }
-
-        placeholderInstalled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
-
-        if (placeholderInstalled) {
-            getLogger().log(Level.INFO, "Placeholder API is installed.");
-        }
+        setupDependencies();
 
         String[] versionParts = getServer().getBukkitVersion().split("\\.");
         if (MathUtil.isNumber(versionParts[0]) && MathUtil.isNumber(versionParts[1])) {
@@ -122,15 +111,31 @@ public class Chat2Go extends JavaPlugin {
         setupManagers();
         setupCommands();
         setupListeners();
-        setupPacketAdapters();
         setupTasks();
+
+        if (mainConfig.isStatisticsAllowed()) {
+            new Metrics(this, 8164);
+        }
 
         for (Player all : Bukkit.getOnlinePlayers()) {
             User user = new User(all);
             getUserManager().getUsers().add(user);
         }
+    }
 
+    private void setupDependencies() {
+        PluginManager pm = Bukkit.getPluginManager();
 
+        if (vaultInstalled = pm.getPlugin("Vault") != null) {
+            setupChat();
+        } else {
+            getLogger().log(Level.WARNING, "Vault is not installed. There's a chance prefixes and suffixes won't be " +
+                    "detected.");
+        }
+
+        if (placeholderInstalled = pm.getPlugin("PlaceholderAPI") != null) {
+            getLogger().log(Level.INFO, "Placeholder API is installed.");
+        }
     }
 
     private void setupChat() {
@@ -179,11 +184,7 @@ public class Chat2Go extends JavaPlugin {
         new PlayerQuitListener(this);
     }
 
-    private void setupPacketAdapters() {
-        new AutoBroadcastTask(this).runTaskTimer(this, 20, 20);
-    }
-
     private void setupTasks() {
-        ProtocolLibrary.getProtocolManager().addPacketListener(new ServerChatPacketAdapter(this));
+        new MainTask(this).runTaskTimer(this, 20, 20);
     }
 }

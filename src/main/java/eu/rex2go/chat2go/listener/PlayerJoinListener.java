@@ -1,13 +1,12 @@
 package eu.rex2go.chat2go.listener;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.chat.Placeholder;
 import eu.rex2go.chat2go.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.util.HashMap;
 
 public class PlayerJoinListener extends AbstractListener {
 
@@ -25,17 +24,12 @@ public class PlayerJoinListener extends AbstractListener {
         if (mainConfig.isHideJoinMessage()) {
             event.setJoinMessage(null);
         } else if (mainConfig.isCustomJoinMessageEnabled()) {
-            HashMap<String, String> placeholderMap = new HashMap<>();
+            Placeholder username = new Placeholder("username", user.getName(), true);
+            Placeholder prefix = new Placeholder("prefix", user.getPrefix(), true);
+            Placeholder suffix = new Placeholder("suffix", user.getSuffix(), true);
 
-            String username = user.getName();
-            String prefix = user.getPrefix();
-            String suffix = user.getSuffix();
-
-            placeholderMap.put("username", username);
-            placeholderMap.put("prefix", prefix);
-            placeholderMap.put("suffix", suffix);
-
-            String format = plugin.getChatManager().processPlaceholders(player, mainConfig.getCustomJoinMessage(), placeholderMap);
+            String format = plugin.getChatManager().processPlaceholders(user, mainConfig.getCustomJoinMessage(),
+                    username, prefix, suffix);
             format = ChatColor.translateAlternateColorCodes('&', format);
             format = Chat2Go.parseHexColor(format);
 

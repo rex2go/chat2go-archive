@@ -16,6 +16,7 @@ public class PermissionConstants {
     public static final String PERMISSION_COMMAND_CHAT_FILTER = "chat2go.command.chat.filter";
     public static final String PERMISSION_COMMAND_CHAT_BAD_WORD = "chat2go.command.chat.bad_word";
     public static final String PERMISSION_COMMAND_CHAT_SLOW_MODE = "chat2go.command.chat.slow_mode";
+    public static final String PERMISSION_COMMAND_CHAT_TOGGLE = "chat2go.command.chat.toggle";
     public static final String PERMISSION_COMMAND_CHAT_RELOAD = "chat2go.command.chat.reload";
 
     public static final String PERMISSION_COMMAND_CLEAR_CHAT = "chat2go.command.clear_chat";

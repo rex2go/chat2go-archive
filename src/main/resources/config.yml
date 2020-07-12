@@ -16,6 +16,8 @@ chatEnabled: true
 # description: config version - please do not change
 version: 3
 
+# description: bStats will collect anonymous statistics of this server
+statisticsAllowed: true
 
 # --- chat formatting ---
 
@@ -29,8 +31,8 @@ chatFormatEnabled: true
 # - {username}
 # - (message}
 # PlaceholderAPI is supported
-chatFormat: "{prefix }{user}{ suffix}&7: &f{message}" # in this example "{user}" is a json element (listed at the bottom
-                                                      # of the file) in which "{username}" is referred.
+# JSON elements can be used here
+chatFormat: "{prefix }{username}{ suffix}&7: &f{message}"
 
 # description: enables colored chatting, in 1.16+ hex colors are supported
 # permission: chat2go.chat.color
@@ -131,8 +133,13 @@ broadcastFormat: "&f[&cBroadcast&f] {message}"
 
 # --- json elements ---
 
+# description: enables the use of the chat2go json feature
+# warning: it may break other chat plugins
+jsonElementsEnabled: false
+
+# description: you can create your own json elements
 jsonElements:
-  user:
+  user: # if jsonElementsEnabled you could now use {user} instead of {username} in formatting
     text: "{username}"
-    hover-text: "Send a private message"
-    suggest-command: "/msg {username} "
+    hoverText: "Send a private message to {username}"
+    suggestCommand: "/msg {username} "

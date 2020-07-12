@@ -30,7 +30,7 @@
 
 #### v0.3-PRE
 - [ ] json actions support (click / hover)
-- [ ] chat format spacing with optional spaces
+- [ ] chat format dynamic spaces
 - [ ] chat toggle command
 
 #### v0.4-PRE

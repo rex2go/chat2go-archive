@@ -48,6 +48,19 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             handleSlowMode(sender, user, label, args);
             return true;
+        } else if (subCommand.equalsIgnoreCase("toggle")) {
+            checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT_TOGGLE);
+
+            boolean chatState = !Chat2Go.getMainConfig().isChatEnabled();
+
+            if (chatState) {
+                Chat2Go.sendMessage(sender, "chat2go.command.chat.toggle.enable", true);
+            } else {
+                Chat2Go.sendMessage(sender, "chat2go.command.chat.toggle.disable", true);
+            }
+
+            Chat2Go.getMainConfig().setChatEnabled(chatState);
+            return true;
         } else if (subCommand.equalsIgnoreCase("reload")) {
             checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT_RELOAD);
 
@@ -108,10 +121,13 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat badword " + ChatColor.WHITE + " | "
                 + ChatColor.GRAY + " manage the bad word list");
 
+        sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat toggle " + ChatColor.WHITE + " | "
+                + ChatColor.GRAY + " toggle the chat");
+
         sender.sendMessage(ChatColor.WHITE + "- " + color + "/chat reload " + ChatColor.WHITE + " | "
                 + ChatColor.GRAY + " reload all files");
 
-        // TODO add msg, slowmode, reply, broadcast, autobroadcast, spy
+        // TODO add msg, reply, broadcast, autobroadcast, spy
 
         sender.sendMessage(ChatColor.GRAY + "---                  ---");
     }

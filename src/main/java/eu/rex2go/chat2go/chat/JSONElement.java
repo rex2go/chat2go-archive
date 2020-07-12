@@ -9,55 +9,67 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 
-import java.util.Map;
-
 public class JSONElement {
 
     @Getter
     private String id, text, hoverText, suggestCommand, runCommand, openUrl;
 
-    @Getter
-    private Map<String, String> placeholders;
-
-
-    public JSONElement(String id, String text, String hoverText, String suggestCommand, String runCommand, String openUrl, Map<String, String> placeholders) {
+    public JSONElement(String id, String text, String hoverText, String suggestCommand, String runCommand,
+                       String openUrl) {
         this.id = id;
         this.text = text;
         this.hoverText = hoverText;
         this.suggestCommand = suggestCommand;
         this.runCommand = runCommand;
         this.openUrl = openUrl;
-        this.placeholders = placeholders;
     }
 
-    public TextComponent build(Chat2Go plugin, User user) {
+    public BaseComponent[] build(Chat2Go plugin, User user, Placeholder... placeholders) {
         String text = this.text;
         text = ChatColor.translateAlternateColorCodes('&', text);
         text = Chat2Go.parseHexColor(text);
-        text = plugin.getChatManager().processPlaceholders(user.getPlayer(), text, placeholders);
 
-        TextComponent textComponent = new TextComponent(text);
+        text = plugin.getChatManager().processPlaceholders(user, text, placeholders);
 
-        if (hoverText != null) {
-            String hoverText = this.hoverText;
-            hoverText = ChatColor.translateAlternateColorCodes('&', hoverText);
-            hoverText = Chat2Go.parseHexColor(hoverText);
+        BaseComponent[] baseComponents = TextComponent.fromLegacyText(text);
 
-            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(hoverText)}));
+        for (BaseComponent textComponent : baseComponents) {
+            if (hoverText != null && !hoverText.equals("")) {
+                String hoverText = this.hoverText;
+
+                hoverText = ChatColor.translateAlternateColorCodes('&', hoverText);
+                hoverText = Chat2Go.parseHexColor(hoverText);
+                hoverText = plugin.getChatManager().processPlaceholders(user, hoverText, placeholders);
+
+                textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        new BaseComponent[]{new TextComponent(hoverText)}));
+            }
+
+            if (suggestCommand != null && !suggestCommand.equals("")) {
+                String suggestCommand = this.suggestCommand;
+
+                suggestCommand = plugin.getChatManager().processPlaceholders(user, suggestCommand, placeholders);
+
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggestCommand));
+            }
+
+            if (runCommand != null && !runCommand.equals("")) {
+                String runCommand = this.runCommand;
+
+                runCommand = plugin.getChatManager().processPlaceholders(user, runCommand, placeholders);
+
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, runCommand));
+            }
+
+            if (openUrl != null && !openUrl.equals("")) {
+                String openUrl = this.openUrl;
+
+                openUrl = plugin.getChatManager().processPlaceholders(user, openUrl, placeholders);
+
+                textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, openUrl));
+            }
         }
 
-        if (suggestCommand != null) {
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggestCommand));
-        }
-
-        if (runCommand != null) {
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, runCommand));
-        }
-
-        if (openUrl != null) {
-            textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, openUrl));
-        }
-
-        return textComponent;
+        return baseComponents;
     }
 }
