@@ -29,9 +29,9 @@
 - [x] fix auto broadcast bug
 
 #### v0.3-PRE
-- [ ] json actions support (click / hover)
-- [ ] chat format dynamic spaces
-- [ ] chat toggle command
+- [x] json actions support (click / hover)
+- [x] chat format dynamic spaces
+- [x] chat toggle command
 
 #### v0.4-PRE
 - [ ] mysql support

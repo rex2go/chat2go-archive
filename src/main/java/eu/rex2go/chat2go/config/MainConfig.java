@@ -143,6 +143,7 @@ public class MainConfig extends CustomConfig {
         jsonElementsEnabled = getConfig().getBoolean("jsonElementsEnabled");
 
         try {
+            jsonElements = new ArrayList<>();
             getConfig().getConfigurationSection("jsonElements").getKeys(false).forEach(id -> {
                 try {
                     String text = getConfig().getString("jsonElements." + id + ".text");
@@ -159,12 +160,6 @@ public class MainConfig extends CustomConfig {
             });
         } catch (Exception ignored) {
         }
-
-        jsonElements.add(new JSONElement("user", "test {username}", "moin",
-                "/test lol", null, null));
-
-        jsonElements.add(new JSONElement("idk", "du {prefix}", "kp",
-                null, null, null));
     }
 
     @Override
