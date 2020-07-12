@@ -33,7 +33,25 @@
 - [x] chat format dynamic spaces
 - [x] chat toggle command
 
+#### v0.3.1-PRE
+- [x] fix config bug
+
+#### v0.3.2-PRE
+- [x] fix json elements chat formatting bugs
+
+#### v0.3.3-PRE
+- [x] fix anti spam error
+
+#### v0.3.4-PRE
+- [x] new auto broadcast system
+- [x] fix link whitelist
+
+#### v0.3.5-PRE
+- [x] increase event priorities
+
 #### v0.4-PRE
+- [ ] range chat
+- [ ] world chat
 - [ ] mysql support
 - [ ] command tab completion
 - [ ] update notify
