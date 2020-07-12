@@ -6,6 +6,7 @@ import eu.rex2go.chat2go.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuitListener extends AbstractListener {
@@ -14,7 +15,7 @@ public class PlayerQuitListener extends AbstractListener {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         User user = plugin.getUserManager().getUser(player);
