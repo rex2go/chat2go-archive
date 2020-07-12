@@ -1,17 +1,24 @@
 package eu.rex2go.chat2go.task;
 
 import eu.rex2go.chat2go.Chat2Go;
-import eu.rex2go.chat2go.broadcast.AutoBroadcast;
 import eu.rex2go.chat2go.chat.JSONElementContent;
+import eu.rex2go.chat2go.config.AutoBroadcastConfig;
 import eu.rex2go.chat2go.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainTask extends BukkitRunnable {
 
     private Chat2Go plugin;
+
+    private AutoBroadcastConfig autoBroadcastConfig = Chat2Go.getAutoBroadcastConfig();
+
+    private int autoBroadcastIndex = 0;
+
+    private Random random = new Random();;
 
     public MainTask(Chat2Go plugin) {
         this.plugin = plugin;
@@ -19,19 +26,32 @@ public class MainTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (AutoBroadcast autoBroadcast : Chat2Go.getAutoBroadcastConfig().getAutoBroadcasts()) {
-            int remainingTime = autoBroadcast.getRemainingTime();
 
-            if (remainingTime > 0) {
-                autoBroadcast.setRemainingTime(--remainingTime);
+        if(autoBroadcastConfig.getAutoBroadcasts().size() > 0) {
+            if (autoBroadcastConfig.getTime() > 0) {
+                autoBroadcastConfig.setTime(autoBroadcastConfig.getTime() - 1);
             } else {
-                String message = autoBroadcast.getMessage();
+                autoBroadcastConfig.resetTime();
+                int index = autoBroadcastIndex;
 
-                message = plugin.getChatManager().formatBroadcast(message);
+                if (autoBroadcastConfig.isShuffle() && autoBroadcastConfig.getAutoBroadcasts().size() > 1) {
+                    index = random.nextInt(autoBroadcastConfig.getAutoBroadcasts().size());
 
-                Bukkit.broadcastMessage(message);
+                    if(index == autoBroadcastIndex) index++;
+                } else {
+                    index++;
+                }
 
-                autoBroadcast.resetRemainingTime();
+                if (autoBroadcastConfig.getAutoBroadcasts().size() <= index) {
+                    index = 0;
+                }
+
+                String message = autoBroadcastConfig.getAutoBroadcasts().get(index);
+                String formatted = plugin.getChatManager().formatBroadcast(message);
+
+                Bukkit.broadcastMessage(formatted);
+
+                autoBroadcastIndex = index;
             }
         }
 

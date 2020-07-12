@@ -1,1 +1,11 @@
+# delay between broadcasts
+delay: 5m
+
+# shuffle broadcasts
+shuffle: false
+
+# allow two or more times repeating messages caused by shuffling
+allowShuffleDoubles: false
+
+# the auto broadcasts
 autoBroadcasts:

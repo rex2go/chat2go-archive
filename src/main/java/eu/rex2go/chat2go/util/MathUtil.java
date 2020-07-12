@@ -32,4 +32,55 @@ public class MathUtil {
         }
     }
 
+    public static int getSeconds(String timeString) {
+        int seconds = 0;
+        String mode = "s";
+        String store = "";
+
+        for (int i = timeString.length() - 1; i >= 0; i--) {
+            char c = timeString.charAt(i);
+
+            if (Character.isDigit(c)) {
+                store = c + store;
+            } else {
+                if (!store.equalsIgnoreCase("")) {
+                    if (mode.equalsIgnoreCase("s")) {
+                        seconds += Integer.parseInt(store);
+                    } else if (mode.equalsIgnoreCase("m")) {
+                        seconds += Integer.parseInt(store) * 60;
+                    } else if (mode.equalsIgnoreCase("h")) {
+                        seconds += Integer.parseInt(store) * 60 * 60;
+                    } else {
+                        seconds += Integer.parseInt(store) * 60 * 60 * 24;
+                    }
+                    store = "";
+                }
+
+                if (c == 's' || c == 'S') {
+                    mode = "s";
+                } else if (c == 'm' || c == 'M') {
+                    mode = "m";
+                } else if (c == 'h' || c == 'H') {
+                    mode = "h";
+                } else if (c == 'd' || c == 'D') {
+                    mode = "d";
+                }
+            }
+        }
+
+        if (!store.equalsIgnoreCase("")) {
+            if (mode.equalsIgnoreCase("s")) {
+                seconds += Integer.parseInt(store);
+            } else if (mode.equalsIgnoreCase("m")) {
+                seconds += Integer.parseInt(store) * 60;
+            } else if (mode.equalsIgnoreCase("h")) {
+                seconds += Integer.parseInt(store) * 60 * 60;
+            } else {
+                seconds += Integer.parseInt(store) * 60 * 60 * 24;
+            }
+        }
+
+        return seconds;
+    }
+
 }

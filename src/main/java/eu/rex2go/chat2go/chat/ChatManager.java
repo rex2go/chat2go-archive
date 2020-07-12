@@ -11,6 +11,7 @@ import lombok.Getter;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.*;
@@ -201,11 +202,11 @@ public class ChatManager {
                 }
             }
 
-            pattern = Pattern.compile("(\\w*\\.[^0-9]{1,4}\\b)");
+            pattern = Pattern.compile("([^ ]*\\.[^0-9]{1,4}\\b)");
             matcher = pattern.matcher(message.toLowerCase());
 
             while (matcher.find()) {
-                String link = matcher.group();
+                String link = matcher.group().replace(" ", "");
 
                 if (Chat2Go.getLinkWhitelistConfig().getLinkWhitelist().stream().noneMatch(link::equalsIgnoreCase)) {
                     ads.add(link);
