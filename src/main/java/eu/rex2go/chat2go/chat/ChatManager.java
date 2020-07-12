@@ -307,12 +307,13 @@ public class ChatManager {
 
         while (matcher.find()) {
             found = true;
-            String match = matcher.group(0);
-            String before = matcher.group(1);
-            String spaceBefore = matcher.group(2);
-            String placeholder = matcher.group(3);
-            String spaceAfter = matcher.group(4);
-            String after = matcher.group(5);
+            String match = matcher.group(0).replace("%%", "%");
+            String before = matcher.group(1).replace("%%", "%");;
+            String spaceBefore = matcher.group(2).replace("%%", "%");;
+            String placeholder = matcher.group(3).replace("%%", "%");;
+            String spaceAfter = matcher.group(4).replace("%%", "%");;
+            String after = matcher.group(5).replace("%%", "%");;
+            boolean found1 = false;
 
             for (JSONElementContent content : user.getJsonContent()) {
                 if (placeholder.equals(content.getUuid().toString())) {
@@ -332,8 +333,14 @@ public class ChatManager {
                     baseComponents.addAll(Arrays.asList(beforeComponent));
                     baseComponents.addAll(Arrays.asList(textComponent));
                     baseComponents.addAll(Arrays.asList(afterComponent));
+
+                    found1 = true;
                     break;
                 }
+            }
+
+            if(!found1) {
+                baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText(match)));
             }
         }
 
