@@ -13,10 +13,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -308,14 +305,17 @@ public class ChatManager {
         while (matcher.find()) {
             found = true;
             String match = matcher.group(0).replace("%%", "%");
-            String before = matcher.group(1).replace("%%", "%");;
-            String spaceBefore = matcher.group(2).replace("%%", "%");;
-            String placeholder = matcher.group(3).replace("%%", "%");;
-            String spaceAfter = matcher.group(4).replace("%%", "%");;
-            String after = matcher.group(5).replace("%%", "%");;
-            boolean found1 = false;
+            String before = matcher.group(1).replace("%%", "%");
+            String spaceBefore = matcher.group(2).replace("%%", "%");
+            String placeholder = matcher.group(3).replace("%%", "%");
+            String spaceAfter = matcher.group(4).replace("%%", "%");
+            String after = matcher.group(5).replace("%%", "%");
+            Optional<JSONElementContent> contentOptional = user.getJsonContent().stream().filter(
+                    c -> placeholder.equals(c.getUuid().toString())).findFirst();
 
-            for (JSONElementContent content : user.getJsonContent()) {
+            if(contentOptional.isPresent()) {
+                JSONElementContent content = contentOptional.get();
+
                 if (placeholder.equals(content.getUuid().toString())) {
                     BaseComponent[] textComponent = content.getJsonElement()
                             .build(plugin, user, content.getPlaceholders());
@@ -333,13 +333,8 @@ public class ChatManager {
                     baseComponents.addAll(Arrays.asList(beforeComponent));
                     baseComponents.addAll(Arrays.asList(textComponent));
                     baseComponents.addAll(Arrays.asList(afterComponent));
-
-                    found1 = true;
-                    break;
                 }
-            }
-
-            if(!found1) {
+            } else {
                 baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText(match)));
             }
         }

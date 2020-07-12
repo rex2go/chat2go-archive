@@ -55,8 +55,6 @@ public class PlayerChatListener extends AbstractListener {
         }
 
         try {
-            event.setMessage(plugin.getChatManager().processMessage(user, message)); // TODO
-
             if (mainConfig.isChatFormatEnabled()) {
                 String format = plugin.getChatManager().format(user, message);
                 event.setFormat(format);
@@ -79,6 +77,8 @@ public class PlayerChatListener extends AbstractListener {
 
                     plugin.getLogger().log(Level.INFO, logMessageStr);
                 }
+            } else {
+                event.setMessage(plugin.getChatManager().processMessage(user, message));
             }
         } catch (BadWordException | AntiSpamException e) {
             event.setCancelled(true);

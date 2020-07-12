@@ -37,8 +37,6 @@ public class JSONElement {
             if (hoverText != null && !hoverText.equals("")) {
                 String hoverText = this.hoverText;
 
-                hoverText = ChatColor.translateAlternateColorCodes('&', hoverText);
-                hoverText = Chat2Go.parseHexColor(hoverText);
                 hoverText = plugin.getChatManager().processPlaceholders(user, hoverText, placeholders);
 
                 textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
