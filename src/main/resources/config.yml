@@ -1,18 +1,38 @@
+# --- notes ---
+
+# 1.  chat2go uses curly brackets ({}) to imply placeholders
+# 2.  spaces inside curly brackets are "optional spaces"
+#     meaning they will only appear if the placeholder won't
+#     be empty (see chatFormat for example usage)
+# 3.  PlaceholderAPI is mostly supported and uses the default
+#     placeholder format using % (e.g. %player_name%)
+
+
+# --- general ---
+
 # description: if set to false chatting will be disabled
 chatEnabled: true
+
+# description: config version - please do not change
+version: 3
+
+# description: bStats will collect anonymous statistics of this server
+statisticsAllowed: true
+
+# --- chat formatting ---
 
 # description: enables chat formatting
 chatFormatEnabled: true
 
 # description: set the format
-# placeholder api is supported
-chatFormat: "{prefix}{username}{suffix}&7: &f{message}"
-
-# description: adds a space after {prefix} - useful for formatting
-prefixTrailingSpaceEnabled: true
-
-# description: adds a space before {suffix} - useful for formatting
-suffixLeadingSpaceEnabled: true
+# chat2go placeholders:
+# - {prefix}
+# - (suffix}
+# - {username}
+# - (message}
+# PlaceholderAPI is supported
+# JSON elements can be used here
+chatFormat: "{prefix }{username}{ suffix}&7: &f{message}"
 
 # description: enables colored chatting, in 1.16+ hex colors are supported
 # permission: chat2go.chat.color
@@ -21,6 +41,9 @@ suffixLeadingSpaceEnabled: true
 # example (1.16+): &#ff0000 turns red
 # example (1.16+): #(ff0000) turns red
 translateChatColorsEnabled: true
+
+
+# --- chat filtering ---
 
 # description: enables chat filtering for bad words defined in badwords.yml
 # permission: chat2go.bad_word.ignore
@@ -38,6 +61,9 @@ badWordNotificationEnabled: true
 # permission: chat2go.chat.bypass_ip
 linkBlockEnabled: true
 
+
+# --- anti spam ---
+
 # description: will try it best to prevent chat spamming
 # permission: chat2go.chat.bypass_anti_spam
 antiSpamEnabled: false
@@ -48,12 +74,18 @@ capsThreshold: 0.5
 # description: (anti spam) threshold of spacing detection
 spaceThreshold: 0.3
 
+
+# --- slow mode ---
+
 # description: chatting will be available with a cooldown
 # permission: chat2go.chat.bypass_slow_mode
 slowModeEnabled: false
 
 # description: the cooldown given in seconds
 slowModeSeconds: 5
+
+
+# --- join and leave messages ---
 
 # description: disables the join message
 hideJoinMessage: false
@@ -62,7 +94,11 @@ hideJoinMessage: false
 customJoinMessageEnabled: true
 
 # description: custom join message format
-# placeholder api is supported
+# chat2go placeholders:
+# - {prefix}
+# - (suffix}
+# - {username}
+# PlaceholderAPI is supported
 customJoinMessage: "&7[&a+&7] &7{username}"
 
 # description: disables the leave message
@@ -72,14 +108,38 @@ hideLeaveMessage: false
 customLeaveMessageEnabled: true
 
 # description: custom leave message format
-# placeholder api is supported
+# chat2go placeholders:
+# - {prefix}
+# - (suffix}
+# - {username}
+# PlaceholderAPI is supported
 customLeaveMessage: "&7[&c-&7] &7{username}"
 
+
+# --- formatting ---
+
 # description: msg format
+# chat2go placeholders:
+# - {from}
+# - (to}
+# - {message}
 privateMessageFormat: "&8MSG &7[{from} -> {to}]&8: &f{message}"
 
 # description: broadcast format
+# chat2go placeholders:
+# - {message}
 broadcastFormat: "&f[&cBroadcast&f] {message}"
 
-# do not touch
-version: 2
+
+# --- json elements ---
+
+# description: enables the use of the chat2go json feature
+# warning: it may break other chat plugins
+jsonElementsEnabled: false
+
+# description: you can create your own json elements
+jsonElements:
+  user: # if jsonElementsEnabled you could now use {user} instead of {username} in formatting
+    text: "{username}"
+    hoverText: "Send a private message to {username}"
+    suggestCommand: "/msg {username} "

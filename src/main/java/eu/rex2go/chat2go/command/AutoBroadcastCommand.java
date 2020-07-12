@@ -6,7 +6,7 @@ import eu.rex2go.chat2go.broadcast.AutoBroadcast;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNotANumberException;
 import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.util.MathUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +18,7 @@ public class AutoBroadcastCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException, CommandWrongUsageException, CommandNotANumberException {
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException, CommandWrongUsageException, CommandNotANumberException {
         checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_AUTO_BROADCAST,
                 PermissionConstants.PERMISSION_COMMAND_AUTOBROADCAST);
 

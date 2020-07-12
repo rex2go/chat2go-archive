@@ -1,15 +1,17 @@
 package eu.rex2go.chat2go.user;
 
 import eu.rex2go.chat2go.Chat2Go;
+import eu.rex2go.chat2go.chat.JSONElementContent;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
-public class ChatUser {
+public class User {
 
     @Getter
     private UUID uuid;
@@ -36,18 +38,22 @@ public class ChatUser {
 
     @Getter
     @Setter
-    private ChatUser lastChatter;
+    private User lastChatter;
 
     @Getter
     @Setter
     private boolean badWordNotificationEnabled = true;
 
-    public ChatUser(UUID uuid, String name) {
+    @Getter
+    @Setter
+    private ArrayList<JSONElementContent> jsonContent = new ArrayList<>();
+
+    public User(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
     }
 
-    public ChatUser(Player player) {
+    public User(Player player) {
         this(player.getUniqueId(), player.getName());
     }
 

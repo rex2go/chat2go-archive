@@ -14,7 +14,7 @@ public class MessageConfig extends CustomConfig {
     private HashMap<String, String> messages = new HashMap<>();
 
     public MessageConfig(Chat2Go plugin) {
-        super(plugin, "messages.yml", 1);
+        super(plugin, "messages.yml", 2);
     }
 
     @Override

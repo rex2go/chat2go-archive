@@ -2,12 +2,17 @@ package eu.rex2go.chat2go.config;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.chat.FilterMode;
+import eu.rex2go.chat2go.chat.JSONElement;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class MainConfig extends CustomConfig {
 
     @Getter
+    @Setter
     private boolean chatEnabled = true;
 
     @Getter
@@ -83,10 +88,20 @@ public class MainConfig extends CustomConfig {
     @Getter
     private String broadcastFormat = "&f[&cBroadcast&f] {message}";
 
+    @Getter
+    private boolean statisticsAllowed = true;
+
+    @Getter
+    private boolean jsonElementsEnabled = false;
+
+    @Getter // TODO config stuff
+    private ArrayList<JSONElement> jsonElements = new ArrayList<>();
+
     // TODO chat log, chat log length, range chat, range chat length
 
+    // version auch in config anpassen..
     public MainConfig(Chat2Go plugin) {
-        super(plugin, "config.yml",2);
+        super(plugin, "config.yml", 3);
     }
 
     @Override
@@ -124,6 +139,32 @@ public class MainConfig extends CustomConfig {
         capsThreshold = getConfig().getDouble("capsThreshold");
         spaceThreshold = getConfig().getDouble("spaceThreshold");
         broadcastFormat = getConfig().getString("broadcastFormat");
+        statisticsAllowed = getConfig().getBoolean("statisticsAllowed");
+        jsonElementsEnabled = getConfig().getBoolean("jsonElementsEnabled");
+
+        try {
+            getConfig().getConfigurationSection("jsonElements").getKeys(false).forEach(id -> {
+                try {
+                    String text = getConfig().getString("jsonElements." + id + ".text");
+                    String hoverText = getConfig().getString("jsonElements." + id + ".hoverText");
+                    String suggestCommand = getConfig().getString("jsonElements." + id + ".suggestCommand");
+                    String runCommand = getConfig().getString("jsonElements." + id + ".runCommand");
+                    String openUrl = getConfig().getString("jsonElements." + id + ".openUrl");
+
+                    JSONElement jsonElement = new JSONElement(id, text, hoverText, suggestCommand, runCommand, openUrl);
+                    jsonElements.add(jsonElement);
+                } catch (Exception exception) {
+                    plugin.getLogger().log(Level.WARNING, "Error in " + getFileName());
+                }
+            });
+        } catch (Exception ignored) {
+        }
+
+        jsonElements.add(new JSONElement("user", "test {username}", "moin",
+                "/test lol", null, null));
+
+        jsonElements.add(new JSONElement("idk", "du {prefix}", "kp",
+                null, null, null));
     }
 
     @Override
@@ -159,6 +200,10 @@ public class MainConfig extends CustomConfig {
         getConfig().set("capsThreshold", capsThreshold);
         getConfig().set("spaceThreshold", spaceThreshold);
         getConfig().set("broadcastFormat", broadcastFormat);
+        getConfig().set("statisticsAllowed", statisticsAllowed);
+        getConfig().set("jsonElementsEnabled", jsonElementsEnabled);
+
+        // TODO save json
 
         super.save();
     }

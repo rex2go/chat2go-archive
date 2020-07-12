@@ -2,7 +2,7 @@ package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.command.exception.*;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,7 +36,7 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase(this.command)) {
-            ChatUser user = null;
+            User user = null;
             if (sender instanceof Player) user = plugin.getUserManager().getUser((Player) sender);
 
             try {
@@ -82,5 +82,5 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
         if (!check) throw new CommandNoPermissionException(permissions[0]);
     }
 
-    protected abstract boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException, CommandNoPlayerException, CommandNotANumberException;
+    protected abstract boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException, CommandNoPlayerException, CommandNotANumberException;
 }

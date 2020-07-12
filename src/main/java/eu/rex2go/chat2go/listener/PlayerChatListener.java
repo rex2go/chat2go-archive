@@ -4,10 +4,13 @@ import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstants;
 import eu.rex2go.chat2go.chat.exception.AntiSpamException;
 import eu.rex2go.chat2go.chat.exception.BadWordException;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.util.MathUtil;
+import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.UnknownFormatConversionException;
@@ -19,18 +22,18 @@ public class PlayerChatListener extends AbstractListener {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        ChatUser chatUser = plugin.getUserManager().getUser(player);
+        User user = plugin.getUserManager().getUser(player);
 
-        if (chatUser == null) {
+        if (user == null) {
             return;
         }
 
         if (!mainConfig.isChatEnabled()) {
             event.setCancelled(true);
-            chatUser.sendMessage("chat2go.chat.disabled", false);
+            user.sendMessage("chat2go.chat.disabled", false);
             return;
         }
 
@@ -42,25 +45,45 @@ public class PlayerChatListener extends AbstractListener {
                 && mainConfig.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(
-                            ((chatUser.getLastMessageTime() + mainConfig.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
+                            ((user.getLastMessageTime() + mainConfig.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
                             2);
             if (cooldown > 0) {
-                chatUser.sendMessage("chat2go.chat.cooldown", false, String.valueOf(cooldown));
+                user.sendMessage("chat2go.chat.cooldown", false, String.valueOf(cooldown));
                 event.setCancelled(true);
                 return;
             }
         }
 
         try {
-            if(mainConfig.isChatFormatEnabled()) {
-                event.setFormat(plugin.getChatManager().format(chatUser, message));
-            } else {
-                event.setMessage(plugin.getChatManager().processMessage(chatUser, message));
+            event.setMessage(plugin.getChatManager().processMessage(user, message)); // TODO
+
+            if (mainConfig.isChatFormatEnabled()) {
+                String format = plugin.getChatManager().format(user, message);
+                event.setFormat(format);
+
+                if (mainConfig.isJsonElementsEnabled() && !event.isCancelled()) {
+                    event.setCancelled(true);
+                    BaseComponent[] baseComponents = plugin.getChatManager().processJsonElements(user, format);
+
+                    for (Player all : Bukkit.getOnlinePlayers()) {
+                        all.spigot().sendMessage(baseComponents);
+                    }
+
+                    StringBuilder logMessage = new StringBuilder();
+
+                    for (BaseComponent baseComponent : baseComponents) {
+                        logMessage.append(baseComponent.toLegacyText());
+                    }
+
+                    String logMessageStr = logMessage.toString().replaceAll("§.", "");
+
+                    plugin.getLogger().log(Level.INFO, logMessageStr);
+                }
             }
         } catch (BadWordException | AntiSpamException e) {
             event.setCancelled(true);
-            chatUser.sendMessage(e.getMessage(), false);
-        } catch(UnknownFormatConversionException e) {
+            user.sendMessage(e.getMessage(), false);
+        } catch (UnknownFormatConversionException e) {
             plugin.getLogger().log(Level.SEVERE, "Error in chat formatting. If you're using Placeholder API, check if" +
                     " all required extensions are installed.");
         }

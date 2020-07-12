@@ -1,14 +1,18 @@
 name: chat2go
-version: 0.2.4-PRE
+version: 0.3-PRE
 author: rex2go
 description: chat2go is an easy to use chat management plugin with 1.16 color support
+
 softdepend:
   - Vault
   - PlaceholderAPI
 loadbefore:
   - Vault
   - PlaceholderAPI
+
 main: eu.rex2go.chat2go.Chat2Go
+api-version: 1.13
+
 commands:
   msg:
     description: Send a private message

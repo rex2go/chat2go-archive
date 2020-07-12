@@ -46,6 +46,10 @@ chat2go:
         enable: "&7Chat Slow Mode has been &aenabled&7."
         disable: "&7Chat Slow Mode has been &cdisabled&7."
 
+      toggle:
+        enable: "&7The chat has been &aenabled&7."
+        disable: "&7The chat has been &cdisabled&7."
+
       reload:
         # {0} equals config name
         reloading: "&7Reloading {0}.."
@@ -69,4 +73,4 @@ chat2go:
       list_empty: '&cThis list is empty. You can add words to it using "/{0} add <interval> <offset> <message>"'
 
 # do not touch
-version: 1
+version: 2

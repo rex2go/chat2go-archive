@@ -5,7 +5,7 @@ import eu.rex2go.chat2go.PermissionConstants;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNotANumberException;
 import eu.rex2go.chat2go.config.MainConfig;
-import eu.rex2go.chat2go.user.ChatUser;
+import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.util.MathUtil;
 import org.bukkit.command.CommandSender;
 
@@ -16,7 +16,7 @@ public class SlowModeCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, ChatUser user, String label, String... args) throws CommandNoPermissionException,
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException,
             CommandNotANumberException {
         checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_SLOW_MODE,
                 PermissionConstants.PERMISSION_COMMAND_SLOWMODE);
