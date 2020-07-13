@@ -24,8 +24,8 @@ public class JSONElement {
         this.openUrl = openUrl;
     }
 
-    public BaseComponent[] build(Chat2Go plugin, User user, Placeholder... placeholders) {
-        String text = this.text;
+    public BaseComponent[] build(Chat2Go plugin, User user, String before, String after, Placeholder... placeholders) {
+        String text = before + this.text + after;
         text = ChatColor.translateAlternateColorCodes('&', text);
         text = Chat2Go.parseHexColor(text);
 

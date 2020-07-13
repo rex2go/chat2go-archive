@@ -298,49 +298,45 @@ public class ChatManager {
 
     public BaseComponent[] processJsonElements(User user, String format) {
         ArrayList<BaseComponent> baseComponents = new ArrayList<>();
-        Pattern pattern = Pattern.compile("(.*?)\\{( *)(.*?)( *)}([^{}\\n\\r]*)");
+        Pattern pattern = Pattern.compile("(.*?)\\{( *)(.*?)( *)}");
         Matcher matcher = pattern.matcher(format);
-        boolean found = false;
 
         while (matcher.find()) {
-            found = true;
             String match = matcher.group(0).replace("%%", "%");
             String before = matcher.group(1).replace("%%", "%");
             String spaceBefore = matcher.group(2).replace("%%", "%");
             String placeholder = matcher.group(3).replace("%%", "%");
             String spaceAfter = matcher.group(4).replace("%%", "%");
-            String after = matcher.group(5).replace("%%", "%");
             Optional<JSONElementContent> contentOptional = user.getJsonContent().stream().filter(
                     c -> placeholder.equals(c.getUuid().toString())).findFirst();
 
-            if(contentOptional.isPresent()) {
+            if (contentOptional.isPresent()) {
                 JSONElementContent content = contentOptional.get();
 
                 if (placeholder.equals(content.getUuid().toString())) {
                     BaseComponent[] textComponent = content.getJsonElement()
-                            .build(plugin, user, content.getPlaceholders());
-                    BaseComponent[] beforeComponent = TextComponent.fromLegacyText(before + spaceBefore);
-                    BaseComponent[] afterComponent = TextComponent.fromLegacyText(after + spaceAfter);
+                            .build(plugin, user, spaceBefore, spaceAfter, content.getPlaceholders());
+                    BaseComponent[] beforeComponent = TextComponent.fromLegacyText(before);
 
                     if (textComponent[0].getColorRaw() == null) {
                         textComponent[0].setColor(beforeComponent[beforeComponent.length - 1].getColor());
                     }
 
-                    if (afterComponent[0].getColorRaw() == null) {
-                        afterComponent[0].setColor(textComponent[textComponent.length - 1].getColor());
-                    }
-
                     baseComponents.addAll(Arrays.asList(beforeComponent));
                     baseComponents.addAll(Arrays.asList(textComponent));
-                    baseComponents.addAll(Arrays.asList(afterComponent));
                 }
             } else {
                 baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText(match)));
             }
         }
 
-        if (!found) {
-            baseComponents.addAll(Arrays.asList(TextComponent.fromLegacyText(format)));
+        pattern = Pattern.compile("}?([^{}]*?$)");
+        matcher = pattern.matcher(format);
+
+        while (matcher.find()) {
+            String after = matcher.group(1).replace("%%", "%");
+            BaseComponent[] beforeComponent = TextComponent.fromLegacyText(after);
+            baseComponents.addAll(Arrays.asList(beforeComponent));
         }
 
         user.getJsonContent().clear();
