@@ -24,6 +24,8 @@ public class PlayerChatListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        if(event.isCancelled()) return;
+
         Player player = event.getPlayer();
         User user = plugin.getUserManager().getUser(player);
 
