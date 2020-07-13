@@ -35,6 +35,6 @@ public class LinkWhitelistConfig extends CustomConfig {
     @Override
     public void save() {
         getConfig().set("linkWhitelist", linkWhitelist);
-        super.save(getClass());
+        saveConfig();
     }
 }

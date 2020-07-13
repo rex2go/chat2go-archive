@@ -39,9 +39,6 @@ public class MessageConfig extends CustomConfig {
         load();
     }
 
-    @Override
-    public void save() { }
-
     public String getMessage(String key, String... args) {
         if (!messages.containsKey(key)) {
             plugin.getLogger().log(Level.WARNING, "Missing message: " + key);

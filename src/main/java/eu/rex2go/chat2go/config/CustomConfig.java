@@ -85,10 +85,10 @@ public abstract class CustomConfig {
         this.config = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void save(Class<? extends CustomConfig> clazz) {
+    public void save() {
         plugin.getLogger().log(Level.INFO, "Saving " + fileName + "..");
 
-        Field[] fields = clazz.getFields();
+        Field[] fields = getClass().getDeclaredFields();
 
         for(Field field : fields) {
             if(!field.isAnnotationPresent(ConfigInfo.class)) continue;
@@ -102,6 +102,10 @@ public abstract class CustomConfig {
             }
         }
 
+        saveConfig();
+    }
+
+    public void saveConfig() {
         try {
             config.save(file);
             plugin.getLogger().log(Level.INFO, "Saved " + fileName + "!");
@@ -109,8 +113,6 @@ public abstract class CustomConfig {
             e.printStackTrace();
         }
     }
-
-    public abstract void save();
 
     @Target({ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)

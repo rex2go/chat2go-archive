@@ -223,7 +223,7 @@ public class MainConfig extends CustomConfig {
 
         // TODO save json*/
 
-        super.save(getClass());
+        super.save();
     }
 
     public FilterMode getChatFilterMode() {
