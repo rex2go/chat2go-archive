@@ -60,7 +60,7 @@ public class AutoBroadcastConfig extends CustomConfig {
         getConfig().set("delay", delay);
         getConfig().set("shuffle", shuffle);
         getConfig().set("allowShuffleDoubles", allowShuffleDoubles);
-        super.save();
+        super.save(getClass());
     }
 
     public void resetTime() {

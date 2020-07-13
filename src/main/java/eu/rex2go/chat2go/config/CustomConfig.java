@@ -2,6 +2,7 @@ package eu.rex2go.chat2go.config;
 
 import eu.rex2go.chat2go.Chat2Go;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -58,7 +59,7 @@ public abstract class CustomConfig {
     }
 
     public void load() {
-        Field[] fields = getClass().getFields();
+        Field[] fields = getClass().getDeclaredFields();
 
         for(Field field : fields) {
             if(!field.isAnnotationPresent(ConfigInfo.class)) continue;
@@ -66,6 +67,7 @@ public abstract class CustomConfig {
             Object object = getConfig().get(configInfo.path());
 
             try {
+                field.setAccessible(true);
                 field.set(this, object);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -83,10 +85,10 @@ public abstract class CustomConfig {
         this.config = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void save() {
+    public void save(Class<? extends CustomConfig> clazz) {
         plugin.getLogger().log(Level.INFO, "Saving " + fileName + "..");
 
-        Field[] fields = getClass().getFields();
+        Field[] fields = clazz.getFields();
 
         for(Field field : fields) {
             if(!field.isAnnotationPresent(ConfigInfo.class)) continue;
@@ -108,6 +110,7 @@ public abstract class CustomConfig {
         }
     }
 
+    public abstract void save();
 
     @Target({ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)

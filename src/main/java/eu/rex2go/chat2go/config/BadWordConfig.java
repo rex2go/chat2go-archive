@@ -35,6 +35,6 @@ public class BadWordConfig extends CustomConfig {
     @Override
     public void save() {
         getConfig().set("badwords", badWords);
-        super.save();
+        super.save(getClass());
     }
 }

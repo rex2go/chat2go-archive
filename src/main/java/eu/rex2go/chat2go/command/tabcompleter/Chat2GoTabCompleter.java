@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Chat2GoTabCompleter implements TabCompleter {
@@ -12,7 +13,8 @@ public class Chat2GoTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("chat2go")) {
-            if (args.length == 0) {
+
+            if (args.length == 1) {
                 ArrayList<String> list = new ArrayList<>();
 
                 list.add("help");
@@ -28,7 +30,7 @@ public class Chat2GoTabCompleter implements TabCompleter {
             String subCommand = args[0];
 
             if (subCommand.equalsIgnoreCase("filter")) {
-                if(args.length == 1) {
+                if(args.length == 2) {
                     ArrayList<String> list = new ArrayList<>();
 
                     list.add("censor");
@@ -38,7 +40,7 @@ public class Chat2GoTabCompleter implements TabCompleter {
                     return list;
                 }
             } else if(subCommand.equalsIgnoreCase("badwords") || subCommand.equalsIgnoreCase("badword")) {
-                if(args.length == 1) {
+                if(args.length == 2) {
                     ArrayList<String> list = new ArrayList<>();
 
                     list.add("list");

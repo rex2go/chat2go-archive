@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class MainConfig extends CustomConfig {
 
@@ -38,7 +39,7 @@ public class MainConfig extends CustomConfig {
     @Getter
     @Setter
     @ConfigInfo(path = "chatFilter.filterMode")
-    protected FilterMode chatFilterMode = FilterMode.BLOCK;
+    protected String chatFilterModeString = "BLOCK";
 
     @Getter
     @ConfigInfo(path = "mentions.badWordNotificationEnabled")
@@ -111,7 +112,6 @@ public class MainConfig extends CustomConfig {
     protected boolean jsonElementsEnabled = false;
 
     @Getter
-    @ConfigInfo(path = "jsonElements.elements", save = false)
     protected ArrayList<JSONElement> jsonElements = new ArrayList<>();
 
     @Getter
@@ -163,7 +163,7 @@ public class MainConfig extends CustomConfig {
         spaceThreshold = getConfig().getDouble("antiSpam.spaceThreshold");
         broadcastFormat = getConfig().getString("formatting.broadcast");
         statisticsAllowed = getConfig().getBoolean("general.statisticsAllowed");
-        jsonElementsEnabled = getConfig().getBoolean("jsonElements.enabled");
+        jsonElementsEnabled = getConfig().getBoolean("jsonElements.enabled");*/
 
         try {
             jsonElements = new ArrayList<>();
@@ -182,7 +182,7 @@ public class MainConfig extends CustomConfig {
                 }
             });
         } catch (Exception ignored) {
-        }*/
+        }
 
         super.load();
     }
@@ -223,6 +223,14 @@ public class MainConfig extends CustomConfig {
 
         // TODO save json*/
 
-        super.save();
+        super.save(getClass());
+    }
+
+    public FilterMode getChatFilterMode() {
+        return FilterMode.valueOf(chatFilterModeString);
+    }
+
+    public void setChatFilterMode(FilterMode filterMode) {
+        this.chatFilterModeString = filterMode.name();
     }
 }

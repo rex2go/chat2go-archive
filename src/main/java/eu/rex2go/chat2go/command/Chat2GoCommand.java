@@ -100,6 +100,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             return true;
         } else if (subCommand.equalsIgnoreCase("help")) {
             sendHelp(sender);
+            return true;
         }
 
         throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.chat" +
@@ -108,15 +109,11 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
     }
 
     private void sendCredits(CommandSender sender) {
-        net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.AQUA;
-
-        if (Chat2Go.isHexSupported()) {
-            color = net.md_5.bungee.api.ChatColor.of("#4287f5");
-        }
-
         // TODO version check
-        sender.sendMessage(color + "chat2go v" + plugin.getDescription().getVersion() + " (latest version)");
-        sender.sendMessage(color + "created with love by rex2go");
+        sender.sendMessage("§r");
+        sender.sendMessage("§bchat2go §fv" + plugin.getDescription().getVersion());
+        sender.sendMessage("§7created with ♥ §7by rex2go");
+        sender.sendMessage("§r");
     }
 
     private void sendHelp(CommandSender sender) {
