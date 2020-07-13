@@ -7,114 +7,129 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class MainConfig extends CustomConfig {
 
     @Getter
     @Setter
-    private boolean chatEnabled = true;
+    @ConfigInfo(path = "general.chatEnabled")
+    protected boolean chatEnabled = true;
 
     @Getter
-    private boolean configSync = false;
+    protected boolean configSync = false;
 
     @Getter
-    private boolean chatFormatEnabled = true;
+    @ConfigInfo(path = "chatFormatting.enabled")
+    protected boolean chatFormatEnabled = true;
 
     @Getter
-    private String chatFormat = "{prefix}{username}{suffix}&7: &f{message}";
+    @ConfigInfo(path = "chatFormatting.format")
+    protected String chatFormat = "{prefix}{username}{suffix}&7: &f{message}";
 
     @Getter
-    private boolean prefixTrailingSpaceEnabled = true;
-
-    @Getter
-    private boolean suffixLeadingSpaceEnabled = true;
-
-    @Getter
-    private boolean translateChatColorsEnabled = true;
-
-    @Getter
-    @Setter
-    private boolean chatFilterEnabled = true;
+    @ConfigInfo(path = "chatFormatting.translateChatColors")
+    protected boolean translateChatColorsEnabled = true;
 
     @Getter
     @Setter
-    private FilterMode chatFilterMode = FilterMode.BLOCK;
-
-    @Getter
-    private boolean badWordNotificationEnabled = true;
-
-    @Getter
-    @Setter
-    private boolean slowModeEnabled = false;
+    @ConfigInfo(path = "chatFilter.enabled")
+    protected boolean chatFilterEnabled = true;
 
     @Getter
     @Setter
-    private int slowModeSeconds = 5;
+    @ConfigInfo(path = "chatFilter.filterMode")
+    protected FilterMode chatFilterMode = FilterMode.BLOCK;
 
     @Getter
-    private boolean hideJoinMessage = false;
+    @ConfigInfo(path = "chatFilter.badWordNotificationEnabled")
+    protected boolean badWordNotificationEnabled = true;
 
     @Getter
-    private boolean customJoinMessageEnabled = true;
+    @Setter
+    @ConfigInfo(path = "slowMode.enabled")
+    protected boolean slowModeEnabled = false;
 
     @Getter
-    private String customJoinMessage = "&7[&a+&7] &7{username}";
+    @Setter
+    @ConfigInfo(path = "slowMode.cooldown")
+    protected int slowModeCooldown = 5;
 
     @Getter
-    private boolean hideLeaveMessage = false;
+    @ConfigInfo(path = "customJoinMessage.hidden")
+    protected boolean hideJoinMessage = false;
 
     @Getter
+    @ConfigInfo(path = "customJoinMessage.enabled")
+    protected boolean customJoinMessageEnabled = true;
+
+    @Getter
+    @ConfigInfo(path = "customJoinMessage.message")
+    protected String customJoinMessage = "&7[&a+&7] &7{username}";
+
+    @Getter
+    @ConfigInfo(path = "customLeaveMessage.hidden")
+    protected boolean hideLeaveMessage = false;
+
+    @Getter
+    @ConfigInfo(path = "customLeaveMessage.enabled")
     private boolean customLeaveMessageEnabled = true;
 
     @Getter
-    private String customLeaveMessage = "&7[&c-&7] &7{username}";
+    @ConfigInfo(path = "customLeaveMessage.message")
+    protected String customLeaveMessage = "&7[&c-&7] &7{username}";
 
     @Getter
-    private String privateMessageFormat = "&8MSG &7[{from} -> {to}]&8: &f{message}";
+    @ConfigInfo(path = "formatting.privateMessage")
+    protected String privateMessageFormat = "&8MSG &7[{from} -> {to}]&8: &f{message}";
 
     @Getter
-    private boolean linkBlockEnabled = true;
+    @ConfigInfo(path = "chatFilter.linkBlockEnabled")
+    protected boolean linkBlockEnabled = true;
 
     @Getter
-    private boolean antiSpamEnabled = false;
+    @ConfigInfo(path = "antiSpam.enabled")
+    protected boolean antiSpamEnabled = false;
 
     @Getter
-    private double capsThreshold = 0.5;
+    @ConfigInfo(path = "antiSpam.capsThreshold")
+    protected double capsThreshold = 0.5;
 
     @Getter
-    private double spaceThreshold = 0.3;
+    @ConfigInfo(path = "antiSpam.spaceThreshold")
+    protected double spaceThreshold = 0.3;
 
     @Getter
-    private String broadcastFormat = "&f[&cBroadcast&f] {message}";
+    @ConfigInfo(path = "formatting.broadcast")
+    protected String broadcastFormat = "&f[&cBroadcast&f] {message}";
 
     @Getter
-    private boolean statisticsAllowed = true;
+    @ConfigInfo(path = "general.statisticsAllowed")
+    protected boolean statisticsAllowed = true;
 
     @Getter
-    private boolean jsonElementsEnabled = false;
+    @ConfigInfo(path = "jsonElements.enabled")
+    protected boolean jsonElementsEnabled = false;
 
-    @Getter // TODO config stuff
-    private ArrayList<JSONElement> jsonElements = new ArrayList<>();
+    @Getter
+    @ConfigInfo(path = "jsonElements.elements", save = false)
+    protected ArrayList<JSONElement> jsonElements = new ArrayList<>();
 
     // TODO chat log, chat log length, range chat, range chat length
 
     // version auch in config anpassen..
     public MainConfig(Chat2Go plugin) {
-        super(plugin, "config.yml", 3);
+        super(plugin, "config.yml", 4);
     }
 
     @Override
     public void load() {
-        chatEnabled = getConfig().getBoolean("chatEnabled");
-        configSync = getConfig().getBoolean("configSync");
-        chatFormatEnabled = getConfig().getBoolean("chatFormatEnabled");
-        chatFormat = getConfig().getString("chatFormat");
-        prefixTrailingSpaceEnabled = getConfig().getBoolean("prefixTrailingSpaceEnabled");
-        suffixLeadingSpaceEnabled = getConfig().getBoolean("suffixLeadingSpaceEnabled");
-        translateChatColorsEnabled = getConfig().getBoolean("translateChatColorsEnabled");
+        /*chatEnabled = getConfig().getBoolean("general.chatEnabled");
+        chatFormatEnabled = getConfig().getBoolean("chatFormatting.enabled");
+        chatFormat = getConfig().getString("chatFormatting.format");
+        translateChatColorsEnabled = getConfig().getBoolean("chatFormatting.translateChatColors");
+        chatFilterEnabled = getConfig().getBoolean("chatFilter.enabled");
 
-        String chatFilterString = getConfig().getString("chatFilterMode");
+        String chatFilterString = getConfig().getString("chatFilter.filterMode");
         if (chatFilterString != null) {
             try {
                 chatFilterMode = FilterMode.valueOf(chatFilterString.toUpperCase());
@@ -124,33 +139,33 @@ public class MainConfig extends CustomConfig {
             }
         }
 
-        badWordNotificationEnabled = getConfig().getBoolean("badWordNotificationEnabled");
-        slowModeEnabled = getConfig().getBoolean("slowModeEnabled");
-        slowModeSeconds = getConfig().getInt("slowModeSeconds");
-        hideJoinMessage = getConfig().getBoolean("hideJoinMessage");
-        customJoinMessageEnabled = getConfig().getBoolean("customJoinMessageEnabled");
-        customJoinMessage = getConfig().getString("customJoinMessage");
-        hideLeaveMessage = getConfig().getBoolean("hideLeaveMessage");
-        customLeaveMessageEnabled = getConfig().getBoolean("customLeaveMessageEnabled");
-        customLeaveMessage = getConfig().getString("customLeaveMessage");
-        privateMessageFormat = getConfig().getString("privateMessageFormat");
-        linkBlockEnabled = getConfig().getBoolean("linkBlockEnabled");
-        antiSpamEnabled = getConfig().getBoolean("antiSpamEnabled");
-        capsThreshold = getConfig().getDouble("capsThreshold");
-        spaceThreshold = getConfig().getDouble("spaceThreshold");
-        broadcastFormat = getConfig().getString("broadcastFormat");
-        statisticsAllowed = getConfig().getBoolean("statisticsAllowed");
-        jsonElementsEnabled = getConfig().getBoolean("jsonElementsEnabled");
+        badWordNotificationEnabled = getConfig().getBoolean("chatFilter.badWordNotificationEnabled");
+        slowModeEnabled = getConfig().getBoolean("slowMode.enabled");
+        slowModeCooldown = getConfig().getInt("slowMode.cooldown");
+        hideJoinMessage = getConfig().getBoolean("customJoinMessage.hidden");
+        customJoinMessageEnabled = getConfig().getBoolean("customJoinMessage.enabled");
+        customJoinMessage = getConfig().getString("customJoinMessage.message");
+        hideLeaveMessage = getConfig().getBoolean("customLeaveMessage.hidden");
+        customLeaveMessageEnabled = getConfig().getBoolean("customLeaveMessage.enabled");
+        customLeaveMessage = getConfig().getString("customLeaveMessage.message");
+        privateMessageFormat = getConfig().getString("formatting.privateMessage");
+        linkBlockEnabled = getConfig().getBoolean("chatFilter.linkBlockEnabled");
+        antiSpamEnabled = getConfig().getBoolean("antiSpam.enabled");
+        capsThreshold = getConfig().getDouble("antiSpam.capsThreshold");
+        spaceThreshold = getConfig().getDouble("antiSpam.spaceThreshold");
+        broadcastFormat = getConfig().getString("formatting.broadcast");
+        statisticsAllowed = getConfig().getBoolean("general.statisticsAllowed");
+        jsonElementsEnabled = getConfig().getBoolean("jsonElements.enabled");
 
         try {
             jsonElements = new ArrayList<>();
-            getConfig().getConfigurationSection("jsonElements").getKeys(false).forEach(id -> {
+            getConfig().getConfigurationSection("jsonElements.elements").getKeys(false).forEach(id -> {
                 try {
-                    String text = getConfig().getString("jsonElements." + id + ".text");
-                    String hoverText = getConfig().getString("jsonElements." + id + ".hoverText");
-                    String suggestCommand = getConfig().getString("jsonElements." + id + ".suggestCommand");
-                    String runCommand = getConfig().getString("jsonElements." + id + ".runCommand");
-                    String openUrl = getConfig().getString("jsonElements." + id + ".openUrl");
+                    String text = getConfig().getString("jsonElements.elements." + id + ".text");
+                    String hoverText = getConfig().getString("jsonElements.elements." + id + ".hoverText");
+                    String suggestCommand = getConfig().getString("jsonElements.elements." + id + ".suggestCommand");
+                    String runCommand = getConfig().getString("jsonElements.elements." + id + ".runCommand");
+                    String openUrl = getConfig().getString("jsonElements.elements." + id + ".openUrl");
 
                     JSONElement jsonElement = new JSONElement(id, text, hoverText, suggestCommand, runCommand, openUrl);
                     jsonElements.add(jsonElement);
@@ -159,7 +174,9 @@ public class MainConfig extends CustomConfig {
                 }
             });
         } catch (Exception ignored) {
-        }
+        }*/
+
+        super.load();
     }
 
     @Override
@@ -170,19 +187,17 @@ public class MainConfig extends CustomConfig {
 
     @Override
     public void save() {
-        if (!configSync) return;
+        /*if (!configSync) return;
 
         getConfig().set("chatEnabled", chatEnabled);
         getConfig().set("configSync", configSync);
         getConfig().set("chatFormatEnabled", chatFormatEnabled);
         getConfig().set("chatFormat", chatFormat);
-        getConfig().set("prefixTrailingSpaceEnabled", prefixTrailingSpaceEnabled);
-        getConfig().set("suffixLeadingSpaceEnabled", suffixLeadingSpaceEnabled);
         getConfig().set("translateChatColorsEnabled", translateChatColorsEnabled);
         getConfig().set("chatFilterMode", chatFilterMode.name());
         getConfig().set("badWordNotificationEnabled", badWordNotificationEnabled);
         getConfig().set("slowModeEnabled", slowModeEnabled);
-        getConfig().set("slowModeSeconds", slowModeSeconds);
+        getConfig().set("slowModeSeconds", slowModeCooldown);
         getConfig().set("hideJoinMessage", hideJoinMessage);
         getConfig().set("customJoinMessageEnabled", customJoinMessageEnabled);
         getConfig().set("customJoinMessage", customJoinMessage);
@@ -198,7 +213,7 @@ public class MainConfig extends CustomConfig {
         getConfig().set("statisticsAllowed", statisticsAllowed);
         getConfig().set("jsonElementsEnabled", jsonElementsEnabled);
 
-        // TODO save json
+        // TODO save json*/
 
         super.save();
     }

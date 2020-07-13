@@ -45,7 +45,7 @@ public class PlayerChatListener extends AbstractListener {
                 && mainConfig.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(
-                            ((user.getLastMessageTime() + mainConfig.getSlowModeSeconds() * 1000) - currentTime) / 1000F,
+                            ((user.getLastMessageTime() + mainConfig.getSlowModeCooldown() * 1000) - currentTime) / 1000F,
                             2);
             if (cooldown > 0) {
                 user.sendMessage("chat2go.chat.cooldown", false, String.valueOf(cooldown));

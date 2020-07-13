@@ -7,6 +7,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.*;
+import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 public abstract class CustomConfig {
@@ -55,7 +57,21 @@ public abstract class CustomConfig {
         }
     }
 
-    public abstract void load();
+    public void load() {
+        Field[] fields = getClass().getFields();
+
+        for(Field field : fields) {
+            if(!field.isAnnotationPresent(ConfigInfo.class)) continue;
+            ConfigInfo configInfo = field.getAnnotation(ConfigInfo.class);
+            Object object = getConfig().get(configInfo.path());
+
+            try {
+                field.set(this, object);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     public void reload() {
         this.file = new File(plugin.getDataFolder() + File.separator + fileName);
@@ -69,11 +85,34 @@ public abstract class CustomConfig {
 
     public void save() {
         plugin.getLogger().log(Level.INFO, "Saving " + fileName + "..");
+
+        Field[] fields = getClass().getFields();
+
+        for(Field field : fields) {
+            if(!field.isAnnotationPresent(ConfigInfo.class)) continue;
+            ConfigInfo configInfo = field.getAnnotation(ConfigInfo.class);
+            if(!configInfo.save()) continue;
+
+            try {
+                getConfig().set(configInfo.path(), field.get(this));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
         try {
             config.save(file);
             plugin.getLogger().log(Level.INFO, "Saved " + fileName + "!");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Target({ElementType.FIELD})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ConfigInfo {
+        String path();
+        boolean save() default true;
     }
 }

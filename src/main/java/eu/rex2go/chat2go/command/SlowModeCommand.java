@@ -25,7 +25,7 @@ public class SlowModeCommand extends WrappedCommandExecutor {
         String cooldownStr = null;
 
         if (args.length < 1) {
-            cooldownStr = String.valueOf(mainConfig.getSlowModeSeconds());
+            cooldownStr = String.valueOf(mainConfig.getSlowModeCooldown());
         } else {
             cooldownStr = args[0];
         }
@@ -38,7 +38,7 @@ public class SlowModeCommand extends WrappedCommandExecutor {
         boolean updatedState = !mainConfig.isSlowModeEnabled();
 
         mainConfig.setSlowModeEnabled(updatedState);
-        mainConfig.setSlowModeSeconds(cooldown);
+        mainConfig.setSlowModeCooldown(cooldown);
 
         Chat2Go.sendMessage(sender, "chat2go.command.slowmode." + (updatedState ? "enable" : "disable"), true,
                 String.valueOf(cooldown));

@@ -6,10 +6,7 @@ import eu.rex2go.chat2go.user.User;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
 public abstract class WrappedCommandExecutor implements CommandExecutor {
@@ -20,17 +17,23 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
     protected PluginCommand pluginCommand;
     private String command;
 
-    public WrappedCommandExecutor(Chat2Go plugin, String command) {
+    public WrappedCommandExecutor(Chat2Go plugin, String command, TabCompleter tabCompleter) {
         this.plugin = plugin;
         this.command = command;
         this.pluginCommand = Bukkit.getPluginCommand(command);
 
         pluginCommand.setExecutor(this);
 
+        if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
+
         if (pluginCommand.getPermissionMessage() == null) {
             pluginCommand.setPermissionMessage(Chat2Go.getMessageConfig().getMessage("chat2go.command.error" +
                     ".no_permission"));
         }
+    }
+
+    public WrappedCommandExecutor(Chat2Go plugin, String command) {
+        this(plugin, command, null);
     }
 
     @Override

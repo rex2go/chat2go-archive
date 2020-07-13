@@ -7,6 +7,7 @@ import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNotANumberException;
 import eu.rex2go.chat2go.command.exception.CommandWrongUsageException;
+import eu.rex2go.chat2go.command.tabcompleter.Chat2GoTabCompleter;
 import eu.rex2go.chat2go.config.MainConfig;
 import eu.rex2go.chat2go.user.User;
 import eu.rex2go.chat2go.util.MathUtil;
@@ -16,7 +17,8 @@ import org.bukkit.command.CommandSender;
 public class Chat2GoCommand extends WrappedCommandExecutor {
 
     public Chat2GoCommand(Chat2Go plugin) {
-        super(plugin, "chat2go");
+        // TODO check version
+        super(plugin, "chat2go", new Chat2GoTabCompleter());
     }
 
     @Override
@@ -25,7 +27,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
         checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_CHAT);
 
         if (args.length < 1) {
-            sendHelp(sender);
+            sendCredits(sender);
             return true;
         }
 
@@ -96,11 +98,24 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             Chat2Go.sendMessage(sender, "chat2go.command.chat.reload.done", true);
             return true;
+        } else if (subCommand.equalsIgnoreCase("help")) {
+            sendHelp(sender);
         }
 
         throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.chat" +
                         ".unknown_sub_command",
                 subCommand, label));
+    }
+
+    private void sendCredits(CommandSender sender) {
+        net.md_5.bungee.api.ChatColor color = net.md_5.bungee.api.ChatColor.AQUA;
+
+        if (Chat2Go.isHexSupported()) {
+            color = net.md_5.bungee.api.ChatColor.of("#4287f5");
+        }
+
+        sender.sendMessage(color + "chat2go v" + plugin.getDescription().getVersion());
+        sender.sendMessage(color + "created with love by rex2go");
     }
 
     private void sendHelp(CommandSender sender) {
@@ -256,7 +271,7 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
 
             int seconds = Integer.parseInt(secondsStr);
 
-            mainConfig.setSlowModeSeconds(seconds);
+            mainConfig.setSlowModeCooldown(seconds);
             mainConfig.save();
 
             // TODO customizable?
