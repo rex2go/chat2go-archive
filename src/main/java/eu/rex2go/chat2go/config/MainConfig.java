@@ -80,7 +80,7 @@ public class MainConfig extends CustomConfig {
 
     @Getter
     @ConfigInfo(path = "formatting.privateMessage")
-    protected String privateMessageFormat = "&8MSG &7[{from} -> {to}]&8: &f{message}";
+    protected String privateMessageFormat = "&8MSG &7[{sender} -> {receiver}]&8: &f{message}";
 
     @Getter
     @ConfigInfo(path = "chatFilter.linkBlockEnabled")

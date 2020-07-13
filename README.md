@@ -56,6 +56,7 @@
 - [ ] command tab completion
 - [ ] update notify
 - [ ] mention
+- [ ] redesigned config
 
 #### v0.5-PRE
 - [ ] message spy command
