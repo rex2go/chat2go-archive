@@ -333,6 +333,7 @@ public class ChatManager {
         pattern = Pattern.compile("}?([^{}]*?$)");
         matcher = pattern.matcher(format);
 
+        // TODO test PlaceholderAPI
         while (matcher.find()) {
             String after = matcher.group(1).replace("%%", "%");
             BaseComponent[] beforeComponent = TextComponent.fromLegacyText(after);
