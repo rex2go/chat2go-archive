@@ -37,7 +37,7 @@ public class PlayerQuitListener extends AbstractListener {
                 Placeholder prefix = new Placeholder("prefix", user.getPrefix(), true);
                 Placeholder suffix = new Placeholder("suffix", user.getSuffix(), true);
 
-                String format = plugin.getChatManager().processPlaceholders(user, mainConfig.getCustomLeaveMessage()
+                String format = plugin.getChatManager().processPlaceholders(mainConfig.getCustomLeaveMessage(), user
                         , username, prefix, suffix);
                 format = ChatColor.translateAlternateColorCodes('&', format);
                 format = Chat2Go.parseHexColor(format);

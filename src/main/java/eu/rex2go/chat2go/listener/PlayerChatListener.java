@@ -56,12 +56,12 @@ public class PlayerChatListener extends AbstractListener {
 
         try {
             if (mainConfig.isChatFormatEnabled()) {
-                String format = plugin.getChatManager().format(user, message);
+                String format = plugin.getChatManager().format(message, user);
                 event.setFormat(format);
 
                 if (mainConfig.isJsonElementsEnabled() && !event.isCancelled()) {
                     event.setCancelled(true);
-                    BaseComponent[] baseComponents = plugin.getChatManager().processJsonElements(user, format);
+                    BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(format, user);
 
                     for (Player all : Bukkit.getOnlinePlayers()) {
                         all.spigot().sendMessage(baseComponents);
@@ -78,7 +78,7 @@ public class PlayerChatListener extends AbstractListener {
                     plugin.getLogger().log(Level.INFO, logMessageStr);
                 }
             } else {
-                event.setMessage(plugin.getChatManager().processMessage(user, message));
+                event.setMessage(plugin.getChatManager().processMessage(message, user));
             }
         } catch (BadWordException | AntiSpamException e) {
             event.setCancelled(true);

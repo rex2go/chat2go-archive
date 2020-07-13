@@ -24,12 +24,12 @@ public class JSONElement {
         this.openUrl = openUrl;
     }
 
-    public BaseComponent[] build(Chat2Go plugin, User user, String before, String after, Placeholder... placeholders) {
+    public BaseComponent[] build(Chat2Go plugin, User processor, String before, String after, Placeholder... placeholders) {
         String text = before + this.text + after;
         text = ChatColor.translateAlternateColorCodes('&', text);
         text = Chat2Go.parseHexColor(text);
 
-        text = plugin.getChatManager().processPlaceholders(user, text, placeholders);
+        text = plugin.getChatManager().processPlaceholders(text, processor, placeholders);
 
         BaseComponent[] baseComponents = TextComponent.fromLegacyText(text);
 
@@ -37,7 +37,7 @@ public class JSONElement {
             if (hoverText != null && !hoverText.equals("")) {
                 String hoverText = this.hoverText;
 
-                hoverText = plugin.getChatManager().processPlaceholders(user, hoverText, placeholders);
+                hoverText = plugin.getChatManager().processPlaceholders(hoverText, processor, placeholders);
 
                 textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
                         new BaseComponent[]{new TextComponent(hoverText)}));
@@ -46,7 +46,7 @@ public class JSONElement {
             if (suggestCommand != null && !suggestCommand.equals("")) {
                 String suggestCommand = this.suggestCommand;
 
-                suggestCommand = plugin.getChatManager().processPlaceholders(user, suggestCommand, placeholders);
+                suggestCommand = plugin.getChatManager().processPlaceholders(suggestCommand, processor, placeholders);
 
                 textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggestCommand));
             }
@@ -54,7 +54,7 @@ public class JSONElement {
             if (runCommand != null && !runCommand.equals("")) {
                 String runCommand = this.runCommand;
 
-                runCommand = plugin.getChatManager().processPlaceholders(user, runCommand, placeholders);
+                runCommand = plugin.getChatManager().processPlaceholders(runCommand, processor, placeholders);
 
                 textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, runCommand));
             }
@@ -62,7 +62,7 @@ public class JSONElement {
             if (openUrl != null && !openUrl.equals("")) {
                 String openUrl = this.openUrl;
 
-                openUrl = plugin.getChatManager().processPlaceholders(user, openUrl, placeholders);
+                openUrl = plugin.getChatManager().processPlaceholders(openUrl, processor, placeholders);
 
                 textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, openUrl));
             }

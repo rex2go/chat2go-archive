@@ -29,7 +29,7 @@ public class PlayerJoinListener extends AbstractListener {
             Placeholder prefix = new Placeholder("prefix", user.getPrefix(), true);
             Placeholder suffix = new Placeholder("suffix", user.getSuffix(), true);
 
-            String format = plugin.getChatManager().processPlaceholders(user, mainConfig.getCustomJoinMessage(),
+            String format = plugin.getChatManager().processPlaceholders(mainConfig.getCustomJoinMessage(), user,
                     username, prefix, suffix);
             format = ChatColor.translateAlternateColorCodes('&', format);
             format = Chat2Go.parseHexColor(format);

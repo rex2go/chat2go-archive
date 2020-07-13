@@ -41,7 +41,7 @@ public class MainConfig extends CustomConfig {
     protected FilterMode chatFilterMode = FilterMode.BLOCK;
 
     @Getter
-    @ConfigInfo(path = "chatFilter.badWordNotificationEnabled")
+    @ConfigInfo(path = "mentions.badWordNotificationEnabled")
     protected boolean badWordNotificationEnabled = true;
 
     @Getter
@@ -113,6 +113,14 @@ public class MainConfig extends CustomConfig {
     @Getter
     @ConfigInfo(path = "jsonElements.elements", save = false)
     protected ArrayList<JSONElement> jsonElements = new ArrayList<>();
+
+    @Getter
+    @ConfigInfo(path = "mentions.chatMentionsEnabled")
+    protected boolean chatMentionsEnabled = false;
+
+    @Getter
+    @ConfigInfo(path = "mentions.chatMentionSoundEnabled")
+    protected boolean chatMentionSoundEnabled = false;
 
     // TODO chat log, chat log length, range chat, range chat length
 

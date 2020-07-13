@@ -55,6 +55,7 @@
 - [ ] mysql support
 - [ ] command tab completion
 - [ ] update notify
+- [ ] mention
 
 #### v0.5-PRE
 - [ ] message spy command

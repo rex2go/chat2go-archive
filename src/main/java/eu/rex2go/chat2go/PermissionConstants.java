@@ -6,6 +6,7 @@ public class PermissionConstants {
     public static final String PERMISSION_CHAT_BYPASS_SLOW_MODE = "chat2go.chat.bypass_slow_mode";
     public static final String PERMISSION_CHAT_BYPASS_ANTI_SPAM = "chat2go.chat.bypass_anti_spam";
     public static final String PERMISSION_CHAT_BYPASS_IP = "chat2go.chat.bypass_ip";
+    public static final String PERMISSION_CHAT_MENTION = "chat2go.chat.mention";
 
     public static final String PERMISSION_BAD_WORD_IGNORE = "chat2go.bad_word.ignore";
     public static final String PERMISSION_BAD_WORD_NOTIFY = "chat2go.bad_word.notify";

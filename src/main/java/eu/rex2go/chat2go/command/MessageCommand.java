@@ -55,8 +55,7 @@ public class MessageCommand extends WrappedCommandExecutor {
 
         message = new StringBuilder(message.substring(0, message.length() - 1));
 
-        String formatted = plugin.getChatManager().formatMsg(user.getName(), target.getName(),
-                message.toString());
+        String formatted = plugin.getChatManager().formatMsg(message.toString(), user, target);
         targetPlayer.sendMessage(formatted);
         player.sendMessage(formatted);
 

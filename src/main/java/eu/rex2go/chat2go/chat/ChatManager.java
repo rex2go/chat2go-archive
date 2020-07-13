@@ -36,34 +36,34 @@ public class ChatManager {
         badWordConfig = Chat2Go.getBadWordConfig();
     }
 
-    public String format(User user, String message) throws BadWordException, AntiSpamException {
-        return format(user, message, true, mainConfig.getChatFormat());
+    public String format(String message, User processor) throws BadWordException, AntiSpamException {
+        return format(message, processor, true, mainConfig.getChatFormat());
     }
 
-    public String format(User user, String message, boolean processMessage, String format) throws BadWordException,
+    public String format(String message, User processor, boolean processMessage, String format) throws BadWordException,
             AntiSpamException {
         format = ChatColor.translateAlternateColorCodes('&', format);
         format = Chat2Go.parseHexColor(format);
 
         if (processMessage) {
             format = format.replaceAll(Pattern.quote(" +"), " ");
-            message = processMessage(user, message);
+            message = processMessage(message, processor);
         }
 
-        Placeholder username = new Placeholder("username", user.getName(), true);
-        Placeholder prefix = new Placeholder("prefix", user.getPrefix(), true);
-        Placeholder suffix = new Placeholder("suffix", user.getSuffix(), true);
+        Placeholder username = new Placeholder("username", processor.getName(), true);
+        Placeholder prefix = new Placeholder("prefix", processor.getPrefix(), true);
+        Placeholder suffix = new Placeholder("suffix", processor.getSuffix(), true);
         Placeholder messagePlaceholder = new Placeholder("message", message, false);
 
-        format = processPlaceholders(user, format, username, prefix, suffix,
+        format = processPlaceholders(format, processor, username, prefix, suffix,
                 messagePlaceholder);
 
         return format.replace("%", "%%");
     }
 
-    public String processPlaceholders(User user, String format, Placeholder... placeholders) {
+    public String processPlaceholders(String format, User processor, Placeholder... placeholders) {
         if (Chat2Go.isPlaceholderInstalled()) {
-            format = PlaceholderAPI.setPlaceholders(user.getPlayer(), format);
+            format = PlaceholderAPI.setPlaceholders(processor.getPlayer(), format);
             format = ChatColor.translateAlternateColorCodes('&', format);
             format = Chat2Go.parseHexColor(format);
         }
@@ -100,7 +100,7 @@ public class ChatManager {
                             UUID uuid = UUID.randomUUID();
                             JSONElementContent jsonElementContent = new JSONElementContent(
                                     uuid, jsonElement, placeholders);
-                            user.getJsonContent().add(jsonElementContent);
+                            processor.getJsonContent().add(jsonElementContent);
                             placeholderContent = "{" + uuid.toString() + "}";
                         }
                         break;
@@ -120,32 +120,37 @@ public class ChatManager {
 
     }
 
-    public String processMessage(User user, String message) throws BadWordException, AntiSpamException {
-        message = antiSpamCheck(user, message);
+    /**
+     * @param message the message to process
+     * @param sender the sender of the message
+     * @return the processed message
+     */
+    public String processMessage(String message, User sender) throws BadWordException, AntiSpamException {
+        message = antiSpamCheck(message, sender);
         String[] ads = new String[0];
 
-        if (!user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_IP)) {
+        if (!sender.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_IP)) {
             ads = filterAdvertisement(message);
         }
 
-        user.setLastMessage(message);
-        user.setLastMessageTime(System.currentTimeMillis());
+        sender.setLastMessage(message);
+        sender.setLastMessageTime(System.currentTimeMillis());
 
         if (mainConfig.isTranslateChatColorsEnabled()
-                && user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_COLOR)) {
+                && sender.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_COLOR)) {
             message = ChatColor.translateAlternateColorCodes('&', message);
             message = Chat2Go.parseHexColor(message);
         }
 
         if (!message.equals(filter(message, ads))
-                && !user.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_IGNORE)
+                && !sender.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_IGNORE)
                 && mainConfig.isChatFilterEnabled()) {
             if (mainConfig.isBadWordNotificationEnabled()) {
                 for (User staff : plugin.getUserManager().getUsers()) {
                     if (staff.getPlayer().hasPermission(PermissionConstants.PERMISSION_BAD_WORD_NOTIFY)
-                            && user.isBadWordNotificationEnabled()) {
+                            && sender.isBadWordNotificationEnabled()) {
                         staff.getPlayer().sendMessage(
-                                Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + user.getName() + ": " + ChatColor.RED + message);
+                                Chat2Go.PREFIX + " " + Chat2Go.WARNING_PREFIX + " " + sender.getName() + ": " + ChatColor.RED + message);
                     }
                 }
             }
@@ -153,7 +158,7 @@ public class ChatManager {
             if (mainConfig.getChatFilterMode() == FilterMode.CENSOR) {
                 message = filter(message, ads);
             } else if (mainConfig.getChatFilterMode() == FilterMode.BLOCK) {
-                throw new BadWordException(user, message);
+                throw new BadWordException(sender, message);
             }
         }
 
@@ -161,6 +166,11 @@ public class ChatManager {
         return message;
     }
 
+    /**
+     * @param message the message to filter
+     * @param additional additional filter strings
+     * @return the filtered message
+     */
     private String filter(String message, String... additional) {
         List<String> badWords = (List<String>) getBadWords().clone();
 
@@ -185,6 +195,10 @@ public class ChatManager {
         return message;
     }
 
+    /**
+     * @param message the message to filter
+     * @return an array of advertisement strings
+     */
     private String[] filterAdvertisement(String message) {
         ArrayList<String> ads = new ArrayList<>();
 
@@ -216,24 +230,29 @@ public class ChatManager {
         return ads.toArray(new String[0]);
     }
 
-    private String antiSpamCheck(User user, String message) throws AntiSpamException {
+    /**
+     * @param sender the sender of the message
+     * @param message the message to check
+     * @return the checked message
+     */
+    private String antiSpamCheck(String message, User sender) throws AntiSpamException {
         if (!mainConfig.isAntiSpamEnabled()) {
             return message;
         }
 
-        if (user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTI_SPAM)
-                || user.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTISPAM)) {
+        if (sender.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTI_SPAM)
+                || sender.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTISPAM)) {
             return message;
         }
 
-        double diff = ((System.currentTimeMillis() - user.getLastMessageTime()) / 1000D);
+        double diff = ((System.currentTimeMillis() - sender.getLastMessageTime()) / 1000D);
 
         if (diff < 0.5) {
             throw new AntiSpamException("chat2go.chat.antispam.too_fast");
         }
 
         if (diff < 30) {
-            if (user.getLastMessage().equalsIgnoreCase(message)) {
+            if (sender.getLastMessage().equalsIgnoreCase(message)) {
                 throw new AntiSpamException("chat2go.chat.antispam.repeating");
             }
         }
@@ -265,29 +284,35 @@ public class ChatManager {
         return message;
     }
 
-    public String formatMsg(String from, String to, String message) {
+    /**
+     * @param message the string to format
+     * @param sender the sender
+     * @param receiver the receiver
+     * @return the formatted string
+     */
+    public String formatMsg(String message, User sender, User receiver) {
         String format = mainConfig.getPrivateMessageFormat();
 
         format = Chat2Go.parseHexColor(format);
         format = ChatColor.translateAlternateColorCodes('&', format);
 
-        format = format.replace("{from}", from);
-        format = format.replace("{to}", to);
+        format = format.replace("{sender}", sender.getName());
+        format = format.replace("{receiver}", receiver.getName());
         format = format.replace("{message}", message);
 
         return format;
     }
 
+    /**
+     * @param message the message to format
+     * @return the formatted string
+     */
     public String formatBroadcast(String message) {
         String format = mainConfig.getBroadcastFormat();
 
+        format = format.replace("{message}", message);
         format = Chat2Go.parseHexColor(format);
         format = ChatColor.translateAlternateColorCodes('&', format);
-
-        message = Chat2Go.parseHexColor(message);
-        message = ChatColor.translateAlternateColorCodes('&', message);
-
-        format = format.replace("{message}", message);
 
         return format;
     }
@@ -296,10 +321,15 @@ public class ChatManager {
         return getBadWordConfig().getBadWords();
     }
 
-    public BaseComponent[] processJsonElements(User user, String format) {
+    /**
+     * @param message the format containing json placeholders to process
+     * @param processor the user containing the processing content ({@link JSONElementContent})
+     * @return an array of {@link BaseComponent}
+     */
+    public BaseComponent[] processJSONMessage(String message, User processor) {
         ArrayList<BaseComponent> baseComponents = new ArrayList<>();
         Pattern pattern = Pattern.compile("(.*?)\\{( *)(.*?)( *)}");
-        Matcher matcher = pattern.matcher(format);
+        Matcher matcher = pattern.matcher(message);
 
         while (matcher.find()) {
             String match = matcher.group(0).replace("%%", "%");
@@ -307,7 +337,7 @@ public class ChatManager {
             String spaceBefore = matcher.group(2).replace("%%", "%");
             String placeholder = matcher.group(3).replace("%%", "%");
             String spaceAfter = matcher.group(4).replace("%%", "%");
-            Optional<JSONElementContent> contentOptional = user.getJsonContent().stream().filter(
+            Optional<JSONElementContent> contentOptional = processor.getJsonContent().stream().filter(
                     c -> placeholder.equals(c.getUuid().toString())).findFirst();
 
             if (contentOptional.isPresent()) {
@@ -315,7 +345,7 @@ public class ChatManager {
 
                 if (placeholder.equals(content.getUuid().toString())) {
                     BaseComponent[] textComponent = content.getJsonElement()
-                            .build(plugin, user, spaceBefore, spaceAfter, content.getPlaceholders());
+                            .build(plugin, processor, spaceBefore, spaceAfter, content.getPlaceholders());
                     BaseComponent[] beforeComponent = TextComponent.fromLegacyText(before);
 
                     if (textComponent[0].getColorRaw() == null) {
@@ -331,7 +361,7 @@ public class ChatManager {
         }
 
         pattern = Pattern.compile("}?([^{}]*?$)");
-        matcher = pattern.matcher(format);
+        matcher = pattern.matcher(message);
 
         // TODO test PlaceholderAPI
         while (matcher.find()) {
@@ -340,7 +370,7 @@ public class ChatManager {
             baseComponents.addAll(Arrays.asList(beforeComponent));
         }
 
-        user.getJsonContent().clear();
+        processor.getJsonContent().clear();
 
         return baseComponents.toArray(new BaseComponent[0]);
     }

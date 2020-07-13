@@ -51,8 +51,7 @@ public class ReplyCommand extends WrappedCommandExecutor {
 
         message = new StringBuilder(message.substring(0, message.length() - 1));
 
-        String formatted = plugin.getChatManager().formatMsg(user.getName(), target.getName(),
-                message.toString());
+        String formatted = plugin.getChatManager().formatMsg(message.toString(), user, target);
 
         target.setLastChatter(user);
 
