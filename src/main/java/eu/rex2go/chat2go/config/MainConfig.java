@@ -24,7 +24,7 @@ public class MainConfig extends CustomConfig {
 
     @Getter
     @ConfigInfo(path = "chatFormatting.format")
-    protected String chatFormat = "{prefix}{username}{suffix}&7: &f{message}";
+    protected String chatFormat = "{prefix }{username}{ suffix}&7: &f{message}";
 
     @Getter
     @ConfigInfo(path = "chatFormatting.translateChatColors")

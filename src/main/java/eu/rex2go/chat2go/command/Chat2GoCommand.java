@@ -114,7 +114,8 @@ public class Chat2GoCommand extends WrappedCommandExecutor {
             color = net.md_5.bungee.api.ChatColor.of("#4287f5");
         }
 
-        sender.sendMessage(color + "chat2go v" + plugin.getDescription().getVersion());
+        // TODO version check
+        sender.sendMessage(color + "chat2go v" + plugin.getDescription().getVersion() + " (latest version)");
         sender.sendMessage(color + "created with love by rex2go");
     }
 
