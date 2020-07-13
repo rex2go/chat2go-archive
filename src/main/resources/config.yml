@@ -32,7 +32,7 @@ chatFormatting:
   # - (message}
   # PlaceholderAPI is supported
   # JSON elements can be used here
-  format: "{prefix }{username}{ suffix}&8 » &f{message}"
+  format: "{prefix }&7{username}{ suffix}&8 » &f{message}"
 
   # description: enables colored chatting, in 1.16+ hex colors are supported
   # permission: chat2go.chat.color
