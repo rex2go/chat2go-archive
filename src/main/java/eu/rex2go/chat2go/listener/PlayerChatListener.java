@@ -13,8 +13,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.Collection;
 import java.util.UnknownFormatConversionException;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class PlayerChatListener extends AbstractListener {
 
@@ -24,7 +26,7 @@ public class PlayerChatListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if(event.isCancelled()) return;
+        if (event.isCancelled()) return;
 
         Player player = event.getPlayer();
         User user = plugin.getUserManager().getUser(player);
@@ -61,22 +63,49 @@ public class PlayerChatListener extends AbstractListener {
                 String format = plugin.getChatManager().format(message, user);
                 event.setFormat(format);
 
-                if (mainConfig.isJsonElementsEnabled() && !event.isCancelled()) {
+                if ((mainConfig.isJsonElementsEnabled()
+                        || mainConfig.isWorldChatEnabled()
+                        || mainConfig.isRangeChatEnabled())
+                        && !event.isCancelled()) {
                     event.setCancelled(true);
-                    BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(format, user);
 
-                    for (Player all : Bukkit.getOnlinePlayers()) {
-                        all.spigot().sendMessage(baseComponents);
+                    Collection<? extends Player> recipients = Bukkit.getOnlinePlayers();
+
+                    if (mainConfig.isWorldChatEnabled()) {
+                        recipients =
+                                recipients.stream().filter(
+                                        r -> r.getWorld().equals(player.getWorld())
+                                ).collect(Collectors.toList());
+                    }
+
+                    if (mainConfig.isRangeChatEnabled()) {
+                        recipients =
+                                recipients.stream().filter(
+                                        r -> r.getLocation().distance(player.getLocation()) <= mainConfig.getRangeChatRange()
+                                ).collect(Collectors.toList());
                     }
 
                     StringBuilder logMessage = new StringBuilder();
 
-                    for (BaseComponent baseComponent : baseComponents) {
-                        logMessage.append(baseComponent.toLegacyText());
+                    if (mainConfig.isJsonElementsEnabled()) {
+                        BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(format, user);
+
+                        for (Player all : recipients) {
+                            all.spigot().sendMessage(baseComponents);
+                        }
+
+                        for (BaseComponent baseComponent : baseComponents) {
+                            logMessage.append(baseComponent.toLegacyText());
+                        }
+                    } else {
+                        for (Player all : recipients) {
+                            all.sendMessage(format);
+                        }
+
+                        logMessage.append(format);
                     }
 
                     String logMessageStr = logMessage.toString().replaceAll("§.", "");
-
                     plugin.getLogger().log(Level.INFO, logMessageStr);
                 }
             } else {

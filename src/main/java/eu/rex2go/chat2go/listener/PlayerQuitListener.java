@@ -3,6 +3,8 @@ package eu.rex2go.chat2go.listener;
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.chat.Placeholder;
 import eu.rex2go.chat2go.user.User;
+import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,12 +39,22 @@ public class PlayerQuitListener extends AbstractListener {
                 Placeholder prefix = new Placeholder("prefix", user.getPrefix(), true);
                 Placeholder suffix = new Placeholder("suffix", user.getSuffix(), true);
 
-                String format = plugin.getChatManager().processPlaceholders(mainConfig.getCustomLeaveMessage(), user
-                        , username, prefix, suffix);
+                String format = plugin.getChatManager().processPlaceholders(mainConfig.getCustomLeaveMessage(), user,
+                        username, prefix, suffix);
                 format = ChatColor.translateAlternateColorCodes('&', format);
                 format = Chat2Go.parseHexColor(format);
 
-                event.setQuitMessage(format);
+                if (mainConfig.isJsonElementsEnabled()) {
+                    BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(format, user);
+
+                    for(Player all : Bukkit.getOnlinePlayers()) {
+                        all.spigot().sendMessage(baseComponents);
+                    }
+
+                    event.setQuitMessage(null);
+                } else {
+                    event.setQuitMessage(format);
+                }
             }
         }
     }

@@ -122,6 +122,19 @@ public class MainConfig extends CustomConfig {
     @ConfigInfo(path = "mentions.chatMentionSoundEnabled")
     protected boolean chatMentionSoundEnabled = false;
 
+    @Getter
+    @ConfigInfo(path = "scope.worldChatEnabled")
+    protected boolean worldChatEnabled = false;
+
+    @Getter
+    @ConfigInfo(path = "scope.rangeChatEnabled")
+    protected boolean rangeChatEnabled = false;
+
+    @Getter
+    @ConfigInfo(path = "scope.rangeChatRange")
+    protected int rangeChatRange = 50;
+
+
     // TODO chat log, chat log length, range chat, range chat length
 
     // version auch in config anpassen..

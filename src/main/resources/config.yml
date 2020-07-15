@@ -18,6 +18,18 @@ general:
   statisticsAllowed: true
 
 
+# --- chat scope --- #
+
+scope:
+  # description: enable world chat
+  worldChatEnabled: false
+
+  # description: ranged chatting
+  rangeChatEnabled: false
+
+  # description: ranged chatting range
+  rangeChatRange: 50
+
 # --- chat formatting --- #
 
 chatFormatting:
@@ -32,7 +44,7 @@ chatFormatting:
   # - (message}
   # PlaceholderAPI is supported
   # JSON elements can be used here
-  format: "{prefix }&7{username}{ suffix}&8 » &f{message}"
+  format: "{prefix }&7{username}{ suffix}&8 > &f{message}"
 
   # description: enables colored chatting, in 1.16+ hex colors are supported
   # permission: chat2go.chat.color
@@ -99,6 +111,7 @@ customJoinMessage:
   # - (suffix}
   # - {username}
   # PlaceholderAPI is supported
+  # JSON elements can be used here
   message: "&7[&a+&7] &7{username}"
 
 customLeaveMessage:
@@ -114,6 +127,7 @@ customLeaveMessage:
   # - (suffix}
   # - {username}
   # PlaceholderAPI is supported
+  # JSON elements can be used here
   message: "&7[&c-&7] &7{username}"
 
 
@@ -125,6 +139,7 @@ formatting:
   # - {sender}
   # - (receiver}
   # - {message}
+  # JSON elements can be used here
   privateMessage: "&8MSG &7[{sender} -> {receiver}]&8: &f{message}"
 
   # description: broadcast format

@@ -50,15 +50,16 @@
 - [x] increase event priorities
 
 #### v0.4-PRE
-- [ ] range chat
-- [ ] world chat
-- [ ] mysql support
-- [ ] command tab completion
-- [ ] update notify
-- [ ] mention
-- [ ] redesigned config
+- [x] range chat
+- [x] world chat
+- [x] command tab completion
+- [x] redesigned config
+- [x] json elements support
 
 #### v0.5-PRE
+- [ ] mysql support
+- [ ] mention
+- [ ] update notify
 - [ ] message spy command
 - [ ] chat log
 - [ ] mute command

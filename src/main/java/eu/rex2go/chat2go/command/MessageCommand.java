@@ -2,14 +2,19 @@ package eu.rex2go.chat2go.command;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.PermissionConstants;
+import eu.rex2go.chat2go.chat.JSONElementContent;
+import eu.rex2go.chat2go.chat.Placeholder;
 import eu.rex2go.chat2go.command.exception.CommandCustomErrorException;
 import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import eu.rex2go.chat2go.command.exception.CommandNoPlayerException;
 import eu.rex2go.chat2go.command.exception.CommandPlayerNotOnlineException;
 import eu.rex2go.chat2go.user.User;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class MessageCommand extends WrappedCommandExecutor {
 
@@ -56,6 +61,22 @@ public class MessageCommand extends WrappedCommandExecutor {
         message = new StringBuilder(message.substring(0, message.length() - 1));
 
         String formatted = plugin.getChatManager().formatMsg(message.toString(), user, target);
+
+        if(Chat2Go.getMainConfig().isJsonElementsEnabled()) {
+            Placeholder senderPlaceholder = new Placeholder("sender", user.getName(), true);
+            Placeholder receiverPlaceholder = new Placeholder("receiver", target.getName(), true);
+
+            formatted = plugin.getChatManager().processPlaceholders(formatted, user, senderPlaceholder,
+                    receiverPlaceholder);
+
+            BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(formatted, user);
+
+            targetPlayer.spigot().sendMessage(baseComponents);
+            player.spigot().sendMessage(baseComponents);
+
+            return true;
+        }
+
         targetPlayer.sendMessage(formatted);
         player.sendMessage(formatted);
 

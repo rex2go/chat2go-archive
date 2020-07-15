@@ -3,6 +3,8 @@ package eu.rex2go.chat2go.listener;
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.chat.Placeholder;
 import eu.rex2go.chat2go.user.User;
+import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +36,17 @@ public class PlayerJoinListener extends AbstractListener {
             format = ChatColor.translateAlternateColorCodes('&', format);
             format = Chat2Go.parseHexColor(format);
 
-            event.setJoinMessage(format);
+            if (mainConfig.isJsonElementsEnabled()) {
+                BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(format, user);
+
+                for(Player all : Bukkit.getOnlinePlayers()) {
+                    all.spigot().sendMessage(baseComponents);
+                }
+
+                event.setJoinMessage(null);
+            } else {
+                event.setJoinMessage(format);
+            }
         }
     }
 }

@@ -5,8 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Chat2GoTabCompleter implements TabCompleter {
 
@@ -21,26 +21,34 @@ public class Chat2GoTabCompleter implements TabCompleter {
                 list.add("reload");
                 list.add("filter");
                 list.add("slowmode");
-                list.add("badwords");
+                list.add("badword");
                 list.add("toggle");
 
-                return list;
+                List<String> suggest =
+                        list.stream().filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+
+                if (suggest.isEmpty()) return list;
+                return suggest;
             }
 
             String subCommand = args[0];
 
             if (subCommand.equalsIgnoreCase("filter")) {
-                if(args.length == 2) {
+                if (args.length == 2) {
                     ArrayList<String> list = new ArrayList<>();
 
                     list.add("censor");
                     list.add("block");
                     list.add("disable");
 
-                    return list;
+                    List<String> suggest =
+                            list.stream().filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+
+                    if (suggest.isEmpty()) return list;
+                    return suggest;
                 }
-            } else if(subCommand.equalsIgnoreCase("badwords") || subCommand.equalsIgnoreCase("badword")) {
-                if(args.length == 2) {
+            } else if (subCommand.equalsIgnoreCase("badwords") || subCommand.equalsIgnoreCase("badword")) {
+                if (args.length == 2) {
                     ArrayList<String> list = new ArrayList<>();
 
                     list.add("list");
@@ -48,8 +56,24 @@ public class Chat2GoTabCompleter implements TabCompleter {
                     list.add("remove");
                     list.add("reload");
 
-                    return list;
+                    List<String> suggest =
+                            list.stream().filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+
+                    if (suggest.isEmpty()) return list;
+                    return suggest;
                 }
+            } else if(subCommand.equalsIgnoreCase("slowmode")) {
+                ArrayList<String> list = new ArrayList<>();
+
+                list.add("enable");
+                list.add("disable");
+                list.add("cooldown");
+
+                List<String> suggest =
+                        list.stream().filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+
+                if (suggest.isEmpty()) return list;
+                return suggest;
             }
         }
 
