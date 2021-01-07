@@ -2,6 +2,7 @@ package eu.rex2go.chat2go.user;
 
 import eu.rex2go.chat2go.Chat2Go;
 import eu.rex2go.chat2go.chat.JSONElementContent;
+import eu.rex2go.chat2go.command.exception.CommandNoPermissionException;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -9,12 +10,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class User {
 
     @Getter
-    private UUID uuid;
+    private final UUID uuid;
 
     @Getter
     @Setter
@@ -81,6 +83,11 @@ public class User {
         if (getPlayer() == null) return;
 
         Chat2Go.sendMessage(getPlayer(), key, prefix, args);
+    }
+
+    public boolean hasPermission(String ... permissions) {
+        Player player = getPlayer();
+        return Arrays.stream(permissions).anyMatch(player::hasPermission);
     }
 
 

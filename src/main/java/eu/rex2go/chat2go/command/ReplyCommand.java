@@ -19,25 +19,31 @@ public class ReplyCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException, CommandCustomErrorException, CommandNoPlayerException {
-        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_MSG);
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws
+            CommandNoPermissionException,
+            CommandPlayerNotOnlineException,
+            CommandCustomErrorException,
+            CommandNoPlayerException {
 
-        if (!(sender instanceof Player)) {
-            throw new CommandNoPlayerException();
-        }
+        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_MSG);
+        checkPlayer(sender);
 
         Player player = user.getPlayer();
 
         if (args.length < 1) {
+            // No message given, return false to send usage
             return false;
         }
 
+        // User to reply to
         User target = user.getLastChatter();
 
         if (target == null) {
-            throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message" +
-                    ".no_player_to_reply_to"));
+            throw new CommandCustomErrorException(
+                    Chat2Go.getMessageConfig().getMessage(
+                            "chat2go.command.message.no_player_to_reply_to"
+                    )
+            );
         }
 
         Player targetPlayer = target.getPlayer();
@@ -46,11 +52,13 @@ public class ReplyCommand extends WrappedCommandExecutor {
             throw new CommandPlayerNotOnlineException(target.getName());
         }
 
+        // Build message
         StringBuilder message = new StringBuilder();
         for (String arg : args) {
             message.append(arg).append(" ");
         }
 
+        // Remove trailing white space
         message = new StringBuilder(message.substring(0, message.length() - 1));
 
         String formatted = plugin.getChatManager().formatMsg(message.toString(), user, target);
@@ -61,8 +69,12 @@ public class ReplyCommand extends WrappedCommandExecutor {
             Placeholder senderPlaceholder = new Placeholder("sender", user.getName(), true);
             Placeholder receiverPlaceholder = new Placeholder("receiver", target.getName(), true);
 
-            formatted = plugin.getChatManager().processPlaceholders(formatted, user, senderPlaceholder,
-                    receiverPlaceholder);
+            formatted = plugin.getChatManager().processPlaceholders(
+                    formatted,
+                    user,
+                    senderPlaceholder,
+                    receiverPlaceholder
+            );
 
             BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(formatted, user);
 

@@ -23,26 +23,30 @@ public class MessageCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException,
-            CommandPlayerNotOnlineException, CommandNoPlayerException, CommandCustomErrorException {
-        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_MSG);
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws
+            CommandNoPermissionException,
+            CommandPlayerNotOnlineException,
+            CommandNoPlayerException,
+            CommandCustomErrorException {
 
-        if (!(sender instanceof Player)) {
-            throw new CommandNoPlayerException();
-        }
+        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_MSG);
+        checkPlayer(sender);
 
         Player player = user.getPlayer();
 
         if (args.length < 2) {
+            // Send usage
             return false;
         }
 
         String targetName = args[0];
         if (targetName.equalsIgnoreCase(user.getName())) {
-            throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage("chat2go.command.message" +
-                    ".message_yourself"));
+            throw new CommandCustomErrorException(Chat2Go.getMessageConfig().getMessage(
+                    "chat2go.command.message.message_yourself"
+            ));
         }
 
+        // Message receiver
         Player targetPlayer =
                 Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase(targetName)).findFirst().orElse(null);
 
@@ -50,14 +54,17 @@ public class MessageCommand extends WrappedCommandExecutor {
             throw new CommandPlayerNotOnlineException(targetName);
         }
 
+        // Message receiver user
         User target = plugin.getUserManager().getUser(targetPlayer);
         target.setLastChatter(user);
 
+        // Build message, skip username (first argument)
         StringBuilder message = new StringBuilder();
         for (int i = 1; i < args.length; i++) {
             message.append(args[i]).append(" ");
         }
 
+        // Remove trailing white space
         message = new StringBuilder(message.substring(0, message.length() - 1));
 
         String formatted = plugin.getChatManager().formatMsg(message.toString(), user, target);
@@ -66,7 +73,10 @@ public class MessageCommand extends WrappedCommandExecutor {
             Placeholder senderPlaceholder = new Placeholder("sender", user.getName(), true);
             Placeholder receiverPlaceholder = new Placeholder("receiver", target.getName(), true);
 
-            formatted = plugin.getChatManager().processPlaceholders(formatted, user, senderPlaceholder,
+            formatted = plugin.getChatManager().processPlaceholders(
+                    formatted,
+                    user,
+                    senderPlaceholder,
                     receiverPlaceholder);
 
             BaseComponent[] baseComponents = plugin.getChatManager().processJSONMessage(formatted, user);

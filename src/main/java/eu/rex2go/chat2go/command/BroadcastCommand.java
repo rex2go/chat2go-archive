@@ -14,7 +14,9 @@ public class BroadcastCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException {
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws
+            CommandNoPermissionException {
+
         checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_BROADCAST);
 
         if (args.length < 1) {

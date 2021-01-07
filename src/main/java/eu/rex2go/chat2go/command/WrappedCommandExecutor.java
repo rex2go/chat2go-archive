@@ -9,6 +9,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 public abstract class WrappedCommandExecutor implements CommandExecutor {
 
     @Getter
@@ -40,6 +42,7 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase(this.command)) {
             User user = null;
+
             if (sender instanceof Player) user = plugin.getUserManager().getUser((Player) sender);
 
             try {
@@ -68,22 +71,24 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
 
     public void checkAllPermissions(CommandSender sender, String... permissions) throws CommandNoPermissionException {
         for (String permission : permissions) {
-            if (!sender.hasPermission(permission)) throw new CommandNoPermissionException(permission);
+            sender.hasPermission(permission);
         }
     }
 
     public void checkPermission(CommandSender sender, String... permissions) throws CommandNoPermissionException {
-        boolean check = false;
-
-        for (String permission : permissions) {
-            if (sender.hasPermission(permission)) {
-                check = true;
-                break;
-            }
-        }
-
-        if (!check) throw new CommandNoPermissionException(permissions[0]);
+        if(Arrays.stream(permissions).noneMatch(sender::hasPermission))
+            throw new CommandNoPermissionException(permissions[0]);
     }
 
-    protected abstract boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException, CommandPlayerNotOnlineException, CommandWrongUsageException, CommandCustomErrorException, CommandNoPlayerException, CommandNotANumberException;
+    public void checkPlayer(CommandSender sender) throws CommandNoPlayerException {
+        if(!(sender instanceof Player)) throw new CommandNoPlayerException();
+    }
+
+    protected abstract boolean execute(CommandSender sender, User user, String label, String... args) throws
+            CommandNoPermissionException,
+            CommandPlayerNotOnlineException,
+            CommandWrongUsageException,
+            CommandCustomErrorException,
+            CommandNoPlayerException,
+            CommandNotANumberException;
 }

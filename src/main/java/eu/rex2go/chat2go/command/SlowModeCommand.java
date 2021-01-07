@@ -16,32 +16,40 @@ public class SlowModeCommand extends WrappedCommandExecutor {
     }
 
     @Override
-    protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException,
+    protected boolean execute(CommandSender sender, User user, String label, String... args) throws
+            CommandNoPermissionException,
             CommandNotANumberException {
-        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_SLOW_MODE,
-                PermissionConstants.PERMISSION_COMMAND_SLOWMODE);
+
+        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_SLOW_MODE);
 
         MainConfig mainConfig = Chat2Go.getMainConfig();
-        String cooldownStr = null;
+        int cooldown;
 
-        if (args.length < 1) {
-            cooldownStr = String.valueOf(mainConfig.getSlowModeCooldown());
+        if (args.length > 0) {
+            // Use custom user input cooldown
+            String cooldownStr = args[0];
+
+            if (!MathUtil.isNumber(cooldownStr)) throw new CommandNotANumberException(cooldownStr);
+
+            cooldown = Integer.parseInt(cooldownStr);
         } else {
-            cooldownStr = args[0];
+            // Use config cooldown
+            cooldown = mainConfig.getSlowModeCooldown();
         }
 
-        if (!MathUtil.isNumber(cooldownStr)) {
-            throw new CommandNotANumberException(cooldownStr);
-        }
-
-        int cooldown = Integer.parseInt(cooldownStr);
+        // Toggle slow mode
         boolean updatedState = !mainConfig.isSlowModeEnabled();
 
         mainConfig.setSlowModeEnabled(updatedState);
         mainConfig.setSlowModeCooldown(cooldown);
 
-        Chat2Go.sendMessage(sender, "chat2go.command.slowmode." + (updatedState ? "enable" : "disable"), true,
-                String.valueOf(cooldown));
+        Chat2Go.sendMessage(
+                sender,
+                "chat2go.command.slowmode." + (updatedState ? "enable" : "disable"),
+                true,
+                String.valueOf(cooldown)
+        );
+
         return true;
     }
 }

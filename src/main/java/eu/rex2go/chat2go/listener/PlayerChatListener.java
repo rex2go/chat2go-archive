@@ -44,8 +44,7 @@ public class PlayerChatListener extends AbstractListener {
         String message = event.getMessage();
         long currentTime = System.currentTimeMillis();
 
-        if (!player.hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_SLOW_MODE)
-                && !player.hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_SLOWMODE)
+        if (!user.hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_SLOW_MODE)
                 && mainConfig.isSlowModeEnabled()) {
             double cooldown =
                     MathUtil.round(

@@ -18,8 +18,7 @@ public class AutoBroadcastCommand extends WrappedCommandExecutor {
 
     @Override
     protected boolean execute(CommandSender sender, User user, String label, String... args) throws CommandNoPermissionException, CommandWrongUsageException, CommandNotANumberException {
-        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_AUTO_BROADCAST,
-                PermissionConstants.PERMISSION_COMMAND_AUTOBROADCAST);
+        checkPermission(sender, PermissionConstants.PERMISSION_COMMAND_AUTO_BROADCAST);
 
         if (args.length < 1) {
             return false;
