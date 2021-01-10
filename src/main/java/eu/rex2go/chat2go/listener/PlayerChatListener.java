@@ -35,6 +35,7 @@ public class PlayerChatListener extends AbstractListener {
             return;
         }
 
+        // Chat disabled
         if (!mainConfig.isChatEnabled()) {
             event.setCancelled(true);
             user.sendMessage("chat2go.chat.disabled", false);
@@ -50,9 +51,12 @@ public class PlayerChatListener extends AbstractListener {
                     MathUtil.round(
                             ((user.getLastMessageTime() + mainConfig.getSlowModeCooldown() * 1000) - currentTime) / 1000F,
                             2);
+
             if (cooldown > 0) {
                 user.sendMessage("chat2go.chat.cooldown", false, String.valueOf(cooldown));
+
                 event.setCancelled(true);
+
                 return;
             }
         }

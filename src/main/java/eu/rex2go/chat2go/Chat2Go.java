@@ -127,7 +127,10 @@ public class Chat2Go extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
 
         if (vaultInstalled = pm.getPlugin("Vault") != null) {
-            setupChat();
+            if(!setupChat()) {
+                getLogger().log(Level.SEVERE, "Vault error. Disabling Vault integration.");
+                vaultInstalled = false;
+            }
         } else {
             getLogger().log(Level.WARNING, "Vault is not installed. There's a chance prefixes and suffixes won't be " +
                     "detected.");
@@ -138,12 +141,16 @@ public class Chat2Go extends JavaPlugin {
         }
     }
 
-    private void setupChat() {
+    private boolean setupChat() {
         RegisteredServiceProvider<Chat> chatProvider =
                 getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+
         if (chatProvider != null) {
             chat = chatProvider.getProvider();
+            return true;
         }
+
+        return false;
     }
 
     private void setupConfigs() {

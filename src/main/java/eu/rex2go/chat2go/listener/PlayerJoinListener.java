@@ -26,6 +26,7 @@ public class PlayerJoinListener extends AbstractListener {
 
         if (mainConfig.isHideJoinMessage()) {
             event.setJoinMessage(null);
+
         } else if (mainConfig.isCustomJoinMessageEnabled()) {
             Placeholder username = new Placeholder("username", user.getName(), true);
             Placeholder prefix = new Placeholder("prefix", user.getPrefix(), true);

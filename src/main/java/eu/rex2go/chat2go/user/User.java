@@ -65,7 +65,11 @@ public class User {
 
     public String getPrefix() {
         if (Chat2Go.isVaultInstalled()) {
-            return ChatColor.translateAlternateColorCodes('&', Chat2Go.getChat().getPlayerPrefix(getPlayer()));
+            String prefix = Chat2Go.getChat().getPlayerPrefix(getPlayer());
+
+            if(prefix == null) return "";
+
+            return ChatColor.translateAlternateColorCodes('&', prefix);
         }
 
         return "";

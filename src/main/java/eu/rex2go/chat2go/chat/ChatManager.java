@@ -240,8 +240,7 @@ public class ChatManager {
             return message;
         }
 
-        if (sender.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTI_SPAM)
-                || sender.getPlayer().hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTISPAM)) {
+        if (sender.hasPermission(PermissionConstants.PERMISSION_CHAT_BYPASS_ANTI_SPAM)) {
             return message;
         }
 
