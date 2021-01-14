@@ -71,17 +71,17 @@ public abstract class WrappedCommandExecutor implements CommandExecutor {
 
     public void checkAllPermissions(CommandSender sender, String... permissions) throws CommandNoPermissionException {
         for (String permission : permissions) {
-            sender.hasPermission(permission);
+            checkPermission(sender, permission);
         }
     }
 
     public void checkPermission(CommandSender sender, String... permissions) throws CommandNoPermissionException {
-        if(Arrays.stream(permissions).noneMatch(sender::hasPermission))
+        if (Arrays.stream(permissions).noneMatch(sender::hasPermission))
             throw new CommandNoPermissionException(permissions[0]);
     }
 
     public void checkPlayer(CommandSender sender) throws CommandNoPlayerException {
-        if(!(sender instanceof Player)) throw new CommandNoPlayerException();
+        if (!(sender instanceof Player)) throw new CommandNoPlayerException();
     }
 
     protected abstract boolean execute(CommandSender sender, User user, String label, String... args) throws
